@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="638.0" prefWidth="446.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demofx.controller.LoginController">
+   <children>
+      <ImageView fitHeight="269.0" fitWidth="397.0" pickOnBounds="true" preserveRatio="true">
+         <VBox.margin>
+            <Insets top="20.0" />
+         </VBox.margin>
+         <image>
+            <Image url="@../images/3568984-removebg-preview.png" />
+         </image>
+         <effect>
+            <Bloom threshold="1.0" />
+         </effect>
+         <cursor>
+            <Cursor fx:constant="MOVE" />
+         </cursor>
+      </ImageView>
+      <MFXTextField fx:id="username" alignment="CENTER" prefHeight="49.0" prefWidth="400.0">
+         <VBox.margin>
+            <Insets bottom="10.0" top="30.0" />
+         </VBox.margin>
+         <font>
+            <Font name="Century751 No2 BT Bold" size="18.0" />
+         </font>
+      </MFXTextField>
+      <MFXPasswordField fx:id="password" alignment="CENTER" prefHeight="49.0" prefWidth="400.0">
+         <font>
+            <Font name="Clarendon Lt BT Light" size="18.0" />
+         </font></MFXPasswordField>
+      <MFXButton fx:id="btn_logn" buttonType="RAISED" depthLevel="LEVEL5" onAction="#add" prefHeight="64.0" prefWidth="243.0" rippleColor="#a084dc" style="-fx-background-color: #8424d7;" text="Login" textFill="WHITE" textOverrun="CENTER_ELLIPSIS">
+         <VBox.margin>
+            <Insets top="20.0" />
+         </VBox.margin>
+         <font>
+            <Font size="28.0" />
+         </font>
+      </MFXButton>
+   </children>
+</VBox>
