@@ -1,37 +1,37 @@
 .addbtn
 {
-    -fx-background-color: linear-gradient( #0d1a27 85%, #20c700 100%);
+    -fx-background-color: linear-gradient( #326df0 98%, #e4e7e3 2%);
     -fx-text-fill: white;
 }
 
 .addbtn:hover
 {
-    -fx-background-color :  linear-gradient( #0d1a27 45%, #20c700 100%);
+    -fx-background-color: linear-gradient( #326df0 98%, #e4e7e3 2%);
     -fx-text-fill: white;
 
 }
 
 .delbtn
 {
-    -fx-background-color: linear-gradient( #0d1a27 85%, #ff3313 100%);
+    -fx-background-color: linear-gradient( #ff3313 85%, #ff3313 100%);
     -fx-text-fill: white;
 }
 
 .delbtn:hover 
 {
-    -fx-background-color :  linear-gradient( #0d1a27 45%, #ff3313 100%);
+    -fx-background-color: linear-gradient( #ff3313 98%, #e4e7e3 2%);
     -fx-text-fill: white;
 }
 
 .upbtn
 {
-    -fx-background-color: linear-gradient( #0d1a27 85%, #fc8b18 100%);
+    -fx-background-color: linear-gradient( #fc8b18 0%, #fc8b18 100%);
     -fx-text-fill: white;
 }
 
 .upbtn:hover 
 {
-    -fx-background-color :  linear-gradient( #0d1a27 45%, #fc8b18 100%);
+    -fx-background-color: linear-gradient( #fc8b18 98%, #e4e7e3 2%);
     -fx-text-fill: white;
 }
 
