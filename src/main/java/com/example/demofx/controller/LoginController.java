@@ -32,6 +32,12 @@ public class LoginController {
     @FXML
     private MFXButton btn_logn;
 
+    public Stage stage;
+
+    public void setStage(Stage stage){
+        this.stage=stage;
+    }
+
     private static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
 
@@ -62,6 +68,7 @@ public class LoginController {
             FXMLLoader main = new FXMLLoader(getClass().getResource("/com/example/demofx/layouts/main.fxml"));
             Parent root=main.load();
             MainController mainController=main.getController();
+            mainController.setStage(stage);
             mainController.showUser(username.getText());
             /*if (screenSize.getWidth() <= 1366) {
                 screenSize.width = 1340;

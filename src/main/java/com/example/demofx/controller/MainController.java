@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -30,6 +31,11 @@ public class MainController implements Initializable {
     private final int dashboardIndex=1;
 
 
+    public Stage stage;
+
+    public void setStage(Stage stage){
+        this.stage=stage;
+    }
 
 
     public void showUser(String data) {
@@ -64,6 +70,10 @@ public class MainController implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(DemoFX.class.getResource("/com/example/demofx/layouts/"+layout+".fxml"));
             Parent root = fxmlLoader.load();
             pane.getChildren().removeAll(pane.getChildren());
+            if(layout.equals("users")){
+                UsersController usersController = fxmlLoader.getController();
+                usersController.setStage(stage);
+            }
             if (root != null) {
                 pane.getChildren().add(root);
             }
