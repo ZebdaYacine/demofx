@@ -2,7 +2,10 @@ package com.example.demofx.controller;
 
 import com.example.demofx.DemoFX;
 import com.example.demofx.databaseManger.jooq.tables.User;
+import com.example.demofx.databaseManger.jooq.tables.records.RoleRecord;
+import com.example.demofx.databaseManger.jooq.tables.records.ServiceRecord;
 import com.example.demofx.databaseManger.jooq.tables.records.UserRecord;
+import com.example.demofx.model.UserModel;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.filter.LongFilter;
@@ -12,6 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.stage.Stage;
+import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Result;
 
@@ -21,7 +25,7 @@ import java.util.Comparator;
 import java.util.ResourceBundle;
 
 import static com.example.demofx.DemoFX.context;
-import static com.example.demofx.databaseManger.jooq.Tables.USER;
+import static com.example.demofx.databaseManger.jooq.Tables.*;
 
 public class UsersController implements Initializable {
     @FXML
@@ -64,6 +68,28 @@ public class UsersController implements Initializable {
             userRecord.setIdservice(r.getValue(USER.IDSERVICE));
             userRecord.setIdtype(r.getValue(USER.IDTYPE));
             listUser.add(userRecord);
+        }
+        return listUser;
+    }
+
+    public ArrayList<UserModel> getAllUsers(DSLContext context) {
+        Result<?> result = context
+                .select()
+                .from(USER)
+                .leftOuterJoin(SERVICE)
+                .on(USER.IDSERVICE.eq(SERVICE.ID))
+                .leftOuterJoin(ROLE)
+                .on(USER.IDROLE.eq(ROLE.ID))
+                .fetch();
+        ArrayList<UserModel> listUser = new ArrayList<>();
+        for (Record r : result) {
+            ServiceRecord serviceRecord= r.into(SERVICE);
+            UserRecord userRecord= r.into(USER);
+            RoleRecord roleRecord= r.into(ROLE);
+            UserModel userModel = new UserModel(userRecord.getId(),userRecord.getUsername(),userRecord.getPassword(),
+                    userRecord.getFirstname(),userRecord.getLastname(),userRecord.getPhone(),userRecord.getType(),serviceRecord.getId(),
+                    roleRecord.getId(),userRecord.getIdtype(),serviceRecord.getName(),roleRecord.getName());
+            listUser.add(userModel);
         }
         return listUser;
     }
@@ -141,7 +167,6 @@ public class UsersController implements Initializable {
             clearInputes();
         });
         delete.setOnAction(actionEvent -> {
-
             currentPage=table.getCurrentPage();
             context.delete(USER).where(USER.ID.eq(Long.parseLong(ID.getText()))).execute();
             user = FXCollections.observableArrayList(getAllUser());
