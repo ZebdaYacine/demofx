@@ -13,6 +13,8 @@ public class UserModel extends UserRecord {
         this.role = role;
     }
 
+    public UserModel() {
+    }
 
     public String getService() {
         return service;

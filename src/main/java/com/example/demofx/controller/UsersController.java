@@ -1,7 +1,6 @@
 package com.example.demofx.controller;
 
 import com.example.demofx.DemoFX;
-import com.example.demofx.databaseManger.jooq.tables.User;
 import com.example.demofx.databaseManger.jooq.tables.records.RoleRecord;
 import com.example.demofx.databaseManger.jooq.tables.records.ServiceRecord;
 import com.example.demofx.databaseManger.jooq.tables.records.UserRecord;
@@ -15,7 +14,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.stage.Stage;
-import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Result;
 
@@ -29,16 +27,16 @@ import static com.example.demofx.databaseManger.jooq.Tables.*;
 
 public class UsersController implements Initializable {
     @FXML
-    private MFXPaginatedTableView<UserRecord> table;
+    private MFXPaginatedTableView<UserModel> table;
     @FXML
-    private MFXTextField Fname, Lname, phone, ID,srh;
+    private MFXTextField Fname, Lname, phone, ID, srh;
     @FXML
     private MFXButton delete, add, update;
     @FXML
     private MFXComboBox role, service, type;
 
 
-    public static ObservableList<UserRecord> user;
+    public static ObservableList<UserModel> listUsers;
 
     public static int currentPage;
 
@@ -54,62 +52,36 @@ public class UsersController implements Initializable {
         //username.setText(data);
     }
 
-    private ArrayList<UserRecord> getAllUser() {
-        Result<Record> result = context.select().from(User.USER).fetch();
-        ArrayList<UserRecord> listUser = new ArrayList<>();
-        for (Record r : result) {
-            UserRecord userRecord = new UserRecord();
-            userRecord.setPhone(r.getValue(USER.PHONE));
-            userRecord.setLastname(r.getValue(USER.LASTNAME));
-            userRecord.setFirstname(r.getValue(USER.FIRSTNAME));
-            userRecord.setType(r.getValue(USER.TYPE));
-            userRecord.setId(r.getValue(USER.ID));
-            userRecord.setIdrole(r.getValue(USER.IDROLE));
-            userRecord.setIdservice(r.getValue(USER.IDSERVICE));
-            userRecord.setIdtype(r.getValue(USER.IDTYPE));
-            listUser.add(userRecord);
-        }
-        return listUser;
-    }
-
-    public ArrayList<UserModel> getAllUsers(DSLContext context) {
-        Result<?> result = context
-                .select()
-                .from(USER)
-                .leftOuterJoin(SERVICE)
+    private ArrayList<UserModel> getAllUser() {
+        Result<?> result = context.select().from(USER).leftOuterJoin(SERVICE)
                 .on(USER.IDSERVICE.eq(SERVICE.ID))
                 .leftOuterJoin(ROLE)
                 .on(USER.IDROLE.eq(ROLE.ID))
                 .fetch();
         ArrayList<UserModel> listUser = new ArrayList<>();
         for (Record r : result) {
-            ServiceRecord serviceRecord= r.into(SERVICE);
-            UserRecord userRecord= r.into(USER);
-            RoleRecord roleRecord= r.into(ROLE);
-            UserModel userModel = new UserModel(userRecord.getId(),userRecord.getUsername(),userRecord.getPassword(),
-                    userRecord.getFirstname(),userRecord.getLastname(),userRecord.getPhone(),userRecord.getType(),serviceRecord.getId(),
-                    roleRecord.getId(),userRecord.getIdtype(),serviceRecord.getName(),roleRecord.getName());
+            ServiceRecord serviceRecord = r.into(SERVICE);
+            UserRecord userRecord = r.into(USER);
+            RoleRecord roleRecord = r.into(ROLE);
+            UserModel userModel = new UserModel(userRecord.getId(), userRecord.getUsername(), userRecord.getPassword(),
+                    userRecord.getFirstname(), userRecord.getLastname(), userRecord.getPhone(), userRecord.getType(), serviceRecord.getId(),
+                    roleRecord.getId(), userRecord.getIdtype(), serviceRecord.getName(), roleRecord.getName());
             listUser.add(userModel);
         }
         return listUser;
     }
 
-    private ArrayList<UserRecord> searchUserByPhone(String phone) {
-        Result<Record> result = context.select().from(User.USER).where(USER.PHONE.contains(phone.toLowerCase())).fetch();
-        ArrayList<UserRecord> listUser = new ArrayList<>();
-        for (Record r : result) {
-            UserRecord userRecord = new UserRecord();
-            userRecord.setPhone(r.getValue(USER.PHONE));
-            userRecord.setLastname(r.getValue(USER.LASTNAME));
-            userRecord.setFirstname(r.getValue(USER.FIRSTNAME));
-            userRecord.setType(r.getValue(USER.TYPE));
-            userRecord.setId(r.getValue(USER.ID));
-            userRecord.setIdrole(r.getValue(USER.IDROLE));
-            userRecord.setIdservice(r.getValue(USER.IDSERVICE));
-            userRecord.setIdtype(r.getValue(USER.IDTYPE));
-            listUser.add(userRecord);
-        }
-        return listUser;
+    private ArrayList<UserModel> searchUserByPhone(String phone) {
+        ArrayList<UserModel> listUserFound = new ArrayList<>();
+        listUsers.forEach(userModel -> {
+            if(userModel.getPhone().equals(phone)){
+                listUserFound.add(userModel);
+            }
+        });
+        listUserFound.forEach(userModel -> {
+            System.out.println(userModel);
+        });
+        return listUserFound;
     }
 
     private void fillInputs(UserRecord userRecord) {
@@ -128,9 +100,7 @@ public class UsersController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //dialogsController= new DialogsController(this.stage);
-        //dialogsController.openInfo();
-        ArrayList<UserRecord> users = new ArrayList<>();
+        ArrayList<UserModel> users = new ArrayList<>();
         setupTable(users);
         table.autosizeColumnsOnInitialization();
         table.getSelectionModel().selectionProperty().addListener((observableValue, integerUserRecordObservableMap, row) -> {
@@ -140,16 +110,15 @@ public class UsersController implements Initializable {
             }
         });
         srh.setOnKeyReleased(keyEvent -> {
-            if(!srh.getText().isEmpty()){
-                user = FXCollections.observableArrayList(searchUserByPhone(srh.getText()));
-                table.setItems(user);
-            }else{
-                user = FXCollections.observableArrayList(getAllUser());
-                table.setItems(user);
+            if (!srh.getText().isEmpty()) {
+                table.setItems(FXCollections.observableArrayList(searchUserByPhone(srh.getText())));
+            } else {
+                listUsers = FXCollections.observableArrayList(getAllUser());
+                table.setItems(listUsers);
             }
         });
         add.setOnAction(event -> {
-            currentPage=table.getCurrentPage();
+            currentPage = table.getCurrentPage();
             UserRecord userRecord = DemoFX.context.newRecord(USER);
             userRecord.setFirstname(Fname.getText());
             userRecord.setLastname(Lname.getText());
@@ -160,23 +129,23 @@ public class UsersController implements Initializable {
             userRecord.setIdservice(1L);
             userRecord.setIdtype(1L);
             userRecord.store();
-            user = FXCollections.observableArrayList(getAllUser());
-            table.setItems(user);
+            listUsers=FXCollections.observableArrayList(getAllUser());
+            table.setItems(listUsers);
             table.goToPage(currentPage);
             table.setCurrentPage(currentPage);
             clearInputes();
         });
         delete.setOnAction(actionEvent -> {
-            currentPage=table.getCurrentPage();
+            currentPage = table.getCurrentPage();
             context.delete(USER).where(USER.ID.eq(Long.parseLong(ID.getText()))).execute();
-            user = FXCollections.observableArrayList(getAllUser());
-            table.setItems(user);
+            listUsers=FXCollections.observableArrayList(getAllUser());
+            table.setItems(listUsers);
             table.goToPage(currentPage);
             table.setCurrentPage(currentPage);
             clearInputes();
         });
         update.setOnAction(actionEvent -> {
-            currentPage=table.getCurrentPage();
+            currentPage = table.getCurrentPage();
             UserRecord userRecord = DemoFX.context.newRecord(USER);
             userRecord.setFirstname(Fname.getText());
             userRecord.setLastname(Lname.getText());
@@ -188,30 +157,30 @@ public class UsersController implements Initializable {
             userRecord.setIdtype(1L);
             userRecord.setId(Long.parseLong(ID.getText()));
             userRecord.update();
-            user = FXCollections.observableArrayList(getAllUser());
-            table.setItems(user);
+            listUsers=FXCollections.observableArrayList(getAllUser());
+            table.setItems(listUsers);
             table.goToPage(currentPage);
             table.setCurrentPage(currentPage);
             clearInputes();
         });
     }
 
-    private void setupTable(ArrayList<UserRecord> users) {
-        MFXTableColumn<UserRecord> Idcolumn = new MFXTableColumn<>("ID", true, Comparator.comparing(UserRecord::getId));
-        MFXTableColumn<UserRecord> FnameColumn = new MFXTableColumn<>("الإسم", true, Comparator.comparing(UserRecord::getFirstname));
-        MFXTableColumn<UserRecord> LnameColumn = new MFXTableColumn<>("اللقب", true, Comparator.comparing(UserRecord::getLastname));
-        MFXTableColumn<UserRecord> PhoneColumn = new MFXTableColumn<>("الهاتف", true, Comparator.comparing(UserRecord::getPhone));
-        MFXTableColumn<UserRecord> RoleColumn = new MFXTableColumn<>("التصريح", true, Comparator.comparing(UserRecord::getIdrole));
-        MFXTableColumn<UserRecord> TypeColumn = new MFXTableColumn<>("النوع", true, Comparator.comparing(UserRecord::getType));
-        MFXTableColumn<UserRecord> ServiceColumn = new MFXTableColumn<>("المصلحة", true, Comparator.comparing(UserRecord::getIdservice));
+    private void setupTable(ArrayList<UserModel> users) {
+        MFXTableColumn<UserModel> Idcolumn = new MFXTableColumn<>("ID", true, Comparator.comparing(UserModel::getId));
+        MFXTableColumn<UserModel> FnameColumn = new MFXTableColumn<>("الإسم", true, Comparator.comparing(UserModel::getFirstname));
+        MFXTableColumn<UserModel> LnameColumn = new MFXTableColumn<>("اللقب", true, Comparator.comparing(UserModel::getLastname));
+        MFXTableColumn<UserModel> PhoneColumn = new MFXTableColumn<>("الهاتف", true, Comparator.comparing(UserModel::getPhone));
+        MFXTableColumn<UserModel> RoleColumn = new MFXTableColumn<>("التصريح", true, Comparator.comparing(UserModel::getRole));
+        MFXTableColumn<UserModel> TypeColumn = new MFXTableColumn<>("النوع", true, Comparator.comparing(UserRecord::getType));
+        MFXTableColumn<UserModel> ServiceColumn = new MFXTableColumn<>("المصلحة", true, Comparator.comparing(UserModel::getService));
 
-        RoleColumn.setRowCellFactory(user -> new MFXTableRowCell<>(UserRecord::getIdrole));
-        PhoneColumn.setRowCellFactory(user -> new MFXTableRowCell<>(UserRecord::getPhone));
-        TypeColumn.setRowCellFactory(user -> new MFXTableRowCell<>(UserRecord::getType));
-        ServiceColumn.setRowCellFactory(user -> new MFXTableRowCell<>(UserRecord::getIdservice));
-        FnameColumn.setRowCellFactory(user -> new MFXTableRowCell<>(UserRecord::getFirstname));
-        LnameColumn.setRowCellFactory(user -> new MFXTableRowCell<>(UserRecord::getLastname));
-        Idcolumn.setRowCellFactory(user -> new MFXTableRowCell<>(UserRecord::getId));
+        RoleColumn.setRowCellFactory(user -> new MFXTableRowCell<>(UserModel::getRole));
+        PhoneColumn.setRowCellFactory(user -> new MFXTableRowCell<>(UserModel::getPhone));
+        TypeColumn.setRowCellFactory(user -> new MFXTableRowCell<>(UserModel::getType));
+        ServiceColumn.setRowCellFactory(user -> new MFXTableRowCell<>(UserModel::getService));
+        FnameColumn.setRowCellFactory(user -> new MFXTableRowCell<>(UserModel::getFirstname));
+        LnameColumn.setRowCellFactory(user -> new MFXTableRowCell<>(UserModel::getLastname));
+        Idcolumn.setRowCellFactory(user -> new MFXTableRowCell<>(UserModel::getId));
 
         table.getTableColumns().addAll(Idcolumn, FnameColumn, LnameColumn, PhoneColumn, RoleColumn, TypeColumn, ServiceColumn);
         table.getFilters().addAll(
@@ -221,8 +190,8 @@ public class UsersController implements Initializable {
                 new StringFilter<>("النوع", UserRecord::getType),
                 new StringFilter<>("الهاتف", UserRecord::getPhone)
         );
-        user = FXCollections.observableArrayList(getAllUser());
-        table.setItems(user);
+        listUsers = FXCollections.observableArrayList(getAllUser());
+        table.setItems(listUsers);
     }
 
 
