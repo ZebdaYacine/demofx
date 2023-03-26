@@ -2,6 +2,7 @@
 
 <?import io.github.palexdev.materialfx.controls.*?>
 <?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
@@ -43,5 +44,19 @@
             <Insets top="20.0" />
          </VBox.margin>
       </MFXPaginatedTableView>
+      <BarChart maxWidth="-Infinity" minHeight="-Infinity" prefHeight="336.0" prefWidth="1001.0">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+         <VBox.margin>
+            <Insets top="5.0" />
+         </VBox.margin>
+      </BarChart>
    </children>
+   <padding>
+      <Insets top="10.0" />
+   </padding>
 </VBox>

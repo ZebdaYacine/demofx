@@ -32,7 +32,7 @@
          <children>
             <VBox alignment="TOP_CENTER" prefHeight="672.0" prefWidth="724.0">
                <children>
-                  <MFXTextField fx:id="srh" alignment="TOP_LEFT" floatMode="BORDER" floatingText="رقم الهاتف" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="334.0">
+                  <MFXTextField fx:id="srh" alignment="TOP_LEFT" floatMode="BORDER" floatingText="رقم الهاتف" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="236.0">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -79,30 +79,30 @@
                         <Insets top="10.0" />
                      </VBox.margin>
                   </MFXTextField>
-                  <MFXComboBox fx:id="role" alignment="CENTER_RIGHT" floatingText="التصريح" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="350.0">
+                  <MFXFilterComboBox fx:id="roleCmbox" alignment="TOP_RIGHT" floatingText="التصريح" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="350.0">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </MFXFilterComboBox>
+                  <MFXFilterComboBox fx:id="serviceCmbox" alignment="TOP_RIGHT" floatingText="المصلحة" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="350.0">
                      <font>
                         <Font size="18.0" />
                      </font>
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>
-                  </MFXComboBox>
-                  <MFXComboBox fx:id="service" alignment="CENTER_RIGHT" floatingText="المصلحة" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="350.0">
+                  </MFXFilterComboBox>
+                  <MFXFilterComboBox fx:id="typeCmbox" alignment="TOP_RIGHT" floatingText="نوع المستخدم" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="350.0">
                      <font>
                         <Font size="18.0" />
                      </font>
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>
-                  </MFXComboBox>
-                  <MFXComboBox fx:id="type" alignment="CENTER_RIGHT" floatingText="نوع الـمستخدم" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="350.0">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </MFXComboBox>
+                  </MFXFilterComboBox>
                   <MFXTextField fx:id="ID" alignment="CENTER" editable="false" floatMode="BORDER" floatingText="ID" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="350.0">
                      <font>
                         <Font size="18.0" />

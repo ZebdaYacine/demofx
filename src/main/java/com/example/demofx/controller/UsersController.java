@@ -3,7 +3,11 @@ package com.example.demofx.controller;
 import com.example.demofx.DemoFX;
 import com.example.demofx.databaseManger.jooq.tables.records.RoleRecord;
 import com.example.demofx.databaseManger.jooq.tables.records.ServiceRecord;
+import com.example.demofx.databaseManger.jooq.tables.records.TypeRecord;
 import com.example.demofx.databaseManger.jooq.tables.records.UserRecord;
+import com.example.demofx.model.RoleModel;
+import com.example.demofx.model.ServiceModel;
+import com.example.demofx.model.TypeModel;
 import com.example.demofx.model.UserModel;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
@@ -33,10 +37,15 @@ public class UsersController implements Initializable {
     @FXML
     private MFXButton delete, add, update;
     @FXML
-    private MFXComboBox role, service, type;
-
-
+    private MFXComboBox<TypeModel> typeCmbox;
+    @FXML
+    private MFXFilterComboBox<RoleModel> roleCmbox;
+    @FXML
+    private MFXFilterComboBox<ServiceModel> serviceCmbox;
     public static ObservableList<UserModel> listUsers;
+
+
+
 
     public static int currentPage;
 
@@ -57,29 +66,83 @@ public class UsersController implements Initializable {
                 .on(USER.IDSERVICE.eq(SERVICE.ID))
                 .leftOuterJoin(ROLE)
                 .on(USER.IDROLE.eq(ROLE.ID))
+                .leftOuterJoin(TYPE)
+                .on(TYPE.ID.eq(USER.IDTYPE))
                 .fetch();
         ArrayList<UserModel> listUser = new ArrayList<>();
         for (Record r : result) {
             ServiceRecord serviceRecord = r.into(SERVICE);
             UserRecord userRecord = r.into(USER);
             RoleRecord roleRecord = r.into(ROLE);
+            TypeRecord typeRecord = r.into(TYPE);
             UserModel userModel = new UserModel(userRecord.getId(), userRecord.getUsername(), userRecord.getPassword(),
-                    userRecord.getFirstname(), userRecord.getLastname(), userRecord.getPhone(), userRecord.getType(), serviceRecord.getId(),
+                    userRecord.getFirstname(), userRecord.getLastname(), userRecord.getPhone(), typeRecord.getName(), serviceRecord.getId(),
                     roleRecord.getId(), userRecord.getIdtype(), serviceRecord.getName(), roleRecord.getName());
             listUser.add(userModel);
         }
         return listUser;
     }
 
+
+
+    private ObservableList<ServiceModel> getAllServices() {
+        ObservableList<ServiceModel> listServices=FXCollections.observableArrayList(new ServiceModel());
+        listServices.remove(0);
+        Result<?> result = context.select().from(SERVICE).fetch();
+        for (Record r : result) {
+            ServiceModel serviceModel =new ServiceModel(r.getValue(SERVICE.ID),r.getValue(SERVICE.NAME));
+            listServices.add(serviceModel);
+        }
+        return listServices;
+    }
+
+    private ObservableList<TypeModel> getAllTypes() {
+        ObservableList<TypeModel> listTypes=FXCollections.observableArrayList(new TypeModel());
+        listTypes.remove(0);
+        Result<?> result = context.select().from(TYPE).fetch();
+        for (Record r : result) {
+            TypeModel typeModel =new TypeModel(r.getValue(TYPE.ID),r.getValue(TYPE.NAME));
+            listTypes.add(typeModel);
+        }
+        return listTypes;
+    }
+
+    private ObservableList<RoleModel> getAllRoles() {
+        ObservableList<RoleModel> listRoles=FXCollections.observableArrayList(new RoleModel());
+        listRoles.remove(0);
+        Result<?> result = context.select().from(ROLE).fetch();
+        for (Record r : result) {
+            RoleModel roleModel =new RoleModel(r.getValue(ROLE.ID),r.getValue(ROLE.NAME));
+            listRoles.add(roleModel);
+        }
+        return listRoles;
+    }
+
+
+
+    public long getIdFromName(String name, String table) {
+        switch (table){
+            case "type":{
+                return context.select().from(TYPE).where(TYPE.NAME.eq(name)).fetchOne().getValue(TYPE.ID);
+            }
+            case "service":{
+                return context.select().from(SERVICE).where(SERVICE.NAME.eq(name)).fetchOne().getValue(SERVICE.ID);
+            }
+            case "role":{
+                return context.select().from(ROLE).where(ROLE.NAME.eq(name)).fetchOne().getValue(ROLE.ID);
+            }
+            default:{
+                return  0L;
+            }
+        }
+    }
+
     private ArrayList<UserModel> searchUserByPhone(String phone) {
         ArrayList<UserModel> listUserFound = new ArrayList<>();
         listUsers.forEach(userModel -> {
-            if(userModel.getPhone().equals(phone)){
+            if(userModel.getPhone().contains(phone)){
                 listUserFound.add(userModel);
             }
-        });
-        listUserFound.forEach(userModel -> {
-            System.out.println(userModel);
         });
         return listUserFound;
     }
@@ -98,11 +161,16 @@ public class UsersController implements Initializable {
         ID.setText("");
     }
 
+    private void loadDataToLayout(){
+        setupTable();
+        table.autosizeColumnsOnInitialization();
+        serviceCmbox.setItems(getAllServices());
+        typeCmbox.setItems(getAllTypes());
+        roleCmbox.setItems(getAllRoles());
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ArrayList<UserModel> users = new ArrayList<>();
-        setupTable(users);
-        table.autosizeColumnsOnInitialization();
+        loadDataToLayout();
         table.getSelectionModel().selectionProperty().addListener((observableValue, integerUserRecordObservableMap, row) -> {
             UserRecord userRecord = table.getSelectionModel().getSelectedValue();
             if (userRecord != null) {
@@ -113,8 +181,12 @@ public class UsersController implements Initializable {
             if (!srh.getText().isEmpty()) {
                 table.setItems(FXCollections.observableArrayList(searchUserByPhone(srh.getText())));
             } else {
-                listUsers = FXCollections.observableArrayList(getAllUser());
-                table.setItems(listUsers);
+                table.getItems().clear();
+                listUsers.forEach(userModel -> {
+                    table.getItems().add(userModel);
+                });
+                table.goToPage(0);
+                table.setCurrentPage(0);
             }
         });
         add.setOnAction(event -> {
@@ -125,9 +197,10 @@ public class UsersController implements Initializable {
             userRecord.setUsername(phone.getText());
             userRecord.setPassword(phone.getText());
             userRecord.setPhone(phone.getText());
-            userRecord.setIdrole(1L);
-            userRecord.setIdservice(1L);
-            userRecord.setIdtype(1L);
+            userRecord.setIdrole(roleCmbox.getSelectionModel().getSelectedItem().getValue(ROLE.ID));
+            userRecord.setIdservice(serviceCmbox.getSelectionModel().getSelectedItem().getValue(SERVICE.ID));
+            userRecord.setIdtype(typeCmbox.getSelectionModel().getSelectedItem().getValue(TYPE.ID));
+            userRecord.setType(typeCmbox.getSelectionModel().getSelectedItem().toString());
             userRecord.store();
             listUsers=FXCollections.observableArrayList(getAllUser());
             table.setItems(listUsers);
@@ -165,7 +238,7 @@ public class UsersController implements Initializable {
         });
     }
 
-    private void setupTable(ArrayList<UserModel> users) {
+    private void setupTable() {
         MFXTableColumn<UserModel> Idcolumn = new MFXTableColumn<>("ID", true, Comparator.comparing(UserModel::getId));
         MFXTableColumn<UserModel> FnameColumn = new MFXTableColumn<>("الإسم", true, Comparator.comparing(UserModel::getFirstname));
         MFXTableColumn<UserModel> LnameColumn = new MFXTableColumn<>("اللقب", true, Comparator.comparing(UserModel::getLastname));
@@ -192,6 +265,8 @@ public class UsersController implements Initializable {
         );
         listUsers = FXCollections.observableArrayList(getAllUser());
         table.setItems(listUsers);
+        table.goToPage(0);
+        table.setCurrentPage(0);
     }
 
 

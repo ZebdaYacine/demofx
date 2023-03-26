@@ -1,6 +1,7 @@
 package com.example.demofx.controller;
 
 import org.junit.jupiter.api.Test;
+
 class UsersControllerTest {
 
     @Test
@@ -11,5 +12,11 @@ class UsersControllerTest {
         usersController.getAllUsers(context).forEach(userModel -> {
             System.out.println(userModel.getRole());
         });*/
+    }
+
+    @Test
+    void getIdFromName() {
+       /* UsersController usersController = new UsersController();
+        System.out.println(usersController.getIdFromName("medecin","type"));*/
     }
 }
