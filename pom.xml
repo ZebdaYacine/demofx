@@ -14,7 +14,7 @@
         <junit.version>5.9.2</junit.version>
     </properties>
     <dependencies>
-        <!--<dependency>
+        <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>19.0.2.1</version>
@@ -23,7 +23,7 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>19.0.2.1</version>
-        </dependency>-->
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -90,6 +90,11 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.14.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.synedra</groupId>
+            <artifactId>validatorfx</artifactId>
+            <version>0.4.0</version>
         </dependency>
     </dependencies>
 
@@ -169,7 +174,7 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
+                <!--<configuration>
                     <jdbc>
                         <driver>com.mysql.cj.jdbc.Driver</driver>
                         <url>jdbc:mysql://localhost:3306/doctorlite</url>
@@ -187,7 +192,7 @@
                             <directory>src/main/java/com/example/demofx</directory>
                         </target>
                     </generator>
-                </configuration>
+                </configuration>-->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

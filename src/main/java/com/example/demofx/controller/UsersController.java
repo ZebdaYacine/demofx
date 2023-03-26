@@ -44,21 +44,18 @@ public class UsersController implements Initializable {
     private MFXFilterComboBox<ServiceModel> serviceCmbox;
     public static ObservableList<UserModel> listUsers;
 
-
-
-
     public static int currentPage;
 
     DialogsController dialogsController;
 
     private Stage stage;
 
-    public void setStage(Stage stage) {
-        this.stage = stage;
+    public void setStage() {
+         //stage = (Stage) add.getScene().getWindow();
     }
 
-    public void showUser(String data) {
-        //username.setText(data);
+    public Stage getStage() {
+        return stage;
     }
 
     private ArrayList<UserModel> getAllUser() {
@@ -119,8 +116,7 @@ public class UsersController implements Initializable {
     }
 
 
-
-    public long getIdFromName(String name, String table) {
+    /*public long getIdFromName(String name, String table) {
         switch (table){
             case "type":{
                 return context.select().from(TYPE).where(TYPE.NAME.eq(name)).fetchOne().getValue(TYPE.ID);
@@ -135,7 +131,7 @@ public class UsersController implements Initializable {
                 return  0L;
             }
         }
-    }
+    }*/
 
     private ArrayList<UserModel> searchUserByPhone(String phone) {
         ArrayList<UserModel> listUserFound = new ArrayList<>();
@@ -170,6 +166,7 @@ public class UsersController implements Initializable {
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        dialogsController=new DialogsController();
         loadDataToLayout();
         table.getSelectionModel().selectionProperty().addListener((observableValue, integerUserRecordObservableMap, row) -> {
             UserRecord userRecord = table.getSelectionModel().getSelectedValue();
@@ -190,23 +187,28 @@ public class UsersController implements Initializable {
             }
         });
         add.setOnAction(event -> {
-            currentPage = table.getCurrentPage();
-            UserRecord userRecord = DemoFX.context.newRecord(USER);
-            userRecord.setFirstname(Fname.getText());
-            userRecord.setLastname(Lname.getText());
-            userRecord.setUsername(phone.getText());
-            userRecord.setPassword(phone.getText());
-            userRecord.setPhone(phone.getText());
-            userRecord.setIdrole(roleCmbox.getSelectionModel().getSelectedItem().getValue(ROLE.ID));
-            userRecord.setIdservice(serviceCmbox.getSelectionModel().getSelectedItem().getValue(SERVICE.ID));
-            userRecord.setIdtype(typeCmbox.getSelectionModel().getSelectedItem().getValue(TYPE.ID));
-            userRecord.setType(typeCmbox.getSelectionModel().getSelectedItem().toString());
-            userRecord.store();
-            listUsers=FXCollections.observableArrayList(getAllUser());
-            table.setItems(listUsers);
-            table.goToPage(currentPage);
-            table.setCurrentPage(currentPage);
-            clearInputes();
+            try {
+                currentPage = table.getCurrentPage();
+                UserRecord userRecord = DemoFX.context.newRecord(USER);
+                userRecord.setFirstname(Fname.getText());
+                userRecord.setLastname(Lname.getText());
+                userRecord.setUsername(phone.getText());
+                userRecord.setPassword(phone.getText());
+                userRecord.setPhone(phone.getText());
+                userRecord.setIdrole(roleCmbox.getSelectionModel().getSelectedItem().getValue(ROLE.ID));
+                userRecord.setIdservice(serviceCmbox.getSelectionModel().getSelectedItem().getValue(SERVICE.ID));
+                userRecord.setIdtype(typeCmbox.getSelectionModel().getSelectedItem().getValue(TYPE.ID));
+                userRecord.setType(typeCmbox.getSelectionModel().getSelectedItem().toString());
+                userRecord.store();
+                listUsers=FXCollections.observableArrayList(getAllUser());
+                table.setItems(listUsers);
+                table.goToPage(currentPage);
+                table.setCurrentPage(currentPage);
+                clearInputes();
+                dialogsController.openInfo("تم عملية الإضافة بنجاح");
+            }catch (Exception e){
+                //dialogsController.openInfo("حدث خطأ في عملية الإضافة");
+            }
         });
         delete.setOnAction(actionEvent -> {
             currentPage = table.getCurrentPage();
@@ -225,9 +227,10 @@ public class UsersController implements Initializable {
             userRecord.setUsername(phone.getText());
             userRecord.setPassword(phone.getText());
             userRecord.setPhone(phone.getText());
-            userRecord.setIdrole(1L);
-            userRecord.setIdservice(1L);
-            userRecord.setIdtype(1L);
+            userRecord.setIdrole(roleCmbox.getSelectionModel().getSelectedItem().getValue(ROLE.ID));
+            userRecord.setIdservice(serviceCmbox.getSelectionModel().getSelectedItem().getValue(SERVICE.ID));
+            userRecord.setIdtype(typeCmbox.getSelectionModel().getSelectedItem().getValue(TYPE.ID));
+            userRecord.setType(typeCmbox.getSelectionModel().getSelectedItem().toString());
             userRecord.setId(Long.parseLong(ID.getText()));
             userRecord.update();
             listUsers=FXCollections.observableArrayList(getAllUser());
@@ -268,6 +271,4 @@ public class UsersController implements Initializable {
         table.goToPage(0);
         table.setCurrentPage(0);
     }
-
-
 }
