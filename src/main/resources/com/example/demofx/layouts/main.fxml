@@ -9,13 +9,13 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="900.0" prefWidth="1380.0" style="-fx-background-color: #EEEEEE;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demofx.controller.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="900.0" prefWidth="1500.0" style="-fx-background-color: #EEEEEE;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demofx.controller.MainController">
    <children>
-      <HBox alignment="TOP_RIGHT" prefHeight="900.0" prefWidth="1380.0">
+      <HBox alignment="TOP_RIGHT" prefHeight="900.0" prefWidth="1502.0">
          <children>
-            <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1086.0">
+            <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1208.0">
                <children>
-                  <HBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="112.0" prefWidth="1045.0" styleClass="card" stylesheets="@../css/style.css">
+                  <HBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="112.0" prefWidth="1145.0" styleClass="card" stylesheets="@../css/style.css">
                      <effect>
                         <DropShadow blurType="TWO_PASS_BOX" height="8.19" radius="4.6025" width="12.22" />
                      </effect>
@@ -38,25 +38,25 @@
                         </ImageView>
                         <VBox alignment="TOP_RIGHT" prefHeight="112.0" prefWidth="860.0">
                            <children>
-                              <Label prefHeight="18.0" prefWidth="77.0" text="الإسم : " textAlignment="RIGHT">
+                              <Label fx:id="Fname" nodeOrientation="RIGHT_TO_LEFT" prefHeight="21.0" prefWidth="327.0" text="الإسم : " textAlignment="RIGHT">
                                  <VBox.margin>
-                                    <Insets top="15.0" />
+                                    <Insets right="10.0" top="15.0" />
                                  </VBox.margin>
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </Label>
-                              <Label prefHeight="18.0" prefWidth="77.0" text="اللقب: " textAlignment="RIGHT">
+                              <Label fx:id="Lname" nodeOrientation="RIGHT_TO_LEFT" prefHeight="21.0" prefWidth="335.0" text="اللقب: " textAlignment="RIGHT">
                                  <VBox.margin>
-                                    <Insets top="10.0" />
+                                    <Insets right="10.0" top="10.0" />
                                  </VBox.margin>
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </Label>
-                              <Label contentDisplay="RIGHT" prefHeight="21.0" prefWidth="113.0" text="اسم المستخدم: " textAlignment="RIGHT">
+                              <Label fx:id="username" contentDisplay="RIGHT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="21.0" prefWidth="326.0" text="اسم المستخدم: " textAlignment="RIGHT">
                                  <VBox.margin>
-                                    <Insets top="10.0" />
+                                    <Insets right="10.0" top="10.0" />
                                  </VBox.margin>
                                  <font>
                                     <Font name="System Bold" size="15.0" />
@@ -77,7 +77,7 @@
                         <Insets top="40.0" />
                      </VBox.margin>
                   </HBox>
-                  <VBox fx:id="pane" alignment="TOP_CENTER" prefHeight="750.0" prefWidth="1086.0" />
+                  <VBox fx:id="pane" alignment="TOP_CENTER" prefHeight="749.0" prefWidth="1208.0" />
                </children>
                <HBox.margin>
                   <Insets />

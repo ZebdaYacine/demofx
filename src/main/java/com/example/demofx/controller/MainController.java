@@ -22,7 +22,7 @@ public class MainController implements Initializable {
 
     public static ArrayList<MFXButton> btnList= new ArrayList<>();
     @FXML
-    private Label username;
+    private Label username,Lname,Fname;
 
     @FXML
     private VBox pane;
@@ -39,7 +39,9 @@ public class MainController implements Initializable {
 
 
     public void showUser(String data) {
-        //username.setText(data);
+        username.setText("إسم الـمستخدم :"+data);
+        Fname.setText("الإسم :"+data);
+        Lname.setText("اللقب :"+data);
     }
 
 
@@ -59,6 +61,9 @@ public class MainController implements Initializable {
         btn2.setOnAction(event -> {
             changePane(btnList,2-dashboardIndex, "users");
         });
+        btn3.setOnAction(event -> {
+            changePane(btnList,3-dashboardIndex, "patient");
+        });
     }
 
     private void changePane(ArrayList<MFXButton> btnList,int index,String layout){
@@ -70,10 +75,6 @@ public class MainController implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(DemoFX.class.getResource("/com/example/demofx/layouts/"+layout+".fxml"));
             Parent root = fxmlLoader.load();
             pane.getChildren().removeAll(pane.getChildren());
-            if(layout.equals("users")){
-                UsersController usersController = fxmlLoader.getController();
-                usersController.setStage(stage);
-            }
             if (root != null) {
                 pane.getChildren().add(root);
             }
