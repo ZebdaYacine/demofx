@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.text.*?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.Blend?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="900.0" prefWidth="1500.0" style="-fx-background-color: #EEEEEE;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demofx.controller.MainController">
    <children>
-      <HBox alignment="TOP_RIGHT" prefHeight="900.0" prefWidth="1502.0">
+      <HBox alignment="TOP_RIGHT" prefHeight="900.0" prefWidth="1500.0">
          <children>
-            <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1208.0">
+            <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1200.0" HBox.hgrow="ALWAYS">
                <children>
                   <HBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="112.0" prefWidth="1145.0" styleClass="card" stylesheets="@../css/style.css">
                      <effect>
@@ -83,13 +89,13 @@
                   <Insets />
                </HBox.margin>
             </VBox>
-            <VBox alignment="TOP_CENTER" prefHeight="900.0" prefWidth="300.0" styleClass="vbox" stylesheets="@../css/style.css">
+            <VBox alignment="TOP_CENTER" prefHeight="900.0" prefWidth="300.0" styleClass="vbox" stylesheets="@../css/style.css" HBox.hgrow="ALWAYS">
                <children>
-                  <VBox alignment="TOP_CENTER" prefHeight="226.0" prefWidth="299.0" styleClass="vboxLogo" stylesheets="@../css/style.css">
+                  <VBox alignment="TOP_CENTER" prefHeight="180.0" styleClass="vboxLogo" stylesheets="@../css/style.css">
                      <children>
                         <ImageView fitHeight="123.0" fitWidth="253.0" pickOnBounds="true" preserveRatio="true">
                            <VBox.margin>
-                              <Insets left="5.0" right="5.0" top="20.0" />
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </VBox.margin>
                            <image>
                               <Image url="@../images/logopurple.png" />
@@ -99,20 +105,38 @@
                      <effect>
                         <DropShadow height="34.19" radius="8.0475" spread="0.08" width="0.0" />
                      </effect>
-                  </VBox>
-                  <MFXButton fx:id="btn1" alignment="CENTER" contentDisplay="RIGHT" prefHeight="80.0" prefWidth="300.0" text="الإحصائيات" textAlignment="CENTER">
                      <VBox.margin>
-                        <Insets top="40.0" />
+                        <Insets />
+                     </VBox.margin>
+                  </VBox>
+                  <MFXButton fx:id="btn1" alignment="CENTER_RIGHT" contentDisplay="RIGHT" depthLevel="LEVEL5" prefHeight="80.0" prefWidth="300.0" rippleColor="WHITE" style="-fx-background-color: transparent; -fx-background-radius: 0 0 0 0;" text="الإحصائيات" textAlignment="CENTER">
+                     <VBox.margin>
+                        <Insets top="15.0" />
                      </VBox.margin>
                      <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="Times New Roman" size="24.0" />
                      </font>
+                     <graphic>
+                        <ImageView fitHeight="40.0" fitWidth="40.0" translateX="6.0">
+                           <image>
+                              <Image url="@../icon/baseline_leaderboard_white_24dp.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets right="50.0" />
+                     </padding>
                      <textFill>
                         <LinearGradient endX="1.0" endY="1.0">
                            <stops>
                               <Stop>
                                  <color>
-                                    <Color red="0.9210526347160339" green="0.8570906519889832" blue="0.8570906519889832" />
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </Stop>
+                              <Stop offset="0.006711409395973154">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
                                  </color>
                               </Stop>
                               <Stop offset="1.0">
@@ -123,24 +147,22 @@
                            </stops>
                         </LinearGradient>
                      </textFill>
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" translateX="6.0">
-                           <image>
-                              <Image url="@../icon/baseline_leaderboard_white_24dp.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
                   </MFXButton>
-                  <MFXButton fx:id="btn2" contentDisplay="RIGHT" prefHeight="80.0" prefWidth="300.0" text="المستخدمين" textAlignment="CENTER">
+                  <MFXButton fx:id="btn2" alignment="CENTER_RIGHT" contentDisplay="RIGHT" depthLevel="LEVEL5" prefHeight="80.0" prefWidth="300.0" rippleColor="WHITE" style="-fx-background-color: transparent; -fx-background-radius: 0 0 0 0;" text="المستخدمين" textAlignment="CENTER">
                      <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="Times New Roman" size="24.0" />
                      </font>
                      <textFill>
                         <LinearGradient endX="1.0" endY="1.0">
                            <stops>
                               <Stop>
                                  <color>
-                                    <Color red="0.9210526347160339" green="0.8570906519889832" blue="0.8570906519889832" />
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </Stop>
+                              <Stop offset="0.006711409395973154">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
                                  </color>
                               </Stop>
                               <Stop offset="1.0">
@@ -158,17 +180,28 @@
                            </image>
                         </ImageView>
                      </graphic>
+                     <padding>
+                        <Insets right="50.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
                   </MFXButton>
-                  <MFXButton fx:id="btn3" contentDisplay="RIGHT" prefHeight="80.0" prefWidth="300.0" text="المرضى" textAlignment="CENTER">
+                  <MFXButton fx:id="btn3" alignment="CENTER_RIGHT" contentDisplay="RIGHT" depthLevel="LEVEL5" prefHeight="80.0" prefWidth="300.0" rippleColor="WHITE" style="-fx-background-color: transparent; -fx-background-radius: 0 0 0 0;" text="المرضى" textAlignment="CENTER">
                      <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="Times New Roman" size="24.0" />
                      </font>
                      <textFill>
                         <LinearGradient endX="1.0" endY="1.0">
                            <stops>
                               <Stop>
                                  <color>
-                                    <Color red="0.9210526347160339" green="0.8570906519889832" blue="0.8570906519889832" />
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </Stop>
+                              <Stop offset="0.006711409395973154">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
                                  </color>
                               </Stop>
                               <Stop offset="1.0">
@@ -186,17 +219,28 @@
                            </image>
                         </ImageView>
                      </graphic>
+                     <padding>
+                        <Insets right="50.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
                   </MFXButton>
-                  <MFXButton fx:id="btn4" contentDisplay="RIGHT" prefHeight="80.0" prefWidth="300.0" text="الملفات الطبية" textAlignment="CENTER">
+                  <MFXButton fx:id="btn4" alignment="CENTER_RIGHT" contentDisplay="RIGHT" depthLevel="LEVEL5" prefHeight="80.0" prefWidth="300.0" rippleColor="WHITE" style="-fx-background-color: transparent; -fx-background-radius: 0 0 0 0;" text="الملفات الطبية" textAlignment="CENTER">
                      <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="Times New Roman" size="24.0" />
                      </font>
                      <textFill>
                         <LinearGradient endX="1.0" endY="1.0">
                            <stops>
                               <Stop>
                                  <color>
-                                    <Color red="0.9210526347160339" green="0.8570906519889832" blue="0.8570906519889832" />
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </Stop>
+                              <Stop offset="0.006711409395973154">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
                                  </color>
                               </Stop>
                               <Stop offset="1.0">
@@ -214,17 +258,28 @@
                            </image>
                         </ImageView>
                      </graphic>
+                     <padding>
+                        <Insets right="50.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
                   </MFXButton>
-                  <MFXButton fx:id="btn5" contentDisplay="RIGHT" prefHeight="80.0" prefWidth="300.0" text="سجل الدخول" textAlignment="CENTER">
+                  <MFXButton fx:id="btn5" alignment="CENTER_RIGHT" contentDisplay="RIGHT" depthLevel="LEVEL5" prefHeight="80.0" prefWidth="300.0" rippleColor="WHITE" style="-fx-background-color: transparent; -fx-background-radius: 0 0 0 0;" text="سجل الدخول" textAlignment="CENTER">
                      <font>
-                        <Font name="Arial Narrow Bold" size="24.0" />
+                        <Font name="Times New Roman" size="24.0" />
                      </font>
                      <textFill>
                         <LinearGradient endX="1.0" endY="1.0">
                            <stops>
                               <Stop>
                                  <color>
-                                    <Color red="0.9210526347160339" green="0.8570906519889832" blue="0.8570906519889832" />
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </Stop>
+                              <Stop offset="0.006711409395973154">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
                                  </color>
                               </Stop>
                               <Stop offset="1.0">
@@ -242,17 +297,28 @@
                            </image>
                         </ImageView>
                      </graphic>
+                     <padding>
+                        <Insets right="50.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
                   </MFXButton>
-                  <MFXButton fx:id="btn6" contentDisplay="RIGHT" prefHeight="80.0" prefWidth="300.0" text="الـمتابعة الطبية" textAlignment="CENTER">
+                  <MFXButton fx:id="btn6" alignment="CENTER_RIGHT" contentDisplay="RIGHT" depthLevel="LEVEL5" prefHeight="80.0" prefWidth="300.0" rippleColor="WHITE" style="-fx-background-color: transparent; -fx-background-radius: 0 0 0 0;" text="الـمتابعة الطبية" textAlignment="CENTER">
                      <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="Times New Roman" size="24.0" />
                      </font>
                      <textFill>
                         <LinearGradient endX="1.0" endY="1.0">
                            <stops>
                               <Stop>
                                  <color>
-                                    <Color red="0.9210526347160339" green="0.8570906519889832" blue="0.8570906519889832" />
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </Stop>
+                              <Stop offset="0.006711409395973154">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
                                  </color>
                               </Stop>
                               <Stop offset="1.0">
@@ -270,17 +336,28 @@
                            </image>
                         </ImageView>
                      </graphic>
+                     <padding>
+                        <Insets right="50.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
                   </MFXButton>
-                  <MFXButton fx:id="btn7" contentDisplay="RIGHT" prefHeight="80.0" prefWidth="300.0" text="التشخيصات" textAlignment="CENTER">
+                  <MFXButton fx:id="btn7" alignment="CENTER_RIGHT" contentDisplay="RIGHT" depthLevel="LEVEL5" prefHeight="80.0" prefWidth="300.0" rippleColor="WHITE" style="-fx-background-color: transparent; -fx-background-radius: 0 0 0 0;" text="التشخيصات" textAlignment="CENTER">
                      <font>
-                        <Font name="Arial Narrow" size="24.0" />
+                        <Font name="Times New Roman" size="24.0" />
                      </font>
                      <textFill>
                         <LinearGradient endX="1.0" endY="1.0">
                            <stops>
                               <Stop>
                                  <color>
-                                    <Color red="0.9210526347160339" green="0.8570906519889832" blue="0.8570906519889832" />
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </Stop>
+                              <Stop offset="0.006711409395973154">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
                                  </color>
                               </Stop>
                               <Stop offset="1.0">
@@ -298,6 +375,12 @@
                            </image>
                         </ImageView>
                      </graphic>
+                     <padding>
+                        <Insets right="50.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
                   </MFXButton>
                </children>
             </VBox>

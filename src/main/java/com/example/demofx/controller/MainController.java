@@ -70,7 +70,7 @@ public class MainController implements Initializable {
         btnList.forEach(mfxButton -> {
             mfxButton.setStyle("-fx-background-color : transparent;");
         });
-        btnList.get(index).setStyle("-fx-background-color : linear-gradient( #b6b4fc 80%, #b2ccdc 100%);");
+        btnList.get(index).setStyle("-fx-background-color : #691cc5;");
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(DemoFX.class.getResource("/com/example/demofx/layouts/"+layout+".fxml"));
             Parent root = fxmlLoader.load();
