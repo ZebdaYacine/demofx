@@ -5,14 +5,13 @@ package com.example.demofx.databaseManger.jooq.tables.records;
 
 
 import com.example.demofx.databaseManger.jooq.tables.Patient;
-
-import java.time.LocalDate;
-
 import org.jooq.Field;
 import org.jooq.Record1;
 import org.jooq.Record14;
 import org.jooq.Row14;
 import org.jooq.impl.UpdatableRecordImpl;
+
+import java.time.LocalDate;
 
 
 /**
@@ -189,6 +188,9 @@ public class PatientRecord extends UpdatableRecordImpl<PatientRecord> implements
      */
     public LocalDate getBirthday() {
         return (LocalDate) get(11);
+    }
+    public String getBirthdayString() {
+        return getBirthday().toString() ;
     }
 
     /**

@@ -40,7 +40,7 @@
                         <Insets right="250.0" top="10.0" />
                      </VBox.margin>
                   </MFXTextField>
-                  <MFXPaginatedTableView fx:id="table" footerVisible="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="160.0" prefWidth="798.0" rowsPerPage="15">
+                  <MFXPaginatedTableView fx:id="table" footerVisible="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="160.0" prefWidth="800.0" rowsPerPage="15">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>
@@ -53,7 +53,7 @@
                   <Insets />
                </HBox.margin>
             </VBox>
-            <VBox alignment="TOP_CENTER" prefHeight="672.0" prefWidth="375.0">
+            <VBox alignment="TOP_CENTER" prefHeight="672.0" prefWidth="367.0">
                <children>
                   <MFXTextField fx:id="Fname" alignment="CENTER" floatMode="BORDER" floatingText="الإسم" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="350.0">
                      <font>

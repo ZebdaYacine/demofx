@@ -1,5 +1,6 @@
 package com.example.demofx.controller;
 
+import com.example.demofx.DemoFX;
 import com.example.demofx.databaseManger.jooq.tables.records.PatientRecord;
 import com.example.demofx.model.PatientModel;
 import io.github.palexdev.materialfx.controls.*;
@@ -8,21 +9,30 @@ import io.github.palexdev.materialfx.filter.DoubleFilter;
 import io.github.palexdev.materialfx.filter.IntegerFilter;
 import io.github.palexdev.materialfx.filter.LongFilter;
 import io.github.palexdev.materialfx.filter.StringFilter;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import org.jooq.Record;
+import org.jooq.Result;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.ResourceBundle;
+
+import static com.example.demofx.DemoFX.context;
+import static com.example.demofx.databaseManger.jooq.Tables.PATIENT;
 
 public class PatientController implements Initializable {
     @FXML
     private MFXPaginatedTableView<PatientModel> table;
     @FXML
-    private MFXTextField Fname, Lname, phone, ID, address,height,weight,work;
+    private MFXTextField Fname, Lname, phone, address,height,weight,work;
     @FXML
     private MFXButton delete, add, update;
+    @FXML
+    private MFXDatePicker birthday;
     @FXML
     private MFXComboBox<String> scientificLevelCmbox,socioEconomicLevelCmbox,genderCmbox,civilStatusCmbox;
 
@@ -32,48 +42,106 @@ public class PatientController implements Initializable {
 
     DialogsController dialogsController;
 
-   
+    private ArrayList<String> genderList ;
+    private ArrayList<String> civilStatusList ;
+    private static Long ID;
 
-   /* private ArrayList<UserModel> getAllUser() {
-       *//* Result<?> result = context.select().from(USER).leftOuterJoin(SERVICE)
-                .on(USER.IDSERVICE.eq(SERVICE.ID))
-                .leftOuterJoin(ROLE)
-                .on(USER.IDROLE.eq(ROLE.ID))
-                .leftOuterJoin(TYPE)
-                .on(TYPE.ID.eq(USER.IDTYPE))
+
+
+    private ArrayList<PatientModel> getAllPatients() {
+        Result<?> result = context.select().from(PATIENT)
                 .fetch();
-        ArrayList<UserModel> listUser = new ArrayList<>();
+        ArrayList<PatientModel> listUser = new ArrayList<>();
         for (Record r : result) {
-            ServiceRecord serviceRecord = r.into(SERVICE);
-            UserRecord userRecord = r.into(USER);
-            RoleRecord roleRecord = r.into(ROLE);
-            TypeRecord typeRecord = r.into(TYPE);
-            UserModel userModel = new UserModel(userRecord.getId(), userRecord.getUsername(), userRecord.getPassword(),
-                    userRecord.getFirstname(), userRecord.getLastname(), userRecord.getPhone(), typeRecord.getName(), serviceRecord.getId(),
-                    roleRecord.getId(), userRecord.getIdtype(), serviceRecord.getName(), roleRecord.getName());
-            listUser.add(userModel);
+            PatientModel patientRecord = new PatientModel();
+            patientRecord.setAddress(r.getValue(PATIENT.ADDRESS));
+            patientRecord.setLastname(r.getValue(PATIENT.LASTNAME));
+            patientRecord.setFirstname(r.getValue(PATIENT.FIRSTNAME));
+            patientRecord.setPhone(r.getValue(PATIENT.PHONE));
+            patientRecord.setAge(r.getValue(PATIENT.AGE));
+            patientRecord.setId(r.getValue(PATIENT.ID));
+            patientRecord.setBirthday(r.getValue(PATIENT.BIRTHDAY));
+            patientRecord.setWorke(r.getValue(PATIENT.WORKE));
+            patientRecord.setGender(r.getValue(PATIENT.GENDER));
+            patientRecord.setHeight(r.getValue(PATIENT.HEIGHT));
+            patientRecord.setWieght(r.getValue(PATIENT.WIEGHT));
+            patientRecord.setWorke(r.getValue(PATIENT.WORKE));
+            patientRecord.setCivilstatus(r.getValue(PATIENT.CIVILSTATUS));
+            listUser.add( patientRecord);
         }
-        return listUser;*//*
-    }*/
+        return listUser;
+    }
 
     
     private void fillInputs(PatientRecord pateintRecord) {
         Fname.setText(pateintRecord.getFirstname());
         Lname.setText(pateintRecord.getLastname());
         phone.setText(pateintRecord.getPhone());
-        ID.setText(pateintRecord.getId().toString());
+        address.setText(pateintRecord.getAddress());
+        height.setText(pateintRecord.getHeight()+"");
+        weight.setText(pateintRecord.getHeight()+"");
+        birthday.setText(pateintRecord.getBirthdayString());
+        genderCmbox.selectItem(pateintRecord.getGender());
+        civilStatusCmbox.selectItem(pateintRecord.getCivilstatus());
+        ID=Long.parseLong(pateintRecord.getId().toString());
     }
 
     private void clearInputes() {
         Fname.setText("");
         Lname.setText("");
         phone.setText("");
-        ID.setText("");
+        address.setText("");
+        height.setText("");
+        weight.setText("");
+        birthday.setText("");
+        genderCmbox.selectItem("");
+        civilStatusCmbox.selectItem("");
+        ID=0L;
     }
 
     private void loadDataToLayout(){
+        genderList = new ArrayList<>();
+        civilStatusList= new ArrayList<>();
+        civilStatusList.add("اغزب");
+        civilStatusList.add("متزوج");
+        civilStatusList.add("أرمل");
+        civilStatusList.add("مطلق");
+        genderList.add("ذكر");
+        genderList.add("أنثى");
         setupTable();
         table.autosizeColumnsOnInitialization();
+        genderCmbox.getItems().addAll(FXCollections.observableArrayList(genderList));
+        civilStatusCmbox.getItems().addAll(FXCollections.observableArrayList(civilStatusList));
+    }
+
+    private PatientRecord initRecord(){
+        currentPage = table.getCurrentPage();
+        PatientRecord pateintRecord = DemoFX.context.newRecord(PATIENT);
+        pateintRecord.setFirstname(Fname.getText());
+        pateintRecord.setLastname(Lname.getText());
+        pateintRecord.setWieght(Double.parseDouble(weight.getText()));
+        pateintRecord.setHeight(Integer.parseInt(height.getText()));
+        pateintRecord.setPhone(phone.getText());
+        pateintRecord.setGender(genderCmbox.getSelectionModel().getSelectedItem().toString());
+        pateintRecord.setCivilstatus(civilStatusCmbox.getSelectionModel().getSelectedItem().toString());
+        pateintRecord.setAddress(address.getText());
+        pateintRecord.setWorke(work.getText());
+        pateintRecord.setBirthday(birthday.getValue());
+        return  pateintRecord;
+    }
+
+    private void refrechLayout(){
+        listPatients=FXCollections.observableArrayList(getAllPatients());
+        table.setItems(listPatients);
+        table.goToPage(currentPage);
+        table.setCurrentPage(currentPage);
+        clearInputes();
+    }
+
+    private void trackingException(Exception e ,String ErrorMessage){
+        e.getStackTrace();
+        System.out.println(e.getMessage());
+        dialogsController.openInfo(ErrorMessage);
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -85,15 +153,32 @@ public class PatientController implements Initializable {
                 fillInputs(patientRecord);
             }
         });
-
         add.setOnAction(event -> {
-
+            try {
+                initRecord().store();
+                refrechLayout();
+                dialogsController.openInfo("تم عملية الإضافة بنجاح");
+            }catch (Exception e){
+                trackingException(e,"حدث خطأ في عملية الإضافة");
+            }
         });
         delete.setOnAction(actionEvent -> {
-
+            currentPage = table.getCurrentPage();
+            context.delete(PATIENT).where(PATIENT.ID.eq(ID)).execute();
+            listPatients=FXCollections.observableArrayList(getAllPatients());
+            table.setItems(listPatients);
+            table.goToPage(currentPage);
+            table.setCurrentPage(currentPage);
+            clearInputes();
         });
         update.setOnAction(actionEvent -> {
-
+            try {
+                initRecord().update();
+                refrechLayout();
+                dialogsController.openInfo("تم عملية التعديل بنجاح");
+            }catch (Exception e){
+                trackingException(e,"حدث خطأ في عملية التعديل");
+            }
         });
     }
 
@@ -103,38 +188,49 @@ public class PatientController implements Initializable {
         MFXTableColumn<PatientModel> LnameColumn = new MFXTableColumn<>("اللقب", true, Comparator.comparing(PatientModel::getLastname));
         MFXTableColumn<PatientModel> PhoneColumn = new MFXTableColumn<>("الهاتف", true, Comparator.comparing(PatientModel::getPhone));
         MFXTableColumn<PatientModel> AddressColumn = new MFXTableColumn<>("العنوان", true, Comparator.comparing(PatientModel::getAddress));
-        MFXTableColumn<PatientModel> BirthdayColumn = new MFXTableColumn<>("العمر", true, Comparator.comparing(PatientModel::getAge));
-        //MFXTableColumn<PatientModel> WorkColumn = new MFXTableColumn<>("العمل", true, Comparator.comparing(PatientModel::getWorke));
+        //MFXTableColumn<PatientModel> BirthdayColumn = new MFXTableColumn<>("العمر", true, Comparator.comparing(PatientModel::getAge));
+        MFXTableColumn<PatientModel> WorkColumn = new MFXTableColumn<>("العمل", true, Comparator.comparing(PatientModel::getWorke));
         MFXTableColumn<PatientModel> HeightColumn = new MFXTableColumn<>("الطول", true, Comparator.comparing(PatientModel::getHeight));
         MFXTableColumn<PatientModel> WeightColumn = new MFXTableColumn<>("الوزن", true, Comparator.comparing(PatientModel::getWieght));
-
+        MFXTableColumn<PatientModel> GenderColumn = new MFXTableColumn<>("الجنس", true, Comparator.comparing(PatientModel::getGender));
+        MFXTableColumn<PatientModel> statusCivilColumn = new MFXTableColumn<>("الحالة المدنية", true, Comparator.comparing(PatientModel::getCivilstatus));
+        MFXTableColumn<PatientModel> dateColumn = new MFXTableColumn<>("تاريخ الميلاد", true, Comparator.comparing(PatientModel::getBirthday));
 
 
         AddressColumn.setRowCellFactory(patientModel -> new MFXTableRowCell<>(PatientModel::getAddress));
-        //WorkColumn.setRowCellFactory(patientModel -> new MFXTableRowCell<>(PatientModel::getWorke));
-        BirthdayColumn.setRowCellFactory(patientModel -> new MFXTableRowCell<>(PatientModel::getAge));
+        WorkColumn.setRowCellFactory(patientModel -> new MFXTableRowCell<>(PatientModel::getWorke));
+        //BirthdayColumn.setRowCellFactory(patientModel -> new MFXTableRowCell<>(PatientModel::getAge));
         PhoneColumn.setRowCellFactory(patientModel -> new MFXTableRowCell<>(PatientModel::getPhone));
         LnameColumn.setRowCellFactory(patientModel -> new MFXTableRowCell<>(PatientModel::getLastname));
         FnameColumn.setRowCellFactory(patientModel -> new MFXTableRowCell<>(PatientModel::getFirstname));
         Idcolumn.setRowCellFactory(patientModel -> new MFXTableRowCell<>(PatientModel::getId));
         HeightColumn.setRowCellFactory(patientModel -> new MFXTableRowCell<>(PatientModel::getHeight));
         WeightColumn.setRowCellFactory(patientModel -> new MFXTableRowCell<>(PatientModel::getWieght));
+        statusCivilColumn.setRowCellFactory(patientModel -> new MFXTableRowCell<>(PatientModel::getCivilstatus));
+        GenderColumn.setRowCellFactory(patientModel -> new MFXTableRowCell<>(PatientModel::getGender));
+        dateColumn.setRowCellFactory(patientModel -> new MFXTableRowCell<>(PatientModel::getBirthday));
 
-        table.getTableColumns().addAll(Idcolumn, FnameColumn, LnameColumn, PhoneColumn, AddressColumn, WeightColumn,HeightColumn, BirthdayColumn);
+
+        table.getTableColumns().addAll(Idcolumn, FnameColumn, LnameColumn,GenderColumn,statusCivilColumn, PhoneColumn, AddressColumn, WeightColumn,HeightColumn,
+                dateColumn,WorkColumn);
         table.getFilters().addAll(
                 new LongFilter<>("ID", PatientRecord::getId),
                 new StringFilter<>("الإسم", PatientRecord::getFirstname),
                 new StringFilter<>("اللقب", PatientRecord::getLastname),
                 new StringFilter<>("العنوان", PatientRecord::getAddress),
                 new StringFilter<>("الهاتف", PatientRecord::getPhone),
-                new StringFilter<>("العمل", PatientRecord::getWorke),
+                //new StringFilter<>("العمر", PatientRecord::getWorke),
                 new IntegerFilter<>("الطول", PatientRecord::getHeight),
                 new DoubleFilter<>("الوزن", PatientRecord::getWieght),
-                new IntegerFilter<>("العمر", PatientRecord::getAge)
-                );
-       /* listPatients = FXCollections.observableArrayList(getAllUser());
+                new StringFilter<>("العمر", PatientRecord::getWorke),
+                new IntegerFilter<>("العمل", PatientRecord::getAge),
+                new StringFilter<>("الحالة المدنية", PatientRecord::getCivilstatus),
+                new StringFilter<>("الجنس", PatientRecord::getGender),
+                new StringFilter<>("تاريخ الميلاد", PatientRecord::getBirthdayString)
+        );
+        listPatients = FXCollections.observableArrayList(getAllPatients());
         table.setItems(listPatients);
         table.goToPage(0);
-        table.setCurrentPage(0);*/
+        table.setCurrentPage(0);
     }
 }

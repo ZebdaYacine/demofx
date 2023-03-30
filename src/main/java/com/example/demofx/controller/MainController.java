@@ -54,33 +54,33 @@ public class MainController implements Initializable {
         btnList.add(btn5);
         btnList.add(btn6);
         btnList.add(btn7);
-        changePane(btnList,1-dashboardIndex, "statistics");
+        changePane(btnList,1-dashboardIndex, "statistics",pane);
         btn1.setOnAction(event -> {
-            changePane(btnList,1-dashboardIndex, "statistics");
+            changePane(btnList,1-dashboardIndex, "statistics",pane);
         });
         btn2.setOnAction(event -> {
-            changePane(btnList,2-dashboardIndex, "users");
+            changePane(btnList,2-dashboardIndex, "users",pane);
         });
         btn3.setOnAction(event -> {
-            changePane(btnList,3-dashboardIndex, "patient");
+            changePane(btnList,3-dashboardIndex, "patient",pane);
         });
     }
 
-    private void changePane(ArrayList<MFXButton> btnList,int index,String layout){
-        btnList.forEach(mfxButton -> {
-            mfxButton.setStyle("-fx-background-color : transparent;");
-        });
-        btnList.get(index).setStyle("-fx-background-color : #691cc5;");
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(DemoFX.class.getResource("/com/example/demofx/layouts/"+layout+".fxml"));
-            Parent root = fxmlLoader.load();
-            pane.getChildren().removeAll(pane.getChildren());
-            if (root != null) {
-                pane.getChildren().add(root);
+    private void changePane(ArrayList<MFXButton> btnList,int index,String layout ,VBox pane){
+            btnList.forEach(mfxButton -> {
+                mfxButton.setStyle("-fx-background-color : transparent;");
+            });
+            btnList.get(index).setStyle("-fx-background-color : #691cc5;");
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(DemoFX.class.getResource("/com/example/demofx/layouts/"+layout+".fxml"));
+                Parent root = fxmlLoader.load();
+                pane.getChildren().removeAll(pane.getChildren());
+                if (root != null) {
+                    pane.getChildren().add(root);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (IOException ex) {
-            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
 
