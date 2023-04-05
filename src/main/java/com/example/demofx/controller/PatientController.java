@@ -48,6 +48,8 @@ public class PatientController implements Initializable {
 
 
 
+
+
     private ArrayList<PatientModel> getAllPatients() {
         Result<?> result = context.select().from(PATIENT)
                 .fetch();
@@ -74,15 +76,36 @@ public class PatientController implements Initializable {
 
     
     private void fillInputs(PatientRecord pateintRecord) {
-        Fname.setText(pateintRecord.getFirstname());
-        Lname.setText(pateintRecord.getLastname());
-        phone.setText(pateintRecord.getPhone());
-        address.setText(pateintRecord.getAddress());
-        height.setText(pateintRecord.getHeight()+"");
-        weight.setText(pateintRecord.getHeight()+"");
-        birthday.setText(pateintRecord.getBirthdayString());
-        genderCmbox.selectItem(pateintRecord.getGender());
-        civilStatusCmbox.selectItem(pateintRecord.getCivilstatus());
+        if(pateintRecord.getWorke()!=null){
+            work.setText(pateintRecord.getWorke());
+        }
+        if(pateintRecord.getFirstname()!=null){
+            Fname.setText(pateintRecord.getFirstname());
+        }
+        if(pateintRecord.getLastname()!=null){
+            Lname.setText(pateintRecord.getLastname());
+        }
+        if(pateintRecord.getPhone()!=null){
+            phone.setText(pateintRecord.getPhone());
+        }
+        if(pateintRecord.getAddress()!=null) {
+            address.setText(pateintRecord.getAddress());
+        }
+        if(pateintRecord.getHeight()!=null) {
+            height.setText(pateintRecord.getHeight()+"");
+        }
+        if(pateintRecord.getWieght()!=null) {
+            weight.setText(pateintRecord.getHeight()+"");
+        }
+        if(pateintRecord.getBirthday()!=null){
+            birthday.setText(pateintRecord.getBirthdayString());
+        }
+        if(pateintRecord.getGender()!=null && !pateintRecord.getGender().isEmpty()){
+            genderCmbox.selectItem(pateintRecord.getGender());
+        }
+        if(pateintRecord.getCivilstatus()!=null && !pateintRecord.getCivilstatus().isEmpty()){
+            civilStatusCmbox.selectItem(pateintRecord.getCivilstatus());
+        }
         ID=Long.parseLong(pateintRecord.getId().toString());
     }
 
@@ -93,9 +116,10 @@ public class PatientController implements Initializable {
         address.setText("");
         height.setText("");
         weight.setText("");
+        work.setText("");
         birthday.setText("");
-        genderCmbox.selectItem("");
-        civilStatusCmbox.selectItem("");
+        //genderCmbox.selectItem("");
+        //civilStatusCmbox.selectItem("");
         ID=0L;
     }
 
@@ -169,11 +193,13 @@ public class PatientController implements Initializable {
             table.setItems(listPatients);
             table.goToPage(currentPage);
             table.setCurrentPage(currentPage);
-            clearInputes();
+            refrechLayout();
         });
         update.setOnAction(actionEvent -> {
             try {
-                initRecord().update();
+                PatientRecord patientRecord=initRecord();
+                patientRecord.setId(ID);
+                patientRecord.update();
                 refrechLayout();
                 dialogsController.openInfo("تم عملية التعديل بنجاح");
             }catch (Exception e){
