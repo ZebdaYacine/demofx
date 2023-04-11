@@ -70,12 +70,12 @@
 }
 
 .hbox{
-    -fx-background-color: #EEEEEE;
+    -fx-background-color: transparent;
     -fx-background-radius: 0 0 0 0;
 }
 
 .vboxLogo{
-    -fx-background-color: #EEEEEE;
+    -fx-background-color: white;
     -fx-background-radius: 0 0 180 180;
 }
 

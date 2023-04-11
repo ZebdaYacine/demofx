@@ -38,7 +38,6 @@ public class LoginController {
         this.stage=stage;
     }
 
-    private static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
 
     private void getAll() {

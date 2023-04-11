@@ -29,15 +29,18 @@ import java.util.ResourceBundle;
 import static com.example.demofx.DemoFX.context;
 import static com.example.demofx.databaseManger.jooq.Tables.*;
 
-public class UsersController implements Initializable {
+public class FollowController implements Initializable {
     @FXML
     private MFXPaginatedTableView<UserModel> table;
+    @FXML
     private MFXTextField Fname;
     @FXML
     private MFXTextField Lname, phone, ID, srh;
     @FXML
     private MFXButton delete, add, update;
+    @FXML
     private MFXComboBox<TypeModel> typeCmbox;
+    @FXML
     private MFXFilterComboBox<RoleModel> roleCmbox;
     @FXML
     private MFXFilterComboBox<ServiceModel> serviceCmbox;
@@ -48,16 +51,6 @@ public class UsersController implements Initializable {
     DialogsController dialogsController;
 
     private Stage stage;
-    @FXML
-    private MFXFilterComboBox<?> patientCmbox;
-    @FXML
-    private MFXFilterComboBox<?> doctorCmbox;
-    @FXML
-    private MFXFilterComboBox<?> psychologistCmbox;
-    @FXML
-    private MFXTextField sickness;
-    @FXML
-    private MFXTextField status;
 
     public void setStage() {
          //stage = (Stage) add.getScene().getWindow();
