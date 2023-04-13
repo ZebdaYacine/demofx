@@ -163,13 +163,13 @@ public class FollowController implements Initializable {
         setupTable();
         table.autosizeColumnsOnInitialization();
         serviceCmbox.setItems(getAllServices());
-        typeCmbox.setItems(getAllTypes());
+        //typeCmbox.setItems(getAllTypes());
         roleCmbox.setItems(getAllRoles());
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        dialogsController=new DialogsController();
-        loadDataToLayout();
+        /*dialogsController=new DialogsController();
+        //loadDataToLayout();
         table.getSelectionModel().selectionProperty().addListener((observableValue, integerUserRecordObservableMap, row) -> {
             UserRecord userRecord = table.getSelectionModel().getSelectedValue();
             if (userRecord != null) {
@@ -240,7 +240,7 @@ public class FollowController implements Initializable {
             table.goToPage(currentPage);
             table.setCurrentPage(currentPage);
             clearInputes();
-        });
+        });*/
     }
 
     private void setupTable() {
