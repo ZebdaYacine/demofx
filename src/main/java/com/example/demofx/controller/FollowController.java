@@ -1,6 +1,5 @@
 package com.example.demofx.controller;
 
-import com.example.demofx.DemoFX;
 import com.example.demofx.databaseManger.jooq.tables.records.RoleRecord;
 import com.example.demofx.databaseManger.jooq.tables.records.ServiceRecord;
 import com.example.demofx.databaseManger.jooq.tables.records.TypeRecord;
