@@ -70,6 +70,9 @@ public class MainController implements Initializable {
         btn3.setOnAction(event -> {
             changePane(btnList,3-dashboardIndex, "patient",pane);
         });
+        btn4.setOnAction(event -> {
+            changePane(btnList,3-dashboardIndex, "follow",pane);
+        });
     }
 
     private void changePane(ArrayList<MFXButton> btnList,int index,String layout ,VBox pane){

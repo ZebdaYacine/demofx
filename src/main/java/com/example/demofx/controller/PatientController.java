@@ -141,7 +141,12 @@ public class PatientController implements Initializable {
     private PatientRecord initRecord(){
         currentPage = table.getCurrentPage();
         PatientRecord pateintRecord = DemoFX.context.newRecord(PATIENT);
-        pateintRecord.setFirstname(Fname.getText());
+        if(Fname.getText().isEmpty()){
+            Fname.setStyle("-fx-border-color: #b61515");
+        }else{
+            pateintRecord.setFirstname(Fname.getText());
+            Fname.setStyle("-fx-border-color: transparent");
+        }
         pateintRecord.setLastname(Lname.getText());
         pateintRecord.setWieght(Double.parseDouble(weight.getText()));
         pateintRecord.setHeight(Integer.parseInt(height.getText()));
