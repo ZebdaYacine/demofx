@@ -5,14 +5,13 @@ package com.example.demofx.databaseManger.jooq.tables.records;
 
 
 import com.example.demofx.databaseManger.jooq.tables.Follow;
-
-import java.time.LocalDate;
-
 import org.jooq.Field;
 import org.jooq.Record1;
 import org.jooq.Record9;
 import org.jooq.Row9;
 import org.jooq.impl.UpdatableRecordImpl;
+
+import java.time.LocalDate;
 
 
 /**
@@ -51,6 +50,7 @@ public class FollowRecord extends UpdatableRecordImpl<FollowRecord> implements R
         return (LocalDate) get(1);
     }
 
+  
     /**
      * Setter for <code>doctorlite.follow.dateGo</code>.
      */

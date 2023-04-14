@@ -1,22 +1,17 @@
 package com.example.demofx.controller;
 
-import com.example.demofx.databaseManger.jooq.tables.records.RoleRecord;
-import com.example.demofx.databaseManger.jooq.tables.records.ServiceRecord;
-import com.example.demofx.databaseManger.jooq.tables.records.TypeRecord;
-import com.example.demofx.databaseManger.jooq.tables.records.UserRecord;
-import com.example.demofx.model.RoleModel;
-import com.example.demofx.model.ServiceModel;
-import com.example.demofx.model.TypeModel;
-import com.example.demofx.model.UserModel;
+import com.example.demofx.DemoFX;
+import com.example.demofx.databaseManger.jooq.tables.records.PatientRecord;
+import com.example.demofx.model.FollowModel;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.filter.LongFilter;
 import io.github.palexdev.materialfx.filter.StringFilter;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.stage.Stage;
 import org.jooq.Record;
 import org.jooq.Result;
 
@@ -26,249 +21,229 @@ import java.util.Comparator;
 import java.util.ResourceBundle;
 
 import static com.example.demofx.DemoFX.context;
-import static com.example.demofx.databaseManger.jooq.Tables.*;
+import static com.example.demofx.databaseManger.jooq.Tables.FOLLOW;
+import static com.example.demofx.databaseManger.jooq.Tables.PATIENT;
 
 public class FollowController implements Initializable {
     @FXML
-    private MFXPaginatedTableView<UserModel> table;
+    private MFXPaginatedTableView<FollowModel> table;
     @FXML
-    private MFXTextField Fname;
-    @FXML
-    private MFXTextField Lname, phone, ID, srh;
+    private MFXTextField patient, sickness, doctor, psychologist, status, service;
     @FXML
     private MFXButton delete, add, update;
     @FXML
-    private MFXComboBox<TypeModel> typeCmbox;
+    private MFXDatePicker dateEnter, dateGo;
     @FXML
-    private MFXFilterComboBox<RoleModel> roleCmbox;
-    @FXML
-    private MFXFilterComboBox<ServiceModel> serviceCmbox;
-    public static ObservableList<UserModel> listUsers;
+    private MFXComboBox<String> scientificLevelCmbox, socioEconomicLevelCmbox, genderCmbox, civilStatusCmbox;
+
+    public static ObservableList<FollowModel> listFollow;
 
     public static int currentPage;
 
     DialogsController dialogsController;
 
-    private Stage stage;
+    private ArrayList<String> genderList;
+    private ArrayList<String> civilStatusList;
+    private static Long ID;
 
-    public void setStage() {
-         //stage = (Stage) add.getScene().getWindow();
-    }
+    public static SimpleStringProperty patientProperty,dateEnterProperty,dateGoProperty,sicknessProperty,doctorProperty,psychologistProperty,statusProperty,serviceProperty;
 
-    public Stage getStage() {
-        return stage;
-    }
 
-    private ArrayList<UserModel> getAllUser() {
-        Result<?> result = context.select().from(USER).leftOuterJoin(SERVICE)
-                .on(USER.IDSERVICE.eq(SERVICE.ID))
-                .leftOuterJoin(ROLE)
-                .on(USER.IDROLE.eq(ROLE.ID))
-                .leftOuterJoin(TYPE)
-                .on(TYPE.ID.eq(USER.IDTYPE))
+
+    private ArrayList<FollowModel> getAllFollows() {
+        Result<?> result = context.select().from(FOLLOW)
                 .fetch();
-        ArrayList<UserModel> listUser = new ArrayList<>();
+        ArrayList<FollowModel> listUser = new ArrayList<>();
         for (Record r : result) {
-            ServiceRecord serviceRecord = r.into(SERVICE);
-            UserRecord userRecord = r.into(USER);
-            RoleRecord roleRecord = r.into(ROLE);
-            TypeRecord typeRecord = r.into(TYPE);
-            UserModel userModel = new UserModel(userRecord.getId(), userRecord.getUsername(), userRecord.getPassword(),
-                    userRecord.getFirstname(), userRecord.getLastname(), userRecord.getPhone(), typeRecord.getName(), serviceRecord.getId(),
-                    roleRecord.getId(), userRecord.getIdtype(), serviceRecord.getName(), roleRecord.getName());
-            listUser.add(userModel);
+            FollowModel followModel = new FollowModel();
+            followModel.setId(r.getValue(FOLLOW.ID));
+            followModel.setIdpatient(r.getValue(FOLLOW.IDPATIENT));
+            followModel.setIddoctor(r.getValue(FOLLOW.IDDOCTOR));
+            followModel.setIdservice(r.getValue(FOLLOW.IDSERVICE));
+            followModel.setIdpsychologist(r.getValue(FOLLOW.IDPSYCHOLOGIST));
+            followModel.setDatego(r.getValue(FOLLOW.DATEGO));
+            followModel.setDateenter(r.getValue(FOLLOW.DATEENTER));
+            followModel.setStatus(r.getValue(FOLLOW.STATUS));
+            followModel.setSickness(r.getValue(FOLLOW.SICKNESS));
+            listUser.add(followModel);
         }
         return listUser;
     }
 
+    private void initDataBinding(){
+        AutoCompletePopup<String> autoCompletePopup = new AutoCompletePopup<>();
+        //autoCompletePopup.().addAll("JavaFX", "Java", "JavaScript", "JavaEE", "JavaSE");
 
-
-    private ObservableList<ServiceModel> getAllServices() {
-        ObservableList<ServiceModel> listServices=FXCollections.observableArrayList(new ServiceModel());
-        listServices.remove(0);
-        Result<?> result = context.select().from(SERVICE).fetch();
-        for (Record r : result) {
-            ServiceModel serviceModel =new ServiceModel(r.getValue(SERVICE.ID),r.getValue(SERVICE.NAME));
-            listServices.add(serviceModel);
-        }
-        return listServices;
-    }
-
-    private ObservableList<TypeModel> getAllTypes() {
-        ObservableList<TypeModel> listTypes=FXCollections.observableArrayList(new TypeModel());
-        listTypes.remove(0);
-        Result<?> result = context.select().from(TYPE).fetch();
-        for (Record r : result) {
-            TypeModel typeModel =new TypeModel(r.getValue(TYPE.ID),r.getValue(TYPE.NAME));
-            listTypes.add(typeModel);
-        }
-        return listTypes;
-    }
-
-    private ObservableList<RoleModel> getAllRoles() {
-        ObservableList<RoleModel> listRoles=FXCollections.observableArrayList(new RoleModel());
-        listRoles.remove(0);
-        Result<?> result = context.select().from(ROLE).fetch();
-        for (Record r : result) {
-            RoleModel roleModel =new RoleModel(r.getValue(ROLE.ID),r.getValue(ROLE.NAME));
-            listRoles.add(roleModel);
-        }
-        return listRoles;
+        //inti Property
+        patientProperty=new SimpleStringProperty();
+        sicknessProperty=new SimpleStringProperty();
+        doctorProperty =new SimpleStringProperty();
+        psychologistProperty=new SimpleStringProperty();
+        statusProperty=new SimpleStringProperty();
+        serviceProperty=new SimpleStringProperty();
+        dateEnterProperty=new SimpleStringProperty();
+        dateGoProperty=new SimpleStringProperty();
+        //binding Property with fields
+        patientProperty.bindBidirectional(patient.textProperty());
+        doctorProperty.bindBidirectional(doctor.textProperty());
+        psychologistProperty.bindBidirectional(psychologist.textProperty());
+        statusProperty.bindBidirectional(status.textProperty());
+        serviceProperty.bindBidirectional(service.textProperty());
+        sicknessProperty.bindBidirectional(sickness.textProperty());
+        dateEnterProperty.bindBidirectional(dateEnter.textProperty());
+        dateGoProperty.bindBidirectional(dateGo.textProperty());
     }
 
 
-    /*public long getIdFromName(String name, String table) {
-        switch (table){
-            case "type":{
-                return context.select().from(TYPE).where(TYPE.NAME.eq(name)).fetchOne().getValue(TYPE.ID);
-            }
-            case "service":{
-                return context.select().from(SERVICE).where(SERVICE.NAME.eq(name)).fetchOne().getValue(SERVICE.ID);
-            }
-            case "role":{
-                return context.select().from(ROLE).where(ROLE.NAME.eq(name)).fetchOne().getValue(ROLE.ID);
-            }
-            default:{
-                return  0L;
-            }
-        }
-    }*/
-
-    private ArrayList<UserModel> searchUserByPhone(String phone) {
-        ArrayList<UserModel> listUserFound = new ArrayList<>();
-        listUsers.forEach(userModel -> {
-            if(userModel.getPhone().contains(phone)){
-                listUserFound.add(userModel);
-            }
-        });
-        return listUserFound;
-    }
-
-    private void fillInputs(UserRecord userRecord) {
-        Fname.setText(userRecord.getFirstname());
-        Lname.setText(userRecord.getLastname());
-        phone.setText(userRecord.getPhone());
-        ID.setText(userRecord.getId().toString());
+    private void fillInputs(FollowModel followRecord) {
+        ID = Long.parseLong(followRecord.getId().toString());
+        patientProperty.set(followRecord.getPatientFullName());
+        doctorProperty.set(followRecord.getDrFullName());
+        sicknessProperty.set(followRecord.getSickness());
+        statusProperty.set(followRecord.getStatus());
+        serviceProperty.set(followRecord.getServiceName());
+        psychologistProperty.set(followRecord.getPsFullName());
+        dateGoProperty.set(followRecord.getDatego().toString());
+        dateEnterProperty.set(followRecord.getDateenterToString().toString());
     }
 
     private void clearInputes() {
-        Fname.setText("");
-        Lname.setText("");
-        phone.setText("");
-        ID.setText("");
+        patient.setText("");
+        sickness.setText("");
+        psychologist.setText("");
+        status.setText("");
+        service.setText("");
+        dateEnter.setText("");
+        //genderCmbox.selectItem("");
+        //civilStatusCmbox.selectItem("");
+        ID = 0L;
     }
 
-    private void loadDataToLayout(){
+    private void loadDataToLayout() {
+        genderList = new ArrayList<>();
+        civilStatusList = new ArrayList<>();
+        civilStatusList.add("اغزب");
+        civilStatusList.add("متزوج");
+        civilStatusList.add("أرمل");
+        civilStatusList.add("مطلق");
+        genderList.add("ذكر");
+        genderList.add("أنثى");
         setupTable();
         table.autosizeColumnsOnInitialization();
-        serviceCmbox.setItems(getAllServices());
-        //typeCmbox.setItems(getAllTypes());
-        roleCmbox.setItems(getAllRoles());
+        //genderCmbox.getItems().addAll(FXCollections.observableArrayList(genderList));
+        //civilStatusCmbox.getItems().addAll(FXCollections.observableArrayList(civilStatusList));
     }
+
+    private PatientRecord initRecord() {
+        currentPage = table.getCurrentPage();
+        PatientRecord pateintRecord = DemoFX.context.newRecord(PATIENT);
+        if (patient.getText().isEmpty()) {
+            patient.setStyle("-fx-border-color: #b61515");
+        } else {
+            pateintRecord.setFirstname(patient.getText());
+            patient.setStyle("-fx-border-color: transparent");
+        }
+        pateintRecord.setLastname(sickness.getText());
+        pateintRecord.setWieght(Double.parseDouble(service.getText()));
+        pateintRecord.setHeight(Integer.parseInt(status.getText()));
+        pateintRecord.setGender(genderCmbox.getSelectionModel().getSelectedItem().toString());
+        pateintRecord.setCivilstatus(civilStatusCmbox.getSelectionModel().getSelectedItem().toString());
+        pateintRecord.setAddress(psychologist.getText());
+        pateintRecord.setBirthday(dateEnter.getValue());
+        return pateintRecord;
+    }
+
+    private void refrechLayout() {
+        listFollow = FXCollections.observableArrayList();
+        table.setItems(listFollow);
+        table.goToPage(currentPage);
+        table.setCurrentPage(currentPage);
+        clearInputes();
+    }
+
+    private void trackingException(Exception e, String ErrorMessage) {
+        e.getStackTrace();
+        System.out.println(e.getMessage());
+        dialogsController.openInfo(ErrorMessage);
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        /*dialogsController=new DialogsController();
-        //loadDataToLayout();
+        dialogsController = new DialogsController();
+        initDataBinding();
+        loadDataToLayout();
         table.getSelectionModel().selectionProperty().addListener((observableValue, integerUserRecordObservableMap, row) -> {
-            UserRecord userRecord = table.getSelectionModel().getSelectedValue();
-            if (userRecord != null) {
-                fillInputs(userRecord);
-            }
-        });
-        srh.setOnKeyReleased(keyEvent -> {
-            if (!srh.getText().isEmpty()) {
-                table.setItems(FXCollections.observableArrayList(searchUserByPhone(srh.getText())));
-            } else {
-                table.getItems().clear();
-                listUsers.forEach(userModel -> {
-                    table.getItems().add(userModel);
-                });
-                table.goToPage(0);
-                table.setCurrentPage(0);
+            FollowModel followModel = table.getSelectionModel().getSelectedValue();
+            if (followModel != null) {
+                fillInputs(followModel);
             }
         });
         add.setOnAction(event -> {
             try {
-                currentPage = table.getCurrentPage();
-                UserRecord userRecord = DemoFX.context.newRecord(USER);
-                userRecord.setFirstname(Fname.getText());
-                userRecord.setLastname(Lname.getText());
-                userRecord.setUsername(phone.getText());
-                userRecord.setPassword(phone.getText());
-                userRecord.setPhone(phone.getText());
-                userRecord.setIdrole(roleCmbox.getSelectionModel().getSelectedItem().getValue(ROLE.ID));
-                userRecord.setIdservice(serviceCmbox.getSelectionModel().getSelectedItem().getValue(SERVICE.ID));
-                userRecord.setIdtype(typeCmbox.getSelectionModel().getSelectedItem().getValue(TYPE.ID));
-                userRecord.setType(typeCmbox.getSelectionModel().getSelectedItem().toString());
-                userRecord.store();
-                listUsers=FXCollections.observableArrayList(getAllUser());
-                table.setItems(listUsers);
-                table.goToPage(currentPage);
-                table.setCurrentPage(currentPage);
-                clearInputes();
+                initRecord().store();
+                refrechLayout();
                 dialogsController.openInfo("تم عملية الإضافة بنجاح");
-            }catch (Exception e){
-                //dialogsController.openInfo("حدث خطأ في عملية الإضافة");
+            } catch (Exception e) {
+                trackingException(e, "حدث خطأ في عملية الإضافة");
             }
         });
         delete.setOnAction(actionEvent -> {
             currentPage = table.getCurrentPage();
-            context.delete(USER).where(USER.ID.eq(Long.parseLong(ID.getText()))).execute();
-            listUsers=FXCollections.observableArrayList(getAllUser());
-            table.setItems(listUsers);
+            context.delete(PATIENT).where(PATIENT.ID.eq(ID)).execute();
+            listFollow = FXCollections.observableArrayList();
+            table.setItems(listFollow);
             table.goToPage(currentPage);
             table.setCurrentPage(currentPage);
-            clearInputes();
+            refrechLayout();
         });
         update.setOnAction(actionEvent -> {
-            currentPage = table.getCurrentPage();
-            UserRecord userRecord = DemoFX.context.newRecord(USER);
-            userRecord.setFirstname(Fname.getText());
-            userRecord.setLastname(Lname.getText());
-            userRecord.setUsername(phone.getText());
-            userRecord.setPassword(phone.getText());
-            userRecord.setPhone(phone.getText());
-            userRecord.setIdrole(roleCmbox.getSelectionModel().getSelectedItem().getValue(ROLE.ID));
-            userRecord.setIdservice(serviceCmbox.getSelectionModel().getSelectedItem().getValue(SERVICE.ID));
-            userRecord.setIdtype(typeCmbox.getSelectionModel().getSelectedItem().getValue(TYPE.ID));
-            userRecord.setType(typeCmbox.getSelectionModel().getSelectedItem().toString());
-            userRecord.setId(Long.parseLong(ID.getText()));
-            userRecord.update();
-            listUsers=FXCollections.observableArrayList(getAllUser());
-            table.setItems(listUsers);
-            table.goToPage(currentPage);
-            table.setCurrentPage(currentPage);
-            clearInputes();
-        });*/
+            try {
+                PatientRecord patientRecord = initRecord();
+                patientRecord.setId(ID);
+                patientRecord.update();
+                refrechLayout();
+                dialogsController.openInfo("تم عملية التعديل بنجاح");
+            } catch (Exception e) {
+                trackingException(e, "حدث خطأ في عملية التعديل");
+            }
+        });
     }
 
     private void setupTable() {
-        MFXTableColumn<UserModel> Idcolumn = new MFXTableColumn<>("ID", true, Comparator.comparing(UserModel::getId));
-        MFXTableColumn<UserModel> FnameColumn = new MFXTableColumn<>("الإسم", true, Comparator.comparing(UserModel::getFirstname));
-        MFXTableColumn<UserModel> LnameColumn = new MFXTableColumn<>("اللقب", true, Comparator.comparing(UserModel::getLastname));
-        MFXTableColumn<UserModel> PhoneColumn = new MFXTableColumn<>("الهاتف", true, Comparator.comparing(UserModel::getPhone));
-        MFXTableColumn<UserModel> RoleColumn = new MFXTableColumn<>("التصريح", true, Comparator.comparing(UserModel::getRole));
-        MFXTableColumn<UserModel> TypeColumn = new MFXTableColumn<>("النوع", true, Comparator.comparing(UserRecord::getType));
-        MFXTableColumn<UserModel> ServiceColumn = new MFXTableColumn<>("المصلحة", true, Comparator.comparing(UserModel::getService));
+        MFXTableColumn<FollowModel> Idcolumn = new MFXTableColumn<>("ID", true, Comparator.comparing(FollowModel::getId));
+        MFXTableColumn<FollowModel> PatientColumn = new MFXTableColumn<>(" المريض", true, Comparator.comparing(FollowModel::getPatientFullName));
+        MFXTableColumn<FollowModel> SicknessColumn = new MFXTableColumn<>("المرض", true, Comparator.comparing(FollowModel::getSickness));
+        MFXTableColumn<FollowModel> DrColumn = new MFXTableColumn<>("الطبيب", true, Comparator.comparing(FollowModel::getDrFullName));
+        MFXTableColumn<FollowModel> Pscolumn = new MFXTableColumn<>("المعالج النفسي", true, Comparator.comparing(FollowModel::getPsFullName));
+        MFXTableColumn<FollowModel> StatusColumn = new MFXTableColumn<>("الحالة", true, Comparator.comparing(FollowModel::getStatus));
+        MFXTableColumn<FollowModel> ServiceColumn = new MFXTableColumn<>("المصلحة", true, Comparator.comparing(FollowModel::getServiceName));
+        MFXTableColumn<FollowModel> dateEnterColumn = new MFXTableColumn<>("تاريخ الدخول ", true, Comparator.comparing(FollowModel::getDateenterToString));
+        MFXTableColumn<FollowModel> dateLeaveColumn = new MFXTableColumn<>("تاريخ الخروج ", true, Comparator.comparing(FollowModel::getDategoToString));
 
-        RoleColumn.setRowCellFactory(user -> new MFXTableRowCell<>(UserModel::getRole));
-        PhoneColumn.setRowCellFactory(user -> new MFXTableRowCell<>(UserModel::getPhone));
-        TypeColumn.setRowCellFactory(user -> new MFXTableRowCell<>(UserModel::getType));
-        ServiceColumn.setRowCellFactory(user -> new MFXTableRowCell<>(UserModel::getService));
-        FnameColumn.setRowCellFactory(user -> new MFXTableRowCell<>(UserModel::getFirstname));
-        LnameColumn.setRowCellFactory(user -> new MFXTableRowCell<>(UserModel::getLastname));
-        Idcolumn.setRowCellFactory(user -> new MFXTableRowCell<>(UserModel::getId));
+        Idcolumn.setRowCellFactory(followModel -> new MFXTableRowCell<>(FollowModel::getId));
+        DrColumn.setRowCellFactory(followModel -> new MFXTableRowCell<>(FollowModel::getDrFullName));
+        PatientColumn.setRowCellFactory(patientModel -> new MFXTableRowCell<>(FollowModel::getPatientFullName));
+        SicknessColumn.setRowCellFactory(patientModel -> new MFXTableRowCell<>(FollowModel::getSickness));
+        Pscolumn.setRowCellFactory(patientModel -> new MFXTableRowCell<>(FollowModel::getPsFullName));
+        StatusColumn.setRowCellFactory(patientModel -> new MFXTableRowCell<>(FollowModel::getStatus));
+        ServiceColumn.setRowCellFactory(patientModel -> new MFXTableRowCell<>(FollowModel::getServiceName));
+        dateEnterColumn.setRowCellFactory(patientModel -> new MFXTableRowCell<>(FollowModel::getDateenterToString));
+        dateLeaveColumn.setRowCellFactory(patientModel -> new MFXTableRowCell<>(FollowModel::getDategoToString));
 
-        table.getTableColumns().addAll(Idcolumn, FnameColumn, LnameColumn, PhoneColumn, RoleColumn, TypeColumn, ServiceColumn);
+        table.getTableColumns().addAll(Idcolumn, PatientColumn, SicknessColumn, DrColumn, Pscolumn, StatusColumn, ServiceColumn, dateEnterColumn, dateLeaveColumn);
         table.getFilters().addAll(
-                new LongFilter<>("ID", UserRecord::getId),
-                new StringFilter<>("الإسم", UserRecord::getFirstname),
-                new StringFilter<>("اللقب", UserRecord::getLastname),
-                new StringFilter<>("النوع", UserRecord::getType),
-                new StringFilter<>("الهاتف", UserRecord::getPhone)
-        );
-        listUsers = FXCollections.observableArrayList(getAllUser());
-        table.setItems(listUsers);
+                new LongFilter<>("ID", FollowModel::getId),
+                new StringFilter<>("المريض", FollowModel::getPatientFullName),
+                new StringFilter<>("الطبيب", FollowModel::getDrFullName),
+                new StringFilter<>("المعالج النفسي", FollowModel::getPsFullName),
+                new StringFilter<>("المرض", FollowModel::getSickness),
+                new StringFilter<>("الحالة", FollowModel::getStatus),
+                new StringFilter<>("تاريخ الدخول", FollowModel::getDateenterToString),
+                new StringFilter<>("تاريخ الخروج", FollowModel::getDategoToString),
+                new StringFilter<>("المرض", FollowModel::getSickness)
+                );
+        listFollow = FXCollections.observableArrayList(getAllFollows());
+        table.setItems(listFollow);
         table.goToPage(0);
         table.setCurrentPage(0);
     }

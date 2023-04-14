@@ -58,12 +58,6 @@ public class MainController implements Initializable {
         btn1.setOnAction(event -> {
             changePane(btnList,1-dashboardIndex, "statistics",pane);
         });
-        btn7.setOnAction(event -> {
-            changePane(btnList,7-dashboardIndex, "diagnostic",pane);
-        });
-        btn6.setOnAction(event -> {
-            changePane(btnList,6-dashboardIndex, "follow",pane);
-        });
         btn2.setOnAction(event -> {
             changePane(btnList,2-dashboardIndex, "users",pane);
         });
