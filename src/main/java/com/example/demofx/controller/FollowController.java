@@ -71,7 +71,9 @@ public class FollowController implements Initializable {
     }
 
     private void initDataBinding(){
+/*
         AutoCompletePopup<String> autoCompletePopup = new AutoCompletePopup<>();
+*/
         //autoCompletePopup.().addAll("JavaFX", "Java", "JavaScript", "JavaEE", "JavaSE");
 
         //inti Property
