@@ -6,134 +6,131 @@
 <?import io.github.palexdev.materialfx.controls.MFXPaginatedTableView?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" prefHeight="750.0" prefWidth="1160.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demofx.controller.DiagnosticController">
+<VBox alignment="TOP_CENTER" prefHeight="750.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demofx.controller.DiagnosticController">
    <children>
-      <HBox alignment="CENTER" prefHeight="80.0" prefWidth="1086.0">
+      <HBox alignment="CENTER_RIGHT" prefHeight="80.0" prefWidth="1086.0">
          <children>
-            <Label contentDisplay="RIGHT" prefHeight="65.0" text="التشخيصات" textAlignment="JUSTIFY" HBox.hgrow="ALWAYS">
+            <MFXFilterComboBox fx:id="followCmbox" alignment="TOP_RIGHT" floatingText="المتابعة" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="340.0">
                <font>
-                  <Font name="Arial Black" size="34.0" />
+                  <Font size="18.0" />
                </font>
                <HBox.margin>
-                  <Insets left="30.0" />
+                  <Insets right="70.0" />
                </HBox.margin>
-            </Label>
+            </MFXFilterComboBox>
+            <MFXFilterComboBox fx:id="patientCmbox" alignment="TOP_RIGHT" floatingText="المريض" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="340.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <HBox.margin>
+                  <Insets right="70.0" />
+               </HBox.margin>
+            </MFXFilterComboBox>
+            <MFXDatePicker fx:id="dateDiagnostic" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="340.0" promptText="تاريخ التشخيص">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <HBox.margin>
+                  <Insets right="20.0" />
+               </HBox.margin>
+            </MFXDatePicker>
          </children>
+         <VBox.margin>
+            <Insets top="30.0" />
+         </VBox.margin>
       </HBox>
-      <HBox prefHeight="674.0" prefWidth="1160.0">
+      <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="10.0" prefHeight="80.0" prefWidth="1086.0">
          <children>
-            <VBox alignment="TOP_RIGHT" prefHeight="672.0" prefWidth="800.0">
+            <MFXTextField fx:id="psychologyDiagnostic" alignment="CENTER" floatMode="BORDER" floatingText="التشخيص النفسي" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="340.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <HBox.margin>
+                  <Insets right="70.0" />
+               </HBox.margin>
+            </MFXTextField>
+            <MFXTextField fx:id="medicalDiagnostic" alignment="CENTER" floatMode="BORDER" floatingText="التشخيص الطبي" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="340.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <HBox.margin>
+                  <Insets right="70.0" />
+               </HBox.margin>
+            </MFXTextField>
+            <MFXTextField fx:id="sickness" alignment="CENTER" floatMode="BORDER" floatingText="الاعراض" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="340.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <HBox.margin>
+                  <Insets right="20.0" />
+               </HBox.margin>
+            </MFXTextField>
+         </children>
+         <VBox.margin>
+            <Insets top="20.0" />
+         </VBox.margin>
+      </HBox>
+      <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="708.0" prefHeight="80.0" prefWidth="1086.0">
+         <children>
+            <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="340.0">
                <children>
-                  <MFXPaginatedTableView fx:id="table" footerVisible="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="160.0" prefWidth="800.0" rowsPerPage="15">
-                     <VBox.margin>
-                        <Insets right="20.0" top="10.0" />
-                     </VBox.margin>
-                  </MFXPaginatedTableView>
+                  <MFXButton fx:id="delete" prefHeight="39.0" prefWidth="115.0" styleClass="delbtn" stylesheets="@../css/buttons_style.css" text="حذف">
+                     <HBox.margin>
+                        <Insets left="10.0" right="10.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </MFXButton>
+                  <MFXButton fx:id="update" prefHeight="39.0" prefWidth="123.0" styleClass="upbtn" stylesheets="@../css/buttons_style.css" text="تعديل">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </MFXButton>
+                  <MFXButton fx:id="add" prefHeight="39.0" prefWidth="101.0" styleClass="addbtn" stylesheets="@../css/buttons_style.css" text="إضافة">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </MFXButton>
                </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
+               <HBox.margin>
+                  <Insets right="70.0" />
+               </HBox.margin>
+            </HBox>
+            <MFXTextField fx:id="ID" alignment="CENTER" editable="false" floatMode="BORDER" floatingText="ID" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="340.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <HBox.margin>
+                  <Insets right="20.0" />
+               </HBox.margin>
+            </MFXTextField>
+         </children>
+         <VBox.margin>
+            <Insets top="20.0" />
+         </VBox.margin>
+      </HBox>
+      <HBox alignment="TOP_CENTER" prefHeight="674.0" prefWidth="1160.0">
+         <children>
+            <MFXPaginatedTableView fx:id="table" footerVisible="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="160.0" prefWidth="1160.0" rowsPerPage="15">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
-            </VBox>
-            <VBox alignment="TOP_CENTER" prefHeight="672.0" prefWidth="360.0">
-               <children>
-                  <MFXDatePicker fx:id="dateDiagnostic" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="340.0" promptText="تاريخ التشخيص">
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </MFXDatePicker>
-                  <MFXFilterComboBox fx:id="patientCmbox" alignment="TOP_RIGHT" floatingText="المريض" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="340.0">
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </MFXFilterComboBox>
-                  <MFXFilterComboBox fx:id="followCmbox" alignment="TOP_RIGHT" floatingText="المتابعة" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="340.0">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </MFXFilterComboBox>
-                  <MFXTextField fx:id="sickness" alignment="CENTER" floatMode="BORDER" floatingText="الاعراض" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="340.0">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </MFXTextField>
-                  <MFXTextField fx:id="medicalDiagnostic" alignment="CENTER" floatMode="BORDER" floatingText="التشخيص الطبي" layoutX="20.0" layoutY="270.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="340.0">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </MFXTextField>
-                  <MFXTextField fx:id="psychologyDiagnostic" alignment="CENTER" floatMode="BORDER" floatingText="التشخيص النفسي" layoutX="20.0" layoutY="509.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="340.0">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </MFXTextField>
-                  <MFXTextField fx:id="ID" alignment="CENTER" editable="false" floatMode="BORDER" floatingText="ID" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="340.0">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </MFXTextField>
-                  <HBox alignment="CENTER_RIGHT" prefWidth="200.0">
-                     <children>
-                        <MFXButton fx:id="delete" prefHeight="39.0" prefWidth="115.0" styleClass="delbtn" stylesheets="@../css/buttons_style.css" text="حذف">
-                           <HBox.margin>
-                              <Insets left="10.0" right="10.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </MFXButton>
-                        <MFXButton fx:id="update" prefHeight="39.0" prefWidth="123.0" styleClass="upbtn" stylesheets="@../css/buttons_style.css" text="تعديل">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                        </MFXButton>
-                        <MFXButton fx:id="add" prefHeight="39.0" prefWidth="101.0" styleClass="addbtn" stylesheets="@../css/buttons_style.css" text="إضافة">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font name="System Bold" size="15.0" />
-                           </font>
-                        </MFXButton>
-                     </children>
-                     <VBox.margin>
-                        <Insets top="60.0" />
-                     </VBox.margin>
-                  </HBox>
-               </children>
-            </VBox>
+            </MFXPaginatedTableView>
          </children>
+         <VBox.margin>
+            <Insets top="20.0" />
+         </VBox.margin>
       </HBox>
    </children>
 </VBox>

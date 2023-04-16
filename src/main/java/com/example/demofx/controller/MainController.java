@@ -27,7 +27,9 @@ public class MainController implements Initializable {
     @FXML
     private VBox pane;
     @FXML
-    private MFXButton btn1,btn2,btn3,btn4,btn5,btn6,btn7;
+    private MFXButton btn1;
+    @FXML
+    private MFXButton btn2,btn3,btn4,btn5,btn6;
     private final int dashboardIndex=1;
 
 
@@ -53,7 +55,6 @@ public class MainController implements Initializable {
         btnList.add(btn4);
         btnList.add(btn5);
         btnList.add(btn6);
-        btnList.add(btn7);
         changePane(btnList,1-dashboardIndex, "statistics",pane);
         btn1.setOnAction(event -> {
             changePane(btnList,1-dashboardIndex, "statistics",pane);
@@ -65,7 +66,10 @@ public class MainController implements Initializable {
             changePane(btnList,3-dashboardIndex, "patient",pane);
         });
         btn4.setOnAction(event -> {
-            changePane(btnList,3-dashboardIndex, "follow",pane);
+            changePane(btnList,4-dashboardIndex, "follow",pane);
+        });
+        btn5.setOnAction(event -> {
+            changePane(btnList,5-dashboardIndex, "diagnostic",pane);
         });
     }
 
