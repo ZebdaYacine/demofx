@@ -16,11 +16,9 @@ public class FollowModel extends FollowRecord {
 
     public FollowModel() {
     }
-
     public FollowModel(Long id, LocalDate dateenter, LocalDate datego, Long idpatient, Long idservice, Long iddoctor, Long idpsychologist, String sickness, String status) {
         super(id, dateenter, datego, idpatient, idservice, iddoctor, idpsychologist, sickness, status);
     }
-
     public PatientModel getPatient(){
         PatientModel patient = (PatientModel) context.selectFrom(Patient.PATIENT).where(Patient.PATIENT.ID.eq(this.getIdpatient())).fetchOne();
         return  patient;
@@ -39,7 +37,6 @@ public class FollowModel extends FollowRecord {
         UserRecord user = (UserRecord) context.selectFrom(USER).where(USER.ID.eq(this.getIdpsychologist())).fetchOne();
         return  user.getFirstname()+" "+user.getLastname();
     }
-
     public UserRecord getDr(){
         UserRecord user = (UserRecord) context.selectFrom(USER).where(USER.ID.eq(this.getIddoctor())).fetchOne();
         return  user;
@@ -48,26 +45,20 @@ public class FollowModel extends FollowRecord {
         UserRecord user = (UserRecord) context.selectFrom(USER).where(USER.ID.eq(this.getIddoctor())).fetchOne();
         return  user.getFirstname()+" "+user.getLastname();
     }
-
     public String getServiceName(){
         ServiceRecord service = (ServiceRecord) context.selectFrom(SERVICE).where(SERVICE.ID.eq(this.getIdservice())).fetchOne();
         return  service.getName();
     }
-
     public ServiceRecord getService(){
         ServiceRecord service = (ServiceRecord) context.selectFrom(SERVICE).where(SERVICE.ID.eq(this.getIdservice())).fetchOne();
         return  service;
     }
-
     public String getDateenterToString() {
         return getDateenter().toString() ;
     }
-
     public String getDategoToString() {
         return getDatego().toString() ;
     }
-
-
 
     @Override
     public String toString() {
