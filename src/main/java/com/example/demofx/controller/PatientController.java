@@ -9,12 +9,11 @@ import io.github.palexdev.materialfx.filter.DoubleFilter;
 import io.github.palexdev.materialfx.filter.IntegerFilter;
 import io.github.palexdev.materialfx.filter.LongFilter;
 import io.github.palexdev.materialfx.filter.StringFilter;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import org.jooq.Record;
-import org.jooq.Result;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -44,79 +43,74 @@ public class PatientController implements Initializable {
 
     private ArrayList<String> genderList ;
     private ArrayList<String> civilStatusList ;
-    private static Long ID;
+    private static Long ID=0L;
+
+    static PatientModel patientModel ;
 
 
 
+    public static SimpleStringProperty fNameProperty,lNameProperty,addressProperty,phoneProperty,weightProperty,workProperty,heightProperty;
 
-
-    private ArrayList<PatientModel> getAllPatients() {
-        Result<?> result = context.select().from(PATIENT)
-                .fetch();
-        ArrayList<PatientModel> listUser = new ArrayList<>();
-        for (Record r : result) {
-            PatientModel patientRecord = new PatientModel();
-            patientRecord.setAddress(r.getValue(PATIENT.ADDRESS));
-            patientRecord.setLastname(r.getValue(PATIENT.LASTNAME));
-            patientRecord.setFirstname(r.getValue(PATIENT.FIRSTNAME));
-            patientRecord.setPhone(r.getValue(PATIENT.PHONE));
-            patientRecord.setAge(r.getValue(PATIENT.AGE));
-            patientRecord.setId(r.getValue(PATIENT.ID));
-            patientRecord.setBirthday(r.getValue(PATIENT.BIRTHDAY));
-            patientRecord.setWorke(r.getValue(PATIENT.WORKE));
-            patientRecord.setGender(r.getValue(PATIENT.GENDER));
-            patientRecord.setHeight(r.getValue(PATIENT.HEIGHT));
-            patientRecord.setWieght(r.getValue(PATIENT.WIEGHT));
-            patientRecord.setWorke(r.getValue(PATIENT.WORKE));
-            patientRecord.setCivilstatus(r.getValue(PATIENT.CIVILSTATUS));
-            listUser.add( patientRecord);
-        }
-        return listUser;
+    private void initDataBinding(){
+        fNameProperty=new SimpleStringProperty();
+        lNameProperty=new SimpleStringProperty();
+        phoneProperty =new SimpleStringProperty();
+        addressProperty=new SimpleStringProperty();
+        weightProperty=new SimpleStringProperty();
+        workProperty=new SimpleStringProperty();
+        heightProperty=new SimpleStringProperty();
+        //binding Property with fields
+        fNameProperty.bindBidirectional(Fname.textProperty());
+        lNameProperty.bindBidirectional(Lname.textProperty());
+        phoneProperty.bindBidirectional(phone.textProperty());
+        addressProperty.bindBidirectional(address.textProperty());
+        weightProperty.bindBidirectional(weight.textProperty());
+        heightProperty.bindBidirectional(height.textProperty());
+        workProperty.bindBidirectional(work.textProperty());
     }
 
-    
-    private void fillInputs(PatientRecord pateintRecord) {
-        if(pateintRecord.getWorke()!=null){
-            work.setText(pateintRecord.getWorke());
+    private void fillInputs(PatientRecord patientRecord) {
+        if(patientRecord.getWorke()!=null){
+            workProperty.set(patientRecord.getWorke());
         }
-        if(pateintRecord.getFirstname()!=null){
-            Fname.setText(pateintRecord.getFirstname());
+        if(patientRecord.getFirstname()!=null){
+            fNameProperty.set(patientRecord.getFirstname());
         }
-        if(pateintRecord.getLastname()!=null){
-            Lname.setText(pateintRecord.getLastname());
+        if(patientRecord.getLastname()!=null){
+            lNameProperty.set(patientRecord.getLastname());
         }
-        if(pateintRecord.getPhone()!=null){
-            phone.setText(pateintRecord.getPhone());
+        if(patientRecord.getPhone()!=null){
+            phoneProperty.set(patientRecord.getPhone());
         }
-        if(pateintRecord.getAddress()!=null) {
-            address.setText(pateintRecord.getAddress());
+        if(patientRecord.getAddress()!=null) {
+            addressProperty.set(patientRecord.getAddress());
         }
-        if(pateintRecord.getHeight()!=null) {
-            height.setText(pateintRecord.getHeight()+"");
+        if(patientRecord.getHeight()!=null) {
+            heightProperty.set(patientRecord.getHeight()+"");
         }
-        if(pateintRecord.getWieght()!=null) {
-            weight.setText(pateintRecord.getHeight()+"");
+        if(patientRecord.getWieght()!=null) {
+            weightProperty.set(patientRecord.getHeight()+"");
         }
-        if(pateintRecord.getBirthday()!=null){
-            birthday.setText(pateintRecord.getBirthdayString());
+        if(patientRecord.getBirthday()!=null){
+            birthday.setText(patientRecord.getBirthdayString());
         }
-        if(pateintRecord.getGender()!=null && !pateintRecord.getGender().isEmpty()){
-            genderCmbox.selectItem(pateintRecord.getGender());
+        if(patientRecord.getGender()!=null && !patientRecord.getGender().isEmpty()){
+            genderCmbox.selectItem(patientRecord.getGender());
         }
-        if(pateintRecord.getCivilstatus()!=null && !pateintRecord.getCivilstatus().isEmpty()){
-            civilStatusCmbox.selectItem(pateintRecord.getCivilstatus());
+        if(patientRecord.getCivilstatus()!=null && !patientRecord.getCivilstatus().isEmpty()){
+            civilStatusCmbox.selectItem(patientRecord.getCivilstatus());
         }
-        ID=Long.parseLong(pateintRecord.getId().toString());
+        ID=Long.parseLong(patientRecord.getId().toString());
     }
 
     private void clearInputes() {
-        Fname.setText("");
-        Lname.setText("");
-        phone.setText("");
-        address.setText("");
-        height.setText("");
-        weight.setText("");
-        work.setText("");
+        fNameProperty.set("");
+        lNameProperty.set("");
+        phoneProperty.set("");
+        addressProperty.set("");
+        heightProperty.set("");
+        weightProperty.set("");
+        workProperty.set("");
         birthday.setText("");
         //genderCmbox.selectItem("");
         //civilStatusCmbox.selectItem("");
@@ -140,41 +134,33 @@ public class PatientController implements Initializable {
 
     private PatientRecord initRecord(){
         currentPage = table.getCurrentPage();
-        PatientRecord pateintRecord = DemoFX.context.newRecord(PATIENT);
-        if(Fname.getText().isEmpty()){
-            Fname.setStyle("-fx-border-color: #b61515");
-        }else{
-            pateintRecord.setFirstname(Fname.getText());
-            Fname.setStyle("-fx-border-color: transparent");
-        }
-        pateintRecord.setLastname(Lname.getText());
-        pateintRecord.setWieght(Double.parseDouble(weight.getText()));
-        pateintRecord.setHeight(Integer.parseInt(height.getText()));
-        pateintRecord.setPhone(phone.getText());
-        pateintRecord.setGender(genderCmbox.getSelectionModel().getSelectedItem().toString());
-        pateintRecord.setCivilstatus(civilStatusCmbox.getSelectionModel().getSelectedItem().toString());
-        pateintRecord.setAddress(address.getText());
-        pateintRecord.setWorke(work.getText());
-        pateintRecord.setBirthday(birthday.getValue());
-        return  pateintRecord;
+        PatientRecord patientRecord = DemoFX.context.newRecord(PATIENT);
+        patientRecord.setFirstname(fNameProperty.getValue());
+        patientRecord.setLastname(lNameProperty.getValue());
+        patientRecord.setWieght(Double.parseDouble(weightProperty.getValue()));
+        patientRecord.setHeight(Integer.parseInt(heightProperty.getValue()));
+        patientRecord.setPhone(phoneProperty.getValue());
+        patientRecord.setGender(genderCmbox.getSelectionModel().getSelectedItem().toString());
+        patientRecord.setCivilstatus(civilStatusCmbox.getSelectionModel().getSelectedItem().toString());
+        patientRecord.setAddress(addressProperty.getValue());
+        patientRecord.setWorke(workProperty.getValue());
+        patientRecord.setBirthday(birthday.getValue());
+        return  patientRecord;
     }
 
     private void refrechLayout(){
-        listPatients=FXCollections.observableArrayList(getAllPatients());
+        listPatients=FXCollections.observableArrayList(patientModel.getAllPatients());
         table.setItems(listPatients);
         table.goToPage(currentPage);
         table.setCurrentPage(currentPage);
         clearInputes();
     }
 
-    private void trackingException(Exception e ,String ErrorMessage){
-        e.getStackTrace();
-        System.out.println(e.getMessage());
-        dialogsController.openInfo(ErrorMessage);
-    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         dialogsController=new DialogsController();
+        patientModel=new PatientModel();
+        initDataBinding();
         loadDataToLayout();
         table.getSelectionModel().selectionProperty().addListener((observableValue, integerUserRecordObservableMap, row) -> {
             PatientRecord patientRecord = table.getSelectionModel().getSelectedValue();
@@ -188,13 +174,13 @@ public class PatientController implements Initializable {
                 refrechLayout();
                 dialogsController.openInfo("تم عملية الإضافة بنجاح");
             }catch (Exception e){
-                trackingException(e,"حدث خطأ في عملية الإضافة");
+                Utils.trackingException(e,"حدث خطأ في عملية الإضافة",dialogsController);
             }
         });
         delete.setOnAction(actionEvent -> {
             currentPage = table.getCurrentPage();
             context.delete(PATIENT).where(PATIENT.ID.eq(ID)).execute();
-            listPatients=FXCollections.observableArrayList(getAllPatients());
+            listPatients=FXCollections.observableArrayList(patientModel.getAllPatients());
             table.setItems(listPatients);
             table.goToPage(currentPage);
             table.setCurrentPage(currentPage);
@@ -208,7 +194,7 @@ public class PatientController implements Initializable {
                 refrechLayout();
                 dialogsController.openInfo("تم عملية التعديل بنجاح");
             }catch (Exception e){
-                trackingException(e,"حدث خطأ في عملية التعديل");
+                Utils.trackingException(e,"حدث خطأ في عملية الإضافة",dialogsController);
             }
         });
     }
@@ -259,7 +245,7 @@ public class PatientController implements Initializable {
                 new StringFilter<>("الجنس", PatientRecord::getGender),
                 new StringFilter<>("تاريخ الميلاد", PatientRecord::getBirthdayString)
         );
-        listPatients = FXCollections.observableArrayList(getAllPatients());
+        listPatients = FXCollections.observableArrayList(patientModel.getAllPatients());
         table.setItems(listPatients);
         table.goToPage(0);
         table.setCurrentPage(0);

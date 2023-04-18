@@ -1,7 +1,7 @@
 package com.example.demofx.controller;
 
 import com.example.demofx.DemoFX;
-import com.example.demofx.databaseManger.jooq.tables.records.PatientRecord;
+import com.example.demofx.databaseManger.jooq.tables.records.FollowRecord;
 import com.example.demofx.model.FollowModel;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
@@ -12,8 +12,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import org.jooq.Record;
-import org.jooq.Result;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -48,35 +46,12 @@ public class FollowController implements Initializable {
 
     public static SimpleStringProperty patientProperty,dateEnterProperty,dateGoProperty,sicknessProperty,doctorProperty,psychologistProperty,statusProperty,serviceProperty;
 
+    static FollowModel followModel ;
 
 
-    private ArrayList<FollowModel> getAllFollows() {
-        Result<?> result = context.select().from(FOLLOW)
-                .fetch();
-        ArrayList<FollowModel> listUser = new ArrayList<>();
-        for (Record r : result) {
-            FollowModel followModel = new FollowModel();
-            followModel.setId(r.getValue(FOLLOW.ID));
-            followModel.setIdpatient(r.getValue(FOLLOW.IDPATIENT));
-            followModel.setIddoctor(r.getValue(FOLLOW.IDDOCTOR));
-            followModel.setIdservice(r.getValue(FOLLOW.IDSERVICE));
-            followModel.setIdpsychologist(r.getValue(FOLLOW.IDPSYCHOLOGIST));
-            followModel.setDatego(r.getValue(FOLLOW.DATEGO));
-            followModel.setDateenter(r.getValue(FOLLOW.DATEENTER));
-            followModel.setStatus(r.getValue(FOLLOW.STATUS));
-            followModel.setSickness(r.getValue(FOLLOW.SICKNESS));
-            listUser.add(followModel);
-        }
-        return listUser;
-    }
+
 
     private void initDataBinding(){
-/*
-        AutoCompletePopup<String> autoCompletePopup = new AutoCompletePopup<>();
-*/
-        //autoCompletePopup.().addAll("JavaFX", "Java", "JavaScript", "JavaEE", "JavaSE");
-
-        //inti Property
         patientProperty=new SimpleStringProperty();
         sicknessProperty=new SimpleStringProperty();
         doctorProperty =new SimpleStringProperty();
@@ -85,6 +60,7 @@ public class FollowController implements Initializable {
         serviceProperty=new SimpleStringProperty();
         dateEnterProperty=new SimpleStringProperty();
         dateGoProperty=new SimpleStringProperty();
+        statusProperty=new SimpleStringProperty();
         //binding Property with fields
         patientProperty.bindBidirectional(patient.textProperty());
         doctorProperty.bindBidirectional(doctor.textProperty());
@@ -110,12 +86,14 @@ public class FollowController implements Initializable {
     }
 
     private void clearInputes() {
-        patient.setText("");
-        sickness.setText("");
-        psychologist.setText("");
-        status.setText("");
-        service.setText("");
-        dateEnter.setText("");
+        patientProperty.set("");
+        doctorProperty.set("");
+        sicknessProperty.set("");
+        statusProperty.set("");
+        serviceProperty.set("");
+        psychologistProperty.set("");
+        dateGoProperty.set("");
+        dateEnterProperty.set("");
         //genderCmbox.selectItem("");
         //civilStatusCmbox.selectItem("");
         ID = 0L;
@@ -136,23 +114,19 @@ public class FollowController implements Initializable {
         //civilStatusCmbox.getItems().addAll(FXCollections.observableArrayList(civilStatusList));
     }
 
-    private PatientRecord initRecord() {
+    private FollowRecord initRecord() {
         currentPage = table.getCurrentPage();
-        PatientRecord pateintRecord = DemoFX.context.newRecord(PATIENT);
-        if (patient.getText().isEmpty()) {
-            patient.setStyle("-fx-border-color: #b61515");
-        } else {
-            pateintRecord.setFirstname(patient.getText());
-            patient.setStyle("-fx-border-color: transparent");
-        }
-        pateintRecord.setLastname(sickness.getText());
-        pateintRecord.setWieght(Double.parseDouble(service.getText()));
-        pateintRecord.setHeight(Integer.parseInt(status.getText()));
-        pateintRecord.setGender(genderCmbox.getSelectionModel().getSelectedItem().toString());
-        pateintRecord.setCivilstatus(civilStatusCmbox.getSelectionModel().getSelectedItem().toString());
-        pateintRecord.setAddress(psychologist.getText());
-        pateintRecord.setBirthday(dateEnter.getValue());
-        return pateintRecord;
+        FollowRecord followRecord = DemoFX.context.newRecord(FOLLOW);
+        System.out.println(followRecord);
+        followRecord.setSickness(sicknessProperty.getValue());
+        followRecord.setStatus(statusProperty.getValue());
+        followRecord.setIdpatient(0L);
+        followRecord.setIddoctor(0L);
+        followRecord.setIdpsychologist(0L);
+        followRecord.setIdservice(0L);
+        followRecord.setDateenter(dateEnter.getValue());
+        followRecord.setDatego(dateGo.getValue());
+        return followRecord;
     }
 
     private void refrechLayout() {
@@ -163,14 +137,9 @@ public class FollowController implements Initializable {
         clearInputes();
     }
 
-    private void trackingException(Exception e, String ErrorMessage) {
-        e.getStackTrace();
-        System.out.println(e.getMessage());
-        dialogsController.openInfo(ErrorMessage);
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        followModel=new FollowModel();
         dialogsController = new DialogsController();
         initDataBinding();
         loadDataToLayout();
@@ -186,7 +155,7 @@ public class FollowController implements Initializable {
                 refrechLayout();
                 dialogsController.openInfo("تم عملية الإضافة بنجاح");
             } catch (Exception e) {
-                trackingException(e, "حدث خطأ في عملية الإضافة");
+                Utils.trackingException(e,"حدث خطأ في عملية الإضافة",dialogsController);
             }
         });
         delete.setOnAction(actionEvent -> {
@@ -200,13 +169,13 @@ public class FollowController implements Initializable {
         });
         update.setOnAction(actionEvent -> {
             try {
-                PatientRecord patientRecord = initRecord();
-                patientRecord.setId(ID);
-                patientRecord.update();
+                FollowRecord followRecord = initRecord();
+                followRecord.setId(ID);
+                followRecord.update();
                 refrechLayout();
                 dialogsController.openInfo("تم عملية التعديل بنجاح");
             } catch (Exception e) {
-                trackingException(e, "حدث خطأ في عملية التعديل");
+                Utils.trackingException(e,"حدث خطأ في عملية الإضافة",dialogsController);
             }
         });
     }
@@ -244,7 +213,7 @@ public class FollowController implements Initializable {
                 new StringFilter<>("تاريخ الخروج", FollowModel::getDategoToString),
                 new StringFilter<>("المرض", FollowModel::getSickness)
                 );
-        listFollow = FXCollections.observableArrayList(getAllFollows());
+        listFollow = FXCollections.observableArrayList(followModel.getAllFollows());
         table.setItems(listFollow);
         table.goToPage(0);
         table.setCurrentPage(0);

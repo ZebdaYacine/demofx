@@ -103,14 +103,6 @@
                         <Insets top="10.0" />
                      </VBox.margin>
                   </MFXFilterComboBox>
-                  <MFXTextField fx:id="ID" alignment="CENTER" editable="false" floatMode="BORDER" floatingText="ID" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="350.0">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </MFXTextField>
                   <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <MFXButton fx:id="delete" prefHeight="39.0" prefWidth="115.0" styleClass="delbtn" stylesheets="@../css/buttons_style.css" text="حذف">

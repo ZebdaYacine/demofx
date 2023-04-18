@@ -5,12 +5,15 @@ import com.example.demofx.databaseManger.jooq.tables.records.FollowRecord;
 import com.example.demofx.databaseManger.jooq.tables.records.PatientRecord;
 import com.example.demofx.databaseManger.jooq.tables.records.ServiceRecord;
 import com.example.demofx.databaseManger.jooq.tables.records.UserRecord;
+import org.jooq.Record;
+import org.jooq.Result;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import static com.example.demofx.DemoFX.context;
-import static com.example.demofx.databaseManger.jooq.Tables.SERVICE;
-import static com.example.demofx.databaseManger.jooq.Tables.USER;
+import static com.example.demofx.databaseManger.jooq.Tables.*;
+import static com.example.demofx.databaseManger.jooq.Tables.FOLLOW;
 
 public class FollowModel extends FollowRecord {
 
@@ -21,47 +24,67 @@ public class FollowModel extends FollowRecord {
     }
     public PatientModel getPatient(){
         PatientModel patient = (PatientModel) context.selectFrom(Patient.PATIENT).where(Patient.PATIENT.ID.eq(this.getIdpatient())).fetchOne();
-        return  patient;
+        return  (patient==null?new PatientModel():patient);
     }
 
     public String getPatientFullName(){
         PatientRecord patient = (PatientRecord) context.selectFrom(Patient.PATIENT).where(Patient.PATIENT.ID.eq(this.getIdpatient())).fetchOne();
-        return  patient.getFirstname()+" "+patient.getLastname();
+        return  (patient==null?"":patient.getFirstname()+" "+patient.getLastname());
     }
 
     public UserRecord getPs(){
         UserRecord user = (UserRecord) context.selectFrom(USER).where(USER.ID.eq(this.getIdpsychologist())).fetchOne();
-        return  user;
+        return  (user==null?new UserModel():user);
     }
     public String getPsFullName(){
         UserRecord user = (UserRecord) context.selectFrom(USER).where(USER.ID.eq(this.getIdpsychologist())).fetchOne();
-        return  user.getFirstname()+" "+user.getLastname();
+        return  (user==null?"":user.getFirstname()+" "+user.getLastname());
     }
     public UserRecord getDr(){
         UserRecord user = (UserRecord) context.selectFrom(USER).where(USER.ID.eq(this.getIddoctor())).fetchOne();
-        return  user;
+        return  (user==null?new UserModel():user);
     }
     public String getDrFullName(){
         UserRecord user = (UserRecord) context.selectFrom(USER).where(USER.ID.eq(this.getIddoctor())).fetchOne();
-        return  user.getFirstname()+" "+user.getLastname();
+        return  (user==null?"":user.getFirstname()+" "+user.getLastname());
     }
     public String getServiceName(){
         ServiceRecord service = (ServiceRecord) context.selectFrom(SERVICE).where(SERVICE.ID.eq(this.getIdservice())).fetchOne();
-        return  service.getName();
+        return  (service==null?"":service.getName());
     }
     public ServiceRecord getService(){
         ServiceRecord service = (ServiceRecord) context.selectFrom(SERVICE).where(SERVICE.ID.eq(this.getIdservice())).fetchOne();
-        return  service;
+        return  (service==null?new ServiceModel():service);
     }
     public String getDateenterToString() {
-        return getDateenter().toString() ;
+        return getDateenter()!=null ? getDateenter().toString() :"" ;
     }
     public String getDategoToString() {
-        return getDatego().toString() ;
+        return getDatego()!=null?getDatego().toString():"";
     }
 
     @Override
     public String toString() {
         return super.toString();
+    }
+
+    public ArrayList<FollowModel> getAllFollows() {
+        Result<?> result = context.select().from(FOLLOW)
+                .fetch();
+        ArrayList<FollowModel> listUser = new ArrayList<>();
+        for (Record r : result) {
+            FollowModel followModel = new FollowModel();
+            followModel.setId(r.getValue(FOLLOW.ID));
+            followModel.setIdpatient(r.getValue(FOLLOW.IDPATIENT));
+            followModel.setIddoctor(r.getValue(FOLLOW.IDDOCTOR));
+            followModel.setIdservice(r.getValue(FOLLOW.IDSERVICE));
+            followModel.setIdpsychologist(r.getValue(FOLLOW.IDPSYCHOLOGIST));
+            followModel.setDatego(r.getValue(FOLLOW.DATEGO));
+            followModel.setDateenter(r.getValue(FOLLOW.DATEENTER));
+            followModel.setStatus(r.getValue(FOLLOW.STATUS));
+            followModel.setSickness(r.getValue(FOLLOW.SICKNESS));
+            listUser.add(followModel);
+        }
+        return listUser;
     }
 }
