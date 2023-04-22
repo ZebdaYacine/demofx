@@ -3,6 +3,9 @@ package com.example.demofx.controller;
 import com.example.demofx.DemoFX;
 import com.example.demofx.databaseManger.jooq.tables.records.FollowRecord;
 import com.example.demofx.model.FollowModel;
+import com.example.demofx.model.PatientModel;
+import com.example.demofx.model.ServiceModel;
+import com.example.demofx.model.UserModel;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.filter.LongFilter;
@@ -26,7 +29,13 @@ public class FollowController implements Initializable {
     @FXML
     private MFXPaginatedTableView<FollowModel> table;
     @FXML
-    private MFXTextField patient, sickness, doctor, psychologist, status, service;
+    private MFXTextField  sickness, status;
+    @FXML
+    private MFXComboBox<PatientModel> patient;
+    @FXML
+    private MFXComboBox<ServiceModel> service;
+    @FXML
+    private MFXComboBox<UserModel>   doctor, psychologist;
     @FXML
     private MFXButton delete, add, update;
     @FXML
@@ -52,7 +61,7 @@ public class FollowController implements Initializable {
 
 
     private void initDataBinding(){
-        patientProperty=new SimpleStringProperty();
+        //patientProperty=new SimpleStringProperty();
         sicknessProperty=new SimpleStringProperty();
         doctorProperty =new SimpleStringProperty();
         psychologistProperty=new SimpleStringProperty();
@@ -62,11 +71,11 @@ public class FollowController implements Initializable {
         dateGoProperty=new SimpleStringProperty();
         statusProperty=new SimpleStringProperty();
         //binding Property with fields
-        patientProperty.bindBidirectional(patient.textProperty());
+       /* patientProperty.bindBidirectional(patient.textProperty());
         doctorProperty.bindBidirectional(doctor.textProperty());
         psychologistProperty.bindBidirectional(psychologist.textProperty());
-        statusProperty.bindBidirectional(status.textProperty());
-        serviceProperty.bindBidirectional(service.textProperty());
+        statusProperty.bindBidirectional(status.textProperty());*/
+       /**/ serviceProperty.bindBidirectional(service.textProperty());
         sicknessProperty.bindBidirectional(sickness.textProperty());
         dateEnterProperty.bindBidirectional(dateEnter.textProperty());
         dateGoProperty.bindBidirectional(dateGo.textProperty());
@@ -75,12 +84,12 @@ public class FollowController implements Initializable {
 
     private void fillInputs(FollowModel followRecord) {
         ID = Long.parseLong(followRecord.getId().toString());
-        patientProperty.set(followRecord.getPatientFullName());
-        doctorProperty.set(followRecord.getDrFullName());
+        //patientProperty.set(followRecord.getPatientFullName());
+        //doctorProperty.set(followRecord.getDrFullName());
         sicknessProperty.set(followRecord.getSickness());
         statusProperty.set(followRecord.getStatus());
-        serviceProperty.set(followRecord.getServiceName());
-        psychologistProperty.set(followRecord.getPsFullName());
+        //serviceProperty.set(followRecord.getServiceName());
+        //psychologistProperty.set(followRecord.getPsFullName());
         dateGoProperty.set(followRecord.getDatego().toString());
         dateEnterProperty.set(followRecord.getDateenterToString().toString());
     }
@@ -117,7 +126,6 @@ public class FollowController implements Initializable {
     private FollowRecord initRecord() {
         currentPage = table.getCurrentPage();
         FollowRecord followRecord = DemoFX.context.newRecord(FOLLOW);
-        System.out.println(followRecord);
         followRecord.setSickness(sicknessProperty.getValue());
         followRecord.setStatus(statusProperty.getValue());
         followRecord.setIdpatient(0L);
