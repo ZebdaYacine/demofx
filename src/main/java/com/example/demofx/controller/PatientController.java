@@ -180,10 +180,6 @@ public class PatientController implements Initializable {
         delete.setOnAction(actionEvent -> {
             currentPage = table.getCurrentPage();
             context.delete(PATIENT).where(PATIENT.ID.eq(ID)).execute();
-            listPatients=FXCollections.observableArrayList(patientModel.getAllPatients());
-            table.setItems(listPatients);
-            table.goToPage(currentPage);
-            table.setCurrentPage(currentPage);
             refrechLayout();
         });
         update.setOnAction(actionEvent -> {

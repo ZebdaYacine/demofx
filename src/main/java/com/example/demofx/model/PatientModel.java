@@ -24,7 +24,7 @@ public class PatientModel extends PatientRecord {
 
     @Override
     public String toString() {
-        return this.getFirstname()+" "+this.getLastname();
+        return getFirstname()+" "+getLastname();
     }
 
     public static ArrayList<PatientModel> getAllPatients() {
@@ -57,7 +57,6 @@ public class PatientModel extends PatientRecord {
         Result<?> result = context.select().from(PATIENT).fetch();
         for (Record r : result) {
             PatientModel patientModel = new PatientModel(r.getValue(PATIENT.ID),r.getValue(PATIENT.LASTNAME),r.getValue(PATIENT.FIRSTNAME));
-            System.out.println(patientModel);
             listPatients.add(patientModel);
         }
         return listPatients;

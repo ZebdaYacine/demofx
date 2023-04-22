@@ -20,7 +20,6 @@ import java.util.ResourceBundle;
 
 import static com.example.demofx.DemoFX.context;
 import static com.example.demofx.databaseManger.jooq.Tables.FOLLOW;
-import static com.example.demofx.databaseManger.jooq.Tables.PATIENT;
 
 public class FollowController implements Initializable {
     @FXML
@@ -51,6 +50,7 @@ public class FollowController implements Initializable {
     public static SimpleStringProperty dateEnterProperty,dateGoProperty,sicknessProperty,statusProperty;
 
     static FollowModel followModel ;
+    static UtilsModel utilsModel;
 
 
 
@@ -69,10 +69,16 @@ public class FollowController implements Initializable {
 
     private void fillInputs(FollowModel followRecord) {
         ID = Long.parseLong(followRecord.getId().toString());
-        sicknessProperty.set(followRecord.getSickness());
-        statusProperty.set(followRecord.getStatus());
-        dateGoProperty.set(followRecord.getDatego().toString());
-        dateEnterProperty.set(followRecord.getDateenterToString().toString());
+        if(followRecord.getSickness()!= null) {
+            sicknessProperty.set(followRecord.getSickness());
+        }
+        if(followRecord.getStatus()!= null){
+            statusProperty.set(followRecord.getStatus());
+        }
+        if(followRecord.getDatego()!= null)
+             dateGoProperty.set(followRecord.getDatego().toString());
+        if(followRecord.getDateenter()!= null)
+            dateEnterProperty.set(followRecord.getDateenter().toString());
     }
 
     private void clearInputs() {
@@ -84,6 +90,7 @@ public class FollowController implements Initializable {
     }
 
     private void loadDataToLayout() {
+        utilsModel= new UtilsModel();
         genderList = new ArrayList<>();
         civilStatusList = new ArrayList<>();
         civilStatusList.add("اغزب");
@@ -93,9 +100,10 @@ public class FollowController implements Initializable {
         genderList.add("ذكر");
         genderList.add("أنثى");
         setupTable();
-        patientCmbox.setItems(PatientModel.fetchPatients());
-        doctorCmbox.setItems(UserModel.fetchUser("doctor"));
-        psychologistCmbox.setItems(UserModel.fetchUser("psychologist"));
+        patientCmbox.getItems().addAll(PatientModel.fetchPatients());
+        doctorCmbox.setItems(UserModel.fetchUser(UtilsModel.TypeUser.doctor.toString()));
+        psychologistCmbox.setItems(UserModel.fetchUser(UtilsModel.TypeUser.psychologist.toString()));
+        serviceCmbox.setItems(UserModel.getAllServices());
         table.autosizeColumnsOnInitialization();
     }
 
@@ -104,17 +112,18 @@ public class FollowController implements Initializable {
         FollowRecord followRecord = DemoFX.context.newRecord(FOLLOW);
         followRecord.setSickness(sicknessProperty.getValue());
         followRecord.setStatus(statusProperty.getValue());
-        followRecord.setIdpatient(0L);
-        followRecord.setIddoctor(0L);
-        followRecord.setIdpsychologist(0L);
-        followRecord.setIdservice(0L);
+        followRecord.setIdpatient(patientCmbox.getSelectionModel().getSelectedItem().getId());
+        followRecord.setIddoctor(doctorCmbox.getSelectionModel().getSelectedItem().getId());
+        followRecord.setIdpsychologist(psychologistCmbox.getSelectionModel().getSelectedItem().getId());
+        followRecord.setIdservice(serviceCmbox.getSelectionModel().getSelectedItem().getId());
+        System.out.println(dateEnter.getValue());
         followRecord.setDateenter(dateEnter.getValue());
         followRecord.setDatego(dateGo.getValue());
         return followRecord;
     }
 
     private void refrechLayout() {
-        listFollow = FXCollections.observableArrayList();
+        listFollow = FXCollections.observableArrayList(followModel.getAllFollows());
         table.setItems(listFollow);
         table.goToPage(currentPage);
         table.setCurrentPage(currentPage);
@@ -144,11 +153,7 @@ public class FollowController implements Initializable {
         });
         delete.setOnAction(actionEvent -> {
             currentPage = table.getCurrentPage();
-            context.delete(PATIENT).where(PATIENT.ID.eq(ID)).execute();
-            listFollow = FXCollections.observableArrayList();
-            table.setItems(listFollow);
-            table.goToPage(currentPage);
-            table.setCurrentPage(currentPage);
+            context.delete(FOLLOW).where(FOLLOW.ID.eq(ID)).execute();
             refrechLayout();
         });
         update.setOnAction(actionEvent -> {

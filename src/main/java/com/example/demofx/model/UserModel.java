@@ -57,7 +57,7 @@ public class UserModel extends UserRecord {
         return this.getFirstname()+" "+this.getLastname();
     }
 
-    public ArrayList<UserModel> getAllUser() {
+    public static ArrayList<UserModel> getAllUser() {
         Result<?> result = context.select().from(USER).leftOuterJoin(SERVICE)
                 .on(USER.IDSERVICE.eq(SERVICE.ID))
                 .leftOuterJoin(ROLE)
@@ -79,7 +79,7 @@ public class UserModel extends UserRecord {
         return listUser;
     }
 
-    public ObservableList<ServiceModel> getAllServices() {
+    public static ObservableList<ServiceModel> getAllServices() {
         ObservableList<ServiceModel> listServices= FXCollections.observableArrayList(new ServiceModel());
         listServices.remove(0);
         Result<?> result = context.select().from(SERVICE).fetch();
@@ -89,7 +89,7 @@ public class UserModel extends UserRecord {
         }
         return listServices;
     }
-    public ObservableList<TypeModel> getAllTypes() {
+    public static ObservableList<TypeModel> getAllTypes() {
         ObservableList<TypeModel> listTypes=FXCollections.observableArrayList(new TypeModel());
         listTypes.remove(0);
         Result<?> result = context.select().from(TYPE).fetch();
@@ -99,7 +99,7 @@ public class UserModel extends UserRecord {
         }
         return listTypes;
     }
-    public ObservableList<RoleModel> getAllRoles() {
+    public static ObservableList<RoleModel> getAllRoles() {
         ObservableList<RoleModel> listRoles=FXCollections.observableArrayList(new RoleModel());
         listRoles.remove(0);
         Result<?> result = context.select().from(ROLE).fetch();
@@ -119,7 +119,7 @@ public class UserModel extends UserRecord {
         TypeRecord result = (TypeRecord) context.select().from(TYPE).where(TYPE.NAME.eq(name)).fetchAny();
         return  result.getValue(TYPE.ID);
     }
-    public ArrayList<UserModel> searchUserByPhone(String phone,ObservableList<UserModel> listUsers) {
+    public static ArrayList<UserModel> searchUserByPhone(String phone,ObservableList<UserModel> listUsers) {
         ArrayList<UserModel> listUserFound = new ArrayList<>();
         listUsers.forEach(userModel -> {
             if(userModel.getPhone().contains(phone)){
