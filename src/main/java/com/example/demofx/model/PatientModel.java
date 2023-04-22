@@ -1,10 +1,11 @@
 package com.example.demofx.model;
 
 import com.example.demofx.databaseManger.jooq.tables.records.PatientRecord;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.jooq.Record;
 import org.jooq.Result;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 import static com.example.demofx.DemoFX.context;
@@ -12,28 +13,21 @@ import static com.example.demofx.databaseManger.jooq.Tables.PATIENT;
 
 public class PatientModel extends PatientRecord {
 
-    private boolean isValidate;
     public PatientModel() {
     }
 
-    public PatientModel(Long id, String firstname, String lastname, String phone, String address, String civilstatus, String worke, String scientificlevel, String socioeconomiclevel, String gender, Integer age, LocalDate birthday, Integer height, Double wieght) {
-        super(id, firstname, lastname, phone, address, civilstatus, worke, scientificlevel, socioeconomiclevel, gender, age, birthday, height, wieght);
-    }
-
-    public boolean isValidate() {
-        return isValidate;
-    }
-
-    public void setValidate(boolean validate) {
-        isValidate = validate;
+    public PatientModel(Long id, String firstname, String lastname) {
+        this.setId(id);
+        this.setFirstname(firstname);
+        this.setLastname(lastname);
     }
 
     @Override
     public String toString() {
-        return super.toString();
+        return this.getFirstname()+" "+this.getLastname();
     }
 
-    public ArrayList<PatientModel> getAllPatients() {
+    public static ArrayList<PatientModel> getAllPatients() {
         Result<?> result = context.select().from(PATIENT)
                 .fetch();
         ArrayList<PatientModel> listUser = new ArrayList<>();
@@ -56,4 +50,18 @@ public class PatientModel extends PatientRecord {
         }
         return listUser;
     }
+
+    public static ObservableList<PatientModel> fetchPatients() {
+        ObservableList<PatientModel> listPatients= FXCollections.observableArrayList(new PatientModel());
+        listPatients.remove(0);
+        Result<?> result = context.select().from(PATIENT).fetch();
+        for (Record r : result) {
+            PatientModel patientModel = new PatientModel(r.getValue(PATIENT.ID),r.getValue(PATIENT.LASTNAME),r.getValue(PATIENT.FIRSTNAME));
+            System.out.println(patientModel);
+            listPatients.add(patientModel);
+        }
+        return listPatients;
+    }
+
+
 }

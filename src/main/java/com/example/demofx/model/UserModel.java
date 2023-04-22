@@ -25,6 +25,13 @@ public class UserModel extends UserRecord {
         this.role = role;
     }
 
+    public UserModel(Long id,  String firstname, String lastname ) {
+        this.setId(id);
+        this.setFirstname(firstname);
+        this.setLastname(lastname);
+
+    }
+
     public UserModel() {
     }
 
@@ -42,6 +49,12 @@ public class UserModel extends UserRecord {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+
+    @Override
+    public String toString() {
+        return this.getFirstname()+" "+this.getLastname();
     }
 
     public ArrayList<UserModel> getAllUser() {
@@ -96,6 +109,16 @@ public class UserModel extends UserRecord {
         }
         return listRoles;
     }
+
+    public static long getRoleIdByName(String name) {
+        RoleRecord result = (RoleRecord) context.select().from(ROLE).where(ROLE.NAME.eq(name)).fetchAny();
+        return  result.getValue(ROLE.ID);
+    }
+
+    public static long getTypeIdByName(String name) {
+        TypeRecord result = (TypeRecord) context.select().from(TYPE).where(TYPE.NAME.eq(name)).fetchAny();
+        return  result.getValue(TYPE.ID);
+    }
     public ArrayList<UserModel> searchUserByPhone(String phone,ObservableList<UserModel> listUsers) {
         ArrayList<UserModel> listUserFound = new ArrayList<>();
         listUsers.forEach(userModel -> {
@@ -104,6 +127,18 @@ public class UserModel extends UserRecord {
             }
         });
         return listUserFound;
+    }
+
+    public static ObservableList<UserModel> fetchUser(String typeName) {
+        ObservableList<UserModel> listUsers= FXCollections.observableArrayList(new UserModel());
+        listUsers.remove(0);
+        long idType=getTypeIdByName(typeName);
+        Result<?> result = context.select().from(USER).where(USER.IDTYPE.eq(idType)).fetch();
+        for (Record r : result) {
+            UserModel userModel = new UserModel(r.getValue(USER.ID),r.getValue(USER.LASTNAME),r.getValue(USER.FIRSTNAME));
+            listUsers.add(userModel);
+        }
+        return listUsers;
     }
 
 }

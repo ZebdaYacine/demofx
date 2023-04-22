@@ -22,6 +22,7 @@ public class PatientRecord extends UpdatableRecordImpl<PatientRecord> implements
 
     private static final long serialVersionUID = 1L;
 
+
     /**
      * Setter for <code>doctorlite.patient.id</code>.
      */

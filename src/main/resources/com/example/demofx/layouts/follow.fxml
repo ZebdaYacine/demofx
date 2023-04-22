@@ -34,14 +34,14 @@
                <children>
                   <HBox prefHeight="72.0" prefWidth="1183.0">
                      <children>
-                        <MFXComboBox fx:id="patient" accessibleRole="COMBO_BOX" floatingText="المريض" prefHeight="50.0" prefWidth="270.0">
+                        <MFXFilterComboBox fx:id="patientCmbox" floatingText="المريض" prefHeight="50.0" prefWidth="270.0">
                            <HBox.margin>
                               <Insets left="10.0" top="10.0" />
                            </HBox.margin>
                            <font>
                               <Font size="18.0" />
                            </font>
-                        </MFXComboBox>
+                        </MFXFilterComboBox>
                         <MFXTextField fx:id="sickness" alignment="CENTER" floatMode="BORDER" floatingText="المرض" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="270.0">
                            <font>
                               <Font size="18.0" />
@@ -50,22 +50,22 @@
                               <Insets left="10.0" top="10.0" />
                            </HBox.margin>
                         </MFXTextField>
-                        <MFXComboBox fx:id="doctor" accessibleRole="COMBO_BOX" floatingText="الطبيب" prefHeight="50.0" prefWidth="270.0">
+                        <MFXFilterComboBox fx:id="doctorCmbox" floatingText="الطبيب" prefHeight="50.0" prefWidth="270.0">
                            <font>
                               <Font size="18.0" />
                            </font>
                            <HBox.margin>
                               <Insets left="10.0" right="10.0" top="10.0" />
                            </HBox.margin>
-                        </MFXComboBox>
-                        <MFXComboBox fx:id="psychologist" accessibleRole="COMBO_BOX" floatingText="النفساني" prefHeight="50.0" prefWidth="270.0">
+                        </MFXFilterComboBox>
+                        <MFXFilterComboBox fx:id="psychologistCmbox" floatingText="النفساني" prefHeight="50.0" prefWidth="270.0">
                            <font>
                               <Font size="18.0" />
                            </font>
                            <HBox.margin>
                               <Insets left="10.0" right="10.0" top="10.0" />
                            </HBox.margin>
-                        </MFXComboBox>
+                        </MFXFilterComboBox>
                      </children>
                   </HBox>
                   <HBox prefHeight="72.0" prefWidth="1183.0">
@@ -78,14 +78,14 @@
                               <Insets left="10.0" top="10.0" />
                            </HBox.margin>
                         </MFXTextField>
-                        <MFXTextField fx:id="service" alignment="CENTER" floatMode="BORDER" floatingText="الـمصلحة" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="270.0">
+                        <MFXFilterComboBox fx:id="serviceCmbox" floatingText="المصلحة" prefHeight="50.0" prefWidth="270.0">
                            <font>
                               <Font size="18.0" />
                            </font>
                            <HBox.margin>
                               <Insets left="10.0" right="10.0" top="10.0" />
                            </HBox.margin>
-                        </MFXTextField>
+                        </MFXFilterComboBox>
                         <MFXDatePicker fx:id="dateEnter" floatMode="BORDER" floatingText="تاريخ الدخول" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="270.0">
                            <font>
                               <Font size="16.0" />

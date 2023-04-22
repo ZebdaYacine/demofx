@@ -2,10 +2,7 @@ package com.example.demofx.controller;
 
 import com.example.demofx.DemoFX;
 import com.example.demofx.databaseManger.jooq.tables.records.FollowRecord;
-import com.example.demofx.model.FollowModel;
-import com.example.demofx.model.PatientModel;
-import com.example.demofx.model.ServiceModel;
-import com.example.demofx.model.UserModel;
+import com.example.demofx.model.*;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.filter.LongFilter;
@@ -31,17 +28,15 @@ public class FollowController implements Initializable {
     @FXML
     private MFXTextField  sickness, status;
     @FXML
-    private MFXComboBox<PatientModel> patient;
+    private MFXFilterComboBox<PatientModel> patientCmbox;
     @FXML
-    private MFXComboBox<ServiceModel> service;
+    private MFXFilterComboBox<ServiceModel> serviceCmbox;
     @FXML
-    private MFXComboBox<UserModel>   doctor, psychologist;
+    private MFXFilterComboBox<UserModel>   doctorCmbox, psychologistCmbox;
     @FXML
     private MFXButton delete, add, update;
     @FXML
     private MFXDatePicker dateEnter, dateGo;
-    @FXML
-    private MFXComboBox<String> scientificLevelCmbox, socioEconomicLevelCmbox, genderCmbox, civilStatusCmbox;
 
     public static ObservableList<FollowModel> listFollow;
 
@@ -53,7 +48,7 @@ public class FollowController implements Initializable {
     private ArrayList<String> civilStatusList;
     private static Long ID;
 
-    public static SimpleStringProperty patientProperty,dateEnterProperty,dateGoProperty,sicknessProperty,doctorProperty,psychologistProperty,statusProperty,serviceProperty;
+    public static SimpleStringProperty dateEnterProperty,dateGoProperty,sicknessProperty,statusProperty;
 
     static FollowModel followModel ;
 
@@ -61,50 +56,30 @@ public class FollowController implements Initializable {
 
 
     private void initDataBinding(){
-        //patientProperty=new SimpleStringProperty();
         sicknessProperty=new SimpleStringProperty();
-        doctorProperty =new SimpleStringProperty();
-        psychologistProperty=new SimpleStringProperty();
         statusProperty=new SimpleStringProperty();
-        serviceProperty=new SimpleStringProperty();
         dateEnterProperty=new SimpleStringProperty();
         dateGoProperty=new SimpleStringProperty();
         statusProperty=new SimpleStringProperty();
-        //binding Property with fields
-       /* patientProperty.bindBidirectional(patient.textProperty());
-        doctorProperty.bindBidirectional(doctor.textProperty());
-        psychologistProperty.bindBidirectional(psychologist.textProperty());
-        statusProperty.bindBidirectional(status.textProperty());*/
-       /**/ serviceProperty.bindBidirectional(service.textProperty());
+        statusProperty.bindBidirectional(status.textProperty());
         sicknessProperty.bindBidirectional(sickness.textProperty());
         dateEnterProperty.bindBidirectional(dateEnter.textProperty());
         dateGoProperty.bindBidirectional(dateGo.textProperty());
     }
 
-
     private void fillInputs(FollowModel followRecord) {
         ID = Long.parseLong(followRecord.getId().toString());
-        //patientProperty.set(followRecord.getPatientFullName());
-        //doctorProperty.set(followRecord.getDrFullName());
         sicknessProperty.set(followRecord.getSickness());
         statusProperty.set(followRecord.getStatus());
-        //serviceProperty.set(followRecord.getServiceName());
-        //psychologistProperty.set(followRecord.getPsFullName());
         dateGoProperty.set(followRecord.getDatego().toString());
         dateEnterProperty.set(followRecord.getDateenterToString().toString());
     }
 
-    private void clearInputes() {
-        patientProperty.set("");
-        doctorProperty.set("");
+    private void clearInputs() {
         sicknessProperty.set("");
         statusProperty.set("");
-        serviceProperty.set("");
-        psychologistProperty.set("");
         dateGoProperty.set("");
         dateEnterProperty.set("");
-        //genderCmbox.selectItem("");
-        //civilStatusCmbox.selectItem("");
         ID = 0L;
     }
 
@@ -118,9 +93,10 @@ public class FollowController implements Initializable {
         genderList.add("ذكر");
         genderList.add("أنثى");
         setupTable();
+        patientCmbox.setItems(PatientModel.fetchPatients());
+        doctorCmbox.setItems(UserModel.fetchUser("doctor"));
+        psychologistCmbox.setItems(UserModel.fetchUser("psychologist"));
         table.autosizeColumnsOnInitialization();
-        //genderCmbox.getItems().addAll(FXCollections.observableArrayList(genderList));
-        //civilStatusCmbox.getItems().addAll(FXCollections.observableArrayList(civilStatusList));
     }
 
     private FollowRecord initRecord() {
@@ -142,7 +118,7 @@ public class FollowController implements Initializable {
         table.setItems(listFollow);
         table.goToPage(currentPage);
         table.setCurrentPage(currentPage);
-        clearInputes();
+        clearInputs();
     }
 
     @Override
@@ -193,7 +169,7 @@ public class FollowController implements Initializable {
         MFXTableColumn<FollowModel> PatientColumn = new MFXTableColumn<>(" المريض", true, Comparator.comparing(FollowModel::getPatientFullName));
         MFXTableColumn<FollowModel> SicknessColumn = new MFXTableColumn<>("المرض", true, Comparator.comparing(FollowModel::getSickness));
         MFXTableColumn<FollowModel> DrColumn = new MFXTableColumn<>("الطبيب", true, Comparator.comparing(FollowModel::getDrFullName));
-        MFXTableColumn<FollowModel> Pscolumn = new MFXTableColumn<>("المعالج النفسي", true, Comparator.comparing(FollowModel::getPsFullName));
+        MFXTableColumn<FollowModel> Pscolumn = new MFXTableColumn<>("النفساني", true, Comparator.comparing(FollowModel::getPsFullName));
         MFXTableColumn<FollowModel> StatusColumn = new MFXTableColumn<>("الحالة", true, Comparator.comparing(FollowModel::getStatus));
         MFXTableColumn<FollowModel> ServiceColumn = new MFXTableColumn<>("المصلحة", true, Comparator.comparing(FollowModel::getServiceName));
         MFXTableColumn<FollowModel> dateEnterColumn = new MFXTableColumn<>("تاريخ الدخول ", true, Comparator.comparing(FollowModel::getDateenterToString));
@@ -214,7 +190,7 @@ public class FollowController implements Initializable {
                 new LongFilter<>("ID", FollowModel::getId),
                 new StringFilter<>("المريض", FollowModel::getPatientFullName),
                 new StringFilter<>("الطبيب", FollowModel::getDrFullName),
-                new StringFilter<>("المعالج النفسي", FollowModel::getPsFullName),
+                new StringFilter<>("النفساني", FollowModel::getPsFullName),
                 new StringFilter<>("المرض", FollowModel::getSickness),
                 new StringFilter<>("الحالة", FollowModel::getStatus),
                 new StringFilter<>("تاريخ الدخول", FollowModel::getDateenterToString),

@@ -1,10 +1,6 @@
 package com.example.demofx.model;
 
 import com.example.demofx.databaseManger.jooq.tables.records.ServiceRecord;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.logging.Logger;
 
 public class ServiceModel extends ServiceRecord {
 
@@ -20,13 +16,5 @@ public class ServiceModel extends ServiceRecord {
         return this.getName();
     }
 
-    public void Template() {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            String jsonString = mapper.writeValueAsString(this);
-            System.out.println(jsonString);
-        } catch (JsonProcessingException ex) {
-            Logger.getLogger(ServiceModel.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-    }
+
 }
