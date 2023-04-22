@@ -139,11 +139,7 @@ public class UsersController implements Initializable {
         delete.setOnAction(actionEvent -> {
             currentPage = table.getCurrentPage();
             context.delete(USER).where(USER.ID.eq(ID)).execute();
-            listUsers=FXCollections.observableArrayList(userModel.getAllUser());
-            table.setItems(listUsers);
-            table.goToPage(currentPage);
-            table.setCurrentPage(currentPage);
-            clearInputes();
+            refrechLayout();
         });
         update.setOnAction(actionEvent -> {
             UserRecord userRecord=initRecord();
