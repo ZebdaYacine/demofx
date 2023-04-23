@@ -24,10 +24,12 @@ public class Indexes {
     // INDEX definitions
     // -------------------------------------------------------------------------
 
+    public static final Index DIAGNOSTIC_IDDOCTOR = Internal.createIndex(DSL.name("idDoctor"), Diagnostic.DIAGNOSTIC, new OrderField[] { Diagnostic.DIAGNOSTIC.IDDOCTOR }, false);
     public static final Index FOLLOW_IDDOCTOR = Internal.createIndex(DSL.name("idDoctor"), Follow.FOLLOW, new OrderField[] { Follow.FOLLOW.IDDOCTOR }, false);
     public static final Index DIAGNOSTIC_IDFOLLOW = Internal.createIndex(DSL.name("idFollow"), Diagnostic.DIAGNOSTIC, new OrderField[] { Diagnostic.DIAGNOSTIC.IDFOLLOW }, false);
     public static final Index DIAGNOSTIC_IDPATIENT = Internal.createIndex(DSL.name("idPatient"), Diagnostic.DIAGNOSTIC, new OrderField[] { Diagnostic.DIAGNOSTIC.IDPATIENT }, false);
     public static final Index FOLLOW_IDPATIENT = Internal.createIndex(DSL.name("idPatient"), Follow.FOLLOW, new OrderField[] { Follow.FOLLOW.IDPATIENT }, false);
+    public static final Index DIAGNOSTIC_IDPSYCHOLOGIST = Internal.createIndex(DSL.name("idPsychologist"), Diagnostic.DIAGNOSTIC, new OrderField[] { Diagnostic.DIAGNOSTIC.IDPSYCHOLOGIST }, false);
     public static final Index FOLLOW_IDPSYCHOLOGIST = Internal.createIndex(DSL.name("idPsychologist"), Follow.FOLLOW, new OrderField[] { Follow.FOLLOW.IDPSYCHOLOGIST }, false);
     public static final Index USER_IDROLE = Internal.createIndex(DSL.name("idRole"), User.USER, new OrderField[] { User.USER.IDROLE }, false);
     public static final Index FOLLOW_IDSERVICE = Internal.createIndex(DSL.name("idService"), Follow.FOLLOW, new OrderField[] { Follow.FOLLOW.IDSERVICE }, false);

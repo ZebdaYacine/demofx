@@ -16,13 +16,13 @@ import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function11;
+import org.jooq.Function13;
 import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Row11;
+import org.jooq.Row13;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -110,6 +110,16 @@ public class Diagnostic extends TableImpl<DiagnosticRecord> {
      */
     public final TableField<DiagnosticRecord, String> RECIPEMEDICALE = createField(DSL.name("recipeMedicale"), SQLDataType.VARCHAR(500), this, "");
 
+    /**
+     * The column <code>doctorlite.diagnostic.idDoctor</code>.
+     */
+    public final TableField<DiagnosticRecord, Long> IDDOCTOR = createField(DSL.name("idDoctor"), SQLDataType.BIGINT, this, "");
+
+    /**
+     * The column <code>doctorlite.diagnostic.idPsychologist</code>.
+     */
+    public final TableField<DiagnosticRecord, Long> IDPSYCHOLOGIST = createField(DSL.name("idPsychologist"), SQLDataType.BIGINT, this, "");
+
     private Diagnostic(Name alias, Table<DiagnosticRecord> aliased) {
         this(alias, aliased, null);
     }
@@ -150,7 +160,7 @@ public class Diagnostic extends TableImpl<DiagnosticRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.asList(Indexes.DIAGNOSTIC_IDFOLLOW, Indexes.DIAGNOSTIC_IDPATIENT);
+        return Arrays.asList(Indexes.DIAGNOSTIC_IDDOCTOR, Indexes.DIAGNOSTIC_IDFOLLOW, Indexes.DIAGNOSTIC_IDPATIENT, Indexes.DIAGNOSTIC_IDPSYCHOLOGIST);
     }
 
     @Override
@@ -165,11 +175,13 @@ public class Diagnostic extends TableImpl<DiagnosticRecord> {
 
     @Override
     public List<ForeignKey<DiagnosticRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.DIAGNOSTIC_IBFK_1, Keys.DIAGNOSTIC_IBFK_2);
+        return Arrays.asList(Keys.DIAGNOSTIC_IBFK_1, Keys.DIAGNOSTIC_IBFK_2, Keys.DIAGNOSTIC_IBFK_3, Keys.DIAGNOSTIC_IBFK_4);
     }
 
     private transient Patient _patient;
     private transient Follow _follow;
+    private transient User _diagnosticIbfk_3;
+    private transient User _diagnosticIbfk_4;
 
     /**
      * Get the implicit join path to the <code>doctorlite.patient</code> table.
@@ -189,6 +201,28 @@ public class Diagnostic extends TableImpl<DiagnosticRecord> {
             _follow = new Follow(this, Keys.DIAGNOSTIC_IBFK_2);
 
         return _follow;
+    }
+
+    /**
+     * Get the implicit join path to the <code>doctorlite.user</code> table, via
+     * the <code>diagnostic_ibfk_3</code> key.
+     */
+    public User diagnosticIbfk_3() {
+        if (_diagnosticIbfk_3 == null)
+            _diagnosticIbfk_3 = new User(this, Keys.DIAGNOSTIC_IBFK_3);
+
+        return _diagnosticIbfk_3;
+    }
+
+    /**
+     * Get the implicit join path to the <code>doctorlite.user</code> table, via
+     * the <code>diagnostic_ibfk_4</code> key.
+     */
+    public User diagnosticIbfk_4() {
+        if (_diagnosticIbfk_4 == null)
+            _diagnosticIbfk_4 = new User(this, Keys.DIAGNOSTIC_IBFK_4);
+
+        return _diagnosticIbfk_4;
     }
 
     @Override
@@ -231,18 +265,18 @@ public class Diagnostic extends TableImpl<DiagnosticRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row11 type methods
+    // Row13 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row11<Long, LocalDate, String, Long, Long, String, String, String, String, String, String> fieldsRow() {
-        return (Row11) super.fieldsRow();
+    public Row13<Long, LocalDate, String, Long, Long, String, String, String, String, String, String, Long, Long> fieldsRow() {
+        return (Row13) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function11<? super Long, ? super LocalDate, ? super String, ? super Long, ? super Long, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function13<? super Long, ? super LocalDate, ? super String, ? super Long, ? super Long, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super Long, ? super Long, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -250,7 +284,7 @@ public class Diagnostic extends TableImpl<DiagnosticRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function11<? super Long, ? super LocalDate, ? super String, ? super Long, ? super Long, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function13<? super Long, ? super LocalDate, ? super String, ? super Long, ? super Long, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super Long, ? super Long, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

@@ -69,38 +69,38 @@ public class PatientController implements Initializable {
         workProperty.bindBidirectional(work.textProperty());
     }
 
-    private void fillInputs(PatientRecord patientRecord) {
-        if(patientRecord.getWorke()!=null){
-            workProperty.set(patientRecord.getWorke());
+    private void fillInputs(PatientModel patientModel) {
+        if(patientModel.getWorke()!=null){
+            workProperty.set(patientModel.getWorke());
         }
-        if(patientRecord.getFirstname()!=null){
-            fNameProperty.set(patientRecord.getFirstname());
+        if(patientModel.getFirstname()!=null){
+            fNameProperty.set(patientModel.getFirstname());
         }
-        if(patientRecord.getLastname()!=null){
-            lNameProperty.set(patientRecord.getLastname());
+        if(patientModel.getLastname()!=null){
+            lNameProperty.set(patientModel.getLastname());
         }
-        if(patientRecord.getPhone()!=null){
-            phoneProperty.set(patientRecord.getPhone());
+        if(patientModel.getPhone()!=null){
+            phoneProperty.set(patientModel.getPhone());
         }
-        if(patientRecord.getAddress()!=null) {
-            addressProperty.set(patientRecord.getAddress());
+        if(patientModel.getAddress()!=null) {
+            addressProperty.set(patientModel.getAddress());
         }
-        if(patientRecord.getHeight()!=null) {
-            heightProperty.set(patientRecord.getHeight()+"");
+        if(patientModel.getHeight()!=null) {
+            heightProperty.set(patientModel.getHeight()+"");
         }
-        if(patientRecord.getWieght()!=null) {
-            weightProperty.set(patientRecord.getHeight()+"");
+        if(patientModel.getWieght()!=null) {
+            weightProperty.set(patientModel.getHeight()+"");
         }
-        if(patientRecord.getBirthday()!=null){
-            birthday.setText(patientRecord.getBirthdayString());
+        if(patientModel.getBirthday()!=null){
+            birthday.setText(patientModel.getBirthdayString());
         }
-        if(patientRecord.getGender()!=null && !patientRecord.getGender().isEmpty()){
-            genderCmbox.selectItem(patientRecord.getGender());
+        if(patientModel.getGender()!=null && !patientModel.getGender().isEmpty()){
+            genderCmbox.selectItem(patientModel.getGender());
         }
-        if(patientRecord.getCivilstatus()!=null && !patientRecord.getCivilstatus().isEmpty()){
-            civilStatusCmbox.selectItem(patientRecord.getCivilstatus());
+        if(patientModel.getCivilstatus()!=null && !patientModel.getCivilstatus().isEmpty()){
+            civilStatusCmbox.selectItem(patientModel.getCivilstatus());
         }
-        ID=Long.parseLong(patientRecord.getId().toString());
+        ID=Long.parseLong(patientModel.getId().toString());
     }
 
     private void clearInputes() {
@@ -163,9 +163,9 @@ public class PatientController implements Initializable {
         initDataBinding();
         loadDataToLayout();
         table.getSelectionModel().selectionProperty().addListener((observableValue, integerUserRecordObservableMap, row) -> {
-            PatientRecord patientRecord = table.getSelectionModel().getSelectedValue();
-            if (patientRecord != null) {
-                fillInputs(patientRecord);
+            PatientModel patientModel = table.getSelectionModel().getSelectedValue();
+            if (patientModel != null) {
+                fillInputs(patientModel);
             }
         });
         add.setOnAction(event -> {
@@ -227,19 +227,19 @@ public class PatientController implements Initializable {
         table.getTableColumns().addAll(Idcolumn, FnameColumn, LnameColumn,GenderColumn,statusCivilColumn, PhoneColumn, AddressColumn, WeightColumn,HeightColumn,
                 dateColumn,WorkColumn);
         table.getFilters().addAll(
-                new LongFilter<>("ID", PatientRecord::getId),
-                new StringFilter<>("الإسم", PatientRecord::getFirstname),
-                new StringFilter<>("اللقب", PatientRecord::getLastname),
-                new StringFilter<>("العنوان", PatientRecord::getAddress),
-                new StringFilter<>("الهاتف", PatientRecord::getPhone),
+                new LongFilter<>("ID", PatientModel::getId),
+                new StringFilter<>("الإسم", PatientModel::getFirstname),
+                new StringFilter<>("اللقب", PatientModel::getLastname),
+                new StringFilter<>("العنوان", PatientModel::getAddress),
+                new StringFilter<>("الهاتف", PatientModel::getPhone),
                 //new StringFilter<>("العمر", PatientRecord::getWorke),
-                new IntegerFilter<>("الطول", PatientRecord::getHeight),
-                new DoubleFilter<>("الوزن", PatientRecord::getWieght),
-                new StringFilter<>("العمر", PatientRecord::getWorke),
-                new IntegerFilter<>("العمل", PatientRecord::getAge),
-                new StringFilter<>("الحالة المدنية", PatientRecord::getCivilstatus),
-                new StringFilter<>("الجنس", PatientRecord::getGender),
-                new StringFilter<>("تاريخ الميلاد", PatientRecord::getBirthdayString)
+                new IntegerFilter<>("الطول", PatientModel::getHeight),
+                new DoubleFilter<>("الوزن", PatientModel::getWieght),
+                new StringFilter<>("العمر", PatientModel::getWorke),
+                new IntegerFilter<>("العمل", PatientModel::getAge),
+                new StringFilter<>("الحالة المدنية", PatientModel::getCivilstatus),
+                new StringFilter<>("الجنس", PatientModel::getGender),
+                new StringFilter<>("تاريخ الميلاد", PatientModel::getBirthdayString)
         );
         listPatients = FXCollections.observableArrayList(patientModel.getAllPatients());
         table.setItems(listPatients);

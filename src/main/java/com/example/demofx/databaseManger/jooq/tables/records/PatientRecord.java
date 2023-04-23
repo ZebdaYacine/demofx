@@ -22,7 +22,6 @@ public class PatientRecord extends UpdatableRecordImpl<PatientRecord> implements
 
     private static final long serialVersionUID = 1L;
 
-
     /**
      * Setter for <code>doctorlite.patient.id</code>.
      */
@@ -189,9 +188,6 @@ public class PatientRecord extends UpdatableRecordImpl<PatientRecord> implements
      */
     public LocalDate getBirthday() {
         return (LocalDate) get(11);
-    }
-    public String getBirthdayString() {
-        return getBirthday().toString() ;
     }
 
     /**

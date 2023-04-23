@@ -22,6 +22,10 @@ public class PatientModel extends PatientRecord {
         this.setLastname(lastname);
     }
 
+    public String getBirthdayString() {
+        return this.getBirthday().toString() ;
+    }
+
     @Override
     public String toString() {
         return getFirstname()+" "+getLastname();

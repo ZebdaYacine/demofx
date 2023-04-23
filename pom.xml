@@ -174,7 +174,7 @@
                         </goals>
                     </execution>
                 </executions>
-                <!--<configuration>
+                <configuration>
                     <jdbc>
                         <driver>com.mysql.cj.jdbc.Driver</driver>
                         <url>jdbc:mysql://localhost:3306/doctorlite</url>
@@ -188,11 +188,11 @@
                             <inputSchema>doctorlite</inputSchema>
                         </database>
                         <target>
-                            <packageName>com.example.demofx</packageName>
-                            <directory>src/main/java/com/example/demofx</directory>
+                            <packageName>com.example.demofx.databaseManger.jooq</packageName>
+                            <directory>src/main/java/com/example/demofx/databaseManger</directory>
                         </target>
                     </generator>
-                </configuration>-->
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
