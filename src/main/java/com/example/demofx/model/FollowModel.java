@@ -5,6 +5,8 @@ import com.example.demofx.databaseManger.jooq.tables.records.FollowRecord;
 import com.example.demofx.databaseManger.jooq.tables.records.PatientRecord;
 import com.example.demofx.databaseManger.jooq.tables.records.ServiceRecord;
 import com.example.demofx.databaseManger.jooq.tables.records.UserRecord;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.jooq.Record;
 import org.jooq.Result;
 
@@ -19,9 +21,14 @@ public class FollowModel extends FollowRecord {
 
     public FollowModel() {
     }
+
+    public FollowModel(long id){
+        this.setId(id);
+    }
     public FollowModel(Long id, LocalDate dateenter, LocalDate datego, Long idpatient, Long idservice, Long iddoctor, Long idpsychologist, String sickness, String status) {
         super(id, dateenter, datego, idpatient, idservice, iddoctor, idpsychologist, sickness, status);
     }
+
     public PatientModel getPatient(){
         PatientModel patient = (PatientModel) context.selectFrom(Patient.PATIENT).where(Patient.PATIENT.ID.eq(this.getIdpatient())).fetchOne();
         return  (patient==null?new PatientModel():patient);
@@ -65,7 +72,7 @@ public class FollowModel extends FollowRecord {
 
     @Override
     public String toString() {
-        return super.toString();
+        return getId().toString();
     }
 
     public ArrayList<FollowModel> getAllFollows() {
@@ -86,5 +93,16 @@ public class FollowModel extends FollowRecord {
             listUser.add(followModel);
         }
         return listUser;
+    }
+
+    public static ObservableList<FollowModel> fetchFollow() {
+        ObservableList<FollowModel> listFollow= FXCollections.observableArrayList(new FollowModel());
+        listFollow.remove(0);
+        Result<?> result = context.select().from(FOLLOW).fetch();
+        for (Record r : result) {
+            FollowModel followModel = new FollowModel(r.getValue(FOLLOW.ID));
+            listFollow.add(followModel);
+        }
+        return listFollow;
     }
 }

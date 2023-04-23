@@ -116,7 +116,6 @@ public class FollowController implements Initializable {
         followRecord.setIddoctor(doctorCmbox.getSelectionModel().getSelectedItem().getId());
         followRecord.setIdpsychologist(psychologistCmbox.getSelectionModel().getSelectedItem().getId());
         followRecord.setIdservice(serviceCmbox.getSelectionModel().getSelectedItem().getId());
-        System.out.println(dateEnter.getValue());
         followRecord.setDateenter(dateEnter.getValue());
         followRecord.setDatego(dateGo.getValue());
         return followRecord;
