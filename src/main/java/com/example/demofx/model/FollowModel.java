@@ -95,14 +95,31 @@ public class FollowModel extends FollowRecord {
         return listUser;
     }
 
-    public static ObservableList<FollowModel> fetchFollow() {
+    public static FollowModel getFollowId(FollowModel followModel) {
         ObservableList<FollowModel> listFollow= FXCollections.observableArrayList(new FollowModel());
         listFollow.remove(0);
-        Result<?> result = context.select().from(FOLLOW).fetch();
+        Result<?> result = context.select().from(FOLLOW)
+                .where(FOLLOW.IDPATIENT.eq(followModel.getIdpatient()))
+                .and(FOLLOW.DATEENTER.eq(followModel.getDateenter()))
+                .and(FOLLOW.IDSERVICE.eq(followModel.getIdservice()))
+                .fetch();
         for (Record r : result) {
-            FollowModel followModel = new FollowModel(r.getValue(FOLLOW.ID));
-            listFollow.add(followModel);
+            followModel.setId(r.getValue(FOLLOW.ID));
         }
-        return listFollow;
+        return followModel;
     }
+
+    public static FollowModel getDateEnterByFollowId(long id) {
+        FollowModel followModel= new FollowModel();
+        Result<?> result = context.select().from(FOLLOW)
+                .where(FOLLOW.ID.eq(id))
+                .fetch();
+        for (Record r : result) {
+            followModel.setDateenter(r.getValue(FOLLOW.DATEENTER));
+        }
+        return followModel;
+    }
+
+    
+
 }

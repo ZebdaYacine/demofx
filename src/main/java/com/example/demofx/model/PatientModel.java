@@ -66,5 +66,14 @@ public class PatientModel extends PatientRecord {
         return listPatients;
     }
 
+    public static PatientModel getPatientById(long id) {
+        PatientModel patientModel=  new PatientModel();
+        Result<?> result = context.select().from(PATIENT).where(PATIENT.ID.eq(id)).fetch();
+        for (Record r : result) {
+             patientModel = new PatientModel(r.getValue(PATIENT.ID),r.getValue(PATIENT.LASTNAME),r.getValue(PATIENT.FIRSTNAME));
+        }
+        return patientModel;
+    }
+
 
 }

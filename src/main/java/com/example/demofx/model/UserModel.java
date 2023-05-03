@@ -141,4 +141,13 @@ public class UserModel extends UserRecord {
         return listUsers;
     }
 
+    public static UserModel getUser(long id,long type) {
+        UserModel userModel=  new UserModel();
+        Result<?> result = context.select().from(USER).where(USER.ID.eq(id)).and(USER.IDTYPE.eq(type)).fetch();
+        for (Record r : result) {
+            userModel = new UserModel(r.getValue(USER.ID),r.getValue(USER.LASTNAME),r.getValue(USER.FIRSTNAME));
+        }
+        return userModel;
+    }
+
 }

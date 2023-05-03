@@ -5,8 +5,6 @@ import com.example.demofx.databaseManger.jooq.tables.records.DiagnosticRecord;
 import com.example.demofx.databaseManger.jooq.tables.records.FollowRecord;
 import com.example.demofx.databaseManger.jooq.tables.records.PatientRecord;
 import com.example.demofx.databaseManger.jooq.tables.records.UserRecord;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import org.jooq.Record;
 import org.jooq.Result;
 
@@ -89,6 +87,7 @@ public class DiagnosticModel extends DiagnosticRecord {
         for (Record r : result) {
             DiagnosticModel diagnosticModel = new DiagnosticModel();
             diagnosticModel.setId(r.getValue(DIAGNOSTIC.ID));
+            diagnosticModel.setIdfollow(r.getValue(DIAGNOSTIC.IDFOLLOW));
             diagnosticModel.setIdpatient(r.getValue(DIAGNOSTIC.IDPATIENT));
             diagnosticModel.setIddoctor(r.getValue(DIAGNOSTIC.IDDOCTOR));
             diagnosticModel.setIdpsychologist(r.getValue(DIAGNOSTIC.IDPSYCHOLOGIST));
@@ -97,15 +96,5 @@ public class DiagnosticModel extends DiagnosticRecord {
         }
         return listDiagnostic;
     }
-
-    public static ObservableList<PatientModel> fetchPatients(long idFollow) {
-        ObservableList<PatientModel> listPatients = FXCollections.observableArrayList(new PatientModel());
-        listPatients.remove(0);
-        PatientModel patientModel = new PatientModel(getPatient(idFollow).getValue(PATIENT.ID), getPatient(idFollow).getValue(PATIENT.LASTNAME)
-                , getPatient(idFollow).getValue(PATIENT.FIRSTNAME));
-        listPatients.add(patientModel);
-        return listPatients;
-    }
-
-
+    
 }

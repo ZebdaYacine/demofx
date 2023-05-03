@@ -30,6 +30,7 @@ public class FollowController implements Initializable {
     private MFXFilterComboBox<PatientModel> patientCmbox;
     @FXML
     private MFXFilterComboBox<ServiceModel> serviceCmbox;
+
     @FXML
     private MFXFilterComboBox<UserModel>   doctorCmbox, psychologistCmbox;
     @FXML
@@ -51,9 +52,6 @@ public class FollowController implements Initializable {
 
     static FollowModel followModel ;
     static UtilsModel utilsModel;
-
-
-
 
     private void initDataBinding(){
         sicknessProperty=new SimpleStringProperty();

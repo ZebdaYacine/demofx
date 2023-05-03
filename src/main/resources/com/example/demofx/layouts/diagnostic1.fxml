@@ -44,14 +44,6 @@
             </VBox>
             <VBox alignment="TOP_CENTER" prefHeight="613.0" prefWidth="479.0">
                <children>
-                  <MFXFilterComboBox fx:id="followCmbox" alignment="CENTER" floatingText="رقم المتابعة الطبية" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="350.0">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </VBox.margin>
-                  </MFXFilterComboBox>
                   <MFXFilterComboBox fx:id="patientCmbox" alignment="CENTER" floatingText="المريض" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="350.0">
                      <font>
                         <Font size="18.0" />
@@ -60,6 +52,22 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </VBox.margin>
                   </MFXFilterComboBox>
+                  <MFXFilterComboBox fx:id="serviceCmbox" alignment="CENTER_RIGHT" floatMode="BORDER" floatingText="المصلحة" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="350.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </VBox.margin>
+                  </MFXFilterComboBox>
+                  <MFXDatePicker fx:id="dateEnter" floatMode="BORDER" floatingText="تاريخ الدخول" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="350.0">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </VBox.margin>
+                  </MFXDatePicker>
                   <MFXFilterComboBox fx:id="doctorCmbox" alignment="CENTER" floatingText="مسؤول التشخيص الطبي" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="350.0">
                      <font>
                         <Font size="18.0" />
