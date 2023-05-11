@@ -14,8 +14,15 @@ import io.github.palexdev.materialfx.filter.StringFilter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
 import java.util.ResourceBundle;
@@ -31,9 +38,12 @@ import static com.example.demofx.databaseManger.jooq.Tables.DIAGNOSTIC;
 public class DiagnosticController implements Initializable {
 
     @FXML
-    private MFXPaginatedTableView<DiagnosticModel> table;
+    private  MFXPaginatedTableView<DiagnosticModel> table;
     @FXML
     private MFXFilterComboBox<PatientModel> patientCmbox;
+
+    @FXML
+    private Label lab;
 
     @FXML
     private MFXFilterComboBox<ServiceModel> serviceCmbox;
@@ -63,17 +73,28 @@ public class DiagnosticController implements Initializable {
         table.autosizeColumnsOnInitialization();
         setupTable();
     }
+
     private void fillInputs(DiagnosticModel diagnosticModel) {
         ID = Long.parseLong(diagnosticModel.getId().toString());
-        System.out.println(ID);
-        if(diagnosticModel.getDatediagnostic()!= null) {
-            dateDiagnostic.setText(diagnosticModel.getDateDiagnosticToString());
+        if (diagnosticModel.getDatediagnostic() != null) {
+            dateDiagnostic.setValue(diagnosticModel.getDatediagnostic());
         }
         patientCmbox.getSelectionModel().selectItem(PatientModel.getPatientById(diagnosticModel.getIdpatient()));
-        doctorCmbox.getSelectionModel().selectItem(UserModel.getUser(diagnosticModel.getIddoctor(),1L));
-        psychologistCmbox.getSelectionModel().selectItem(UserModel.getUser(diagnosticModel.getIdpsychologist(),2L));
+        doctorCmbox.getSelectionModel().selectItem(UserModel.getUser(diagnosticModel.getIddoctor(), 1L));
+        psychologistCmbox.getSelectionModel().selectItem(UserModel.getUser(diagnosticModel.getIdpsychologist(), 2L));
         serviceCmbox.getSelectionModel().selectItem(ServiceModel.getServiceByFollowId(diagnosticModel.getIdfollow()));
-        dateEnter.setText(FollowModel.getDateEnterByFollowId(diagnosticModel.getIdfollow()).getDateenterToString());
+        dateEnter.setValue(FollowModel.getDateEnterByFollowId(diagnosticModel.getIdfollow()).getDateenter());
+    }
+
+    private void changeStyl(Boolean ok) {
+        if (ok == true) {
+            lab.setText("الإطلاع على التشخيصات");
+            lab.setTextFill(Color.GREEN);
+        } else {
+            lab.setText("إضافة التشخيصات");
+            lab.setTextFill(Color.RED);
+
+        }
     }
 
     @Override
@@ -82,8 +103,15 @@ public class DiagnosticController implements Initializable {
         table.getSelectionModel().selectionProperty().addListener((observableValue, integerUserRecordObservableMap, row) -> {
             DiagnosticModel tabDiag = table.getSelectionModel().getSelectedValue();
             if (tabDiag != null) {
+                diagnosticModel=tabDiag;
+                boolean ok = tabDiag.getConclusion() != null && tabDiag.getPsychologydiagnostic() != null
+                        && tabDiag.getMedicladiagnostic() != null && tabDiag.getInterviewdynamics() != null;
+                changeStyl(ok);
                 fillInputs(tabDiag);
             }
+        });
+        lab.setOnMouseClicked(event -> {
+            showDiagnostics("diagnostic2",diagnosticModel);
         });
         add.setOnAction(event -> {
             DiagnosticRecord diagnosticRecord = initRecord();
@@ -101,6 +129,21 @@ public class DiagnosticController implements Initializable {
             currentPage = table.getCurrentPage();
             context.delete(DIAGNOSTIC).where(DIAGNOSTIC.ID.eq(ID)).execute();
             refrechLayout();
+        });
+        update.setOnAction(event -> {
+            try {
+                DiagnosticRecord diagnosticRecord = initRecord();
+                if (diagnosticRecord != null) {
+                    diagnosticRecord.setId(ID);
+                    diagnosticRecord.update();
+                    refrechLayout();
+                    //dialogsController.openInfo("تم عملية التعديل بنجاح");
+                } else {
+                    //Utils.trackingException(null,"حدث خطأ في عملية الإضافة",dialogsController);
+                }
+            } catch (Exception e) {
+                //Utils.trackingException(e,"حدث خطأ في عملية الإضافة",dialogsController);
+            }
         });
     }
 
@@ -122,7 +165,7 @@ public class DiagnosticController implements Initializable {
         followModel.setIdservice(serviceCmbox.getSelectedItem().getId());
         followModel.setDateenter(dateEnter.getValue());
         followModel.setIdpatient(patientCmbox.getSelectedItem().getId());
-        System.out.println(followModel.getIdpatient()+" "+followModel.getDateenter()+" "+followModel.getIdpatient());
+        System.out.println(followModel.getIdservice() + " " + followModel.getDateenter() + " " + dateEnter.getValue() + " " + followModel.getIdpatient());
         try {
             long idFollow = FollowModel.getFollowId(followModel).getId();
             //TODO CHECK IF ID FOLLOW IS NOT NULL
@@ -146,8 +189,8 @@ public class DiagnosticController implements Initializable {
             diagnosticRecord.setIdfollow(idFollow);
             diagnosticRecord.setIddoctor(doctorCmbox.getSelectedItem().getId());
             return diagnosticRecord;
-        }else{
-            return  null;
+        } else {
+            return null;
         }
     }
 
@@ -179,6 +222,24 @@ public class DiagnosticController implements Initializable {
         table.setItems(listDiagnostic);
         table.goToPage(0);
         table.setCurrentPage(0);
+    }
+
+    private void showDiagnostics(String layout,DiagnosticModel diagnosticModel) {
+        if(diagnosticModel.getId()!=null){
+            try {
+                FXMLLoader main = new FXMLLoader(getClass().getResource("/com/example/demofx/layouts/" + layout + ".fxml"));
+                Parent root = main.load();
+                DiagnosticController1 diagnosticController1 = main.getController();
+                diagnosticController1.fillInputs(diagnosticModel,table,lab);
+                Scene home_scene = new Scene(root);
+                Stage stage = new Stage();
+                stage.setScene(home_scene);
+                stage.setResizable(false);
+                stage.show();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
 

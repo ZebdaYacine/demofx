@@ -92,7 +92,7 @@ public class PatientController implements Initializable {
             weightProperty.set(patientModel.getHeight()+"");
         }
         if(patientModel.getBirthday()!=null){
-            birthday.setText(patientModel.getBirthdayString());
+            birthday.setValue(patientModel.getBirthday());
         }
         if(patientModel.getGender()!=null && !patientModel.getGender().isEmpty()){
             genderCmbox.selectItem(patientModel.getGender());

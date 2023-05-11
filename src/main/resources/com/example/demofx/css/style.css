@@ -1,3 +1,15 @@
+
+.green
+{
+    /*-fx-background-color : #E9EBEE;*/
+    -fx-background-color : #1DE172FF;
+}
+.red
+{
+    /*-fx-background-color : #E9EBEE;*/
+    -fx-background-color : #EC011CFF;
+}
+
 .button
 {
     -fx-background-color : transparent;

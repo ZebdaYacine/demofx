@@ -16,6 +16,7 @@ import static com.example.demofx.databaseManger.jooq.Tables.*;
 
 public class DiagnosticModel extends DiagnosticRecord {
 
+
     public DiagnosticModel() {
     }
 
@@ -92,9 +93,14 @@ public class DiagnosticModel extends DiagnosticRecord {
             diagnosticModel.setIddoctor(r.getValue(DIAGNOSTIC.IDDOCTOR));
             diagnosticModel.setIdpsychologist(r.getValue(DIAGNOSTIC.IDPSYCHOLOGIST));
             diagnosticModel.setDatediagnostic(r.getValue(DIAGNOSTIC.DATEDIAGNOSTIC));
+            diagnosticModel.setPsychologydiagnostic(r.getValue(DIAGNOSTIC.PSYCHOLOGYDIAGNOSTIC));
+            diagnosticModel.setMedicladiagnostic(r.getValue(DIAGNOSTIC.MEDICLADIAGNOSTIC));
+            diagnosticModel.setInterviewdynamics(r.getValue(DIAGNOSTIC.INTERVIEWDYNAMICS));
+            diagnosticModel.setConclusion(r.getValue(DIAGNOSTIC.CONCLUSION));
             listDiagnostic.add(diagnosticModel);
         }
         return listDiagnostic;
     }
-    
+
+
 }

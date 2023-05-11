@@ -74,9 +74,9 @@ public class FollowController implements Initializable {
             statusProperty.set(followRecord.getStatus());
         }
         if(followRecord.getDatego()!= null)
-             dateGoProperty.set(followRecord.getDatego().toString());
+             dateGo.setValue(followRecord.getDatego());
         if(followRecord.getDateenter()!= null)
-            dateEnterProperty.set(followRecord.getDateenter().toString());
+            dateEnter.setValue(followRecord.getDateenter());
     }
 
     private void clearInputs() {
