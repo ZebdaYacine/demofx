@@ -38,7 +38,7 @@ import static com.example.demofx.databaseManger.jooq.Tables.DIAGNOSTIC;
 public class DiagnosticController implements Initializable {
 
     @FXML
-    private  MFXPaginatedTableView<DiagnosticModel> table;
+    private MFXPaginatedTableView<DiagnosticModel> table;
     @FXML
     private MFXFilterComboBox<PatientModel> patientCmbox;
 
@@ -97,21 +97,25 @@ public class DiagnosticController implements Initializable {
         }
     }
 
+
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         loadDataToLayout();
         table.getSelectionModel().selectionProperty().addListener((observableValue, integerUserRecordObservableMap, row) -> {
             DiagnosticModel tabDiag = table.getSelectionModel().getSelectedValue();
             if (tabDiag != null) {
-                diagnosticModel=tabDiag;
-                boolean ok = tabDiag.getConclusion() != null && tabDiag.getPsychologydiagnostic() != null
-                        && tabDiag.getMedicladiagnostic() != null && tabDiag.getInterviewdynamics() != null;
+                diagnosticModel = tabDiag;
+                boolean ok = Utils.checkStringIsValid(tabDiag.getConclusion()) &&
+                             Utils.checkStringIsValid(tabDiag.getPsychologydiagnostic()) &&
+                             Utils.checkStringIsValid(tabDiag.getMedicladiagnostic()) &&
+                             Utils.checkStringIsValid(tabDiag.getInterviewdynamics());
                 changeStyl(ok);
                 fillInputs(tabDiag);
             }
         });
         lab.setOnMouseClicked(event -> {
-            showDiagnostics("diagnostic2",diagnosticModel);
+            showDiagnostics("diagnosticDetails", diagnosticModel);
         });
         add.setOnAction(event -> {
             DiagnosticRecord diagnosticRecord = initRecord();
@@ -224,13 +228,13 @@ public class DiagnosticController implements Initializable {
         table.setCurrentPage(0);
     }
 
-    private void showDiagnostics(String layout,DiagnosticModel diagnosticModel) {
-        if(diagnosticModel.getId()!=null){
+    private void showDiagnostics(String layout, DiagnosticModel diagnosticModel) {
+        if (diagnosticModel.getId() != null) {
             try {
                 FXMLLoader main = new FXMLLoader(getClass().getResource("/com/example/demofx/layouts/" + layout + ".fxml"));
                 Parent root = main.load();
-                DiagnosticController1 diagnosticController1 = main.getController();
-                diagnosticController1.fillInputs(diagnosticModel,table,lab);
+                DiagnosticDetailsController diagnosticController1 = main.getController();
+                diagnosticController1.fillInputs(diagnosticModel, table, lab);
                 Scene home_scene = new Scene(root);
                 Stage stage = new Stage();
                 stage.setScene(home_scene);

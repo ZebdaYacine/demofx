@@ -71,6 +71,9 @@ public class MainController implements Initializable {
         btn5.setOnAction(event -> {
             changePane(btnList,5-dashboardIndex, "diagnostic1",pane);
         });
+        btn6.setOnAction(event -> {
+            changePane(btnList,5-dashboardIndex, "folderMidecal",pane);
+        });
     }
 
     private void changePane(ArrayList<MFXButton> btnList,int index,String layout ,VBox pane){

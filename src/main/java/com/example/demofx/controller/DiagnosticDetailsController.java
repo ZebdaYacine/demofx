@@ -26,7 +26,7 @@ import static com.example.demofx.databaseManger.jooq.Tables.DIAGNOSTIC;
  *
  * @author harran
  */
-public class DiagnosticController1 implements Initializable {
+public class DiagnosticDetailsController implements Initializable {
 
     @FXML
     private MFXButton save;
@@ -113,8 +113,10 @@ public class DiagnosticController1 implements Initializable {
                     tableCurrent.setItems(FXCollections.observableArrayList(new DiagnosticModel().getAllDiagnostic()));
                     tableCurrent.goToPage(0);
                     tableCurrent.setCurrentPage(0);
-                    boolean ok = diagnosticRecord.getConclusion().isEmpty() && diagnosticRecord.getPsychologydiagnostic().isEmpty()
-                            && diagnosticRecord.getMedicladiagnostic().isEmpty() && diagnosticRecord.getInterviewdynamics().isEmpty();
+                    boolean ok = Utils.checkStringIsValid(diagnosticRecord.getConclusion()) &&
+                            Utils.checkStringIsValid(diagnosticRecord.getPsychologydiagnostic()) &&
+                            Utils.checkStringIsValid(diagnosticRecord.getMedicladiagnostic()) &&
+                            Utils.checkStringIsValid(diagnosticRecord.getInterviewdynamics());
                     if (ok == true) {
                         labCurrent.setText("الإطلاع على التشخيصات");
                         labCurrent.setTextFill(Color.GREEN);

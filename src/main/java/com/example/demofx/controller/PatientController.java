@@ -47,8 +47,6 @@ public class PatientController implements Initializable {
 
     static PatientModel patientModel ;
 
-
-
     public static SimpleStringProperty fNameProperty,lNameProperty,addressProperty,phoneProperty,weightProperty,workProperty,heightProperty;
 
     private void initDataBinding(){

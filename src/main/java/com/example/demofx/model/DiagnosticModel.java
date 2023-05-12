@@ -81,9 +81,19 @@ public class DiagnosticModel extends DiagnosticRecord {
         return super.toString();
     }
 
-    public ArrayList<DiagnosticModel> getAllDiagnostic() {
-        Result<?> result = context.select().from(DIAGNOSTIC)
+
+    public ArrayList<DiagnosticModel> getAllDiagnosticByFollowID(long id) {
+        Result<?> result = context.select().from(DIAGNOSTIC).where(DIAGNOSTIC.IDFOLLOW.eq(id))
                 .fetch();
+        return fillDiagnosticModels(result);
+    }
+
+    public ArrayList<DiagnosticModel> getAllDiagnostic() {
+        Result<?> result = context.select().from(DIAGNOSTIC).fetch();
+        return fillDiagnosticModels(result);
+    }
+
+    private ArrayList<DiagnosticModel> fillDiagnosticModels(Result<?> result) {
         ArrayList<DiagnosticModel> listDiagnostic = new ArrayList<>();
         for (Record r : result) {
             DiagnosticModel diagnosticModel = new DiagnosticModel();

@@ -34,6 +34,16 @@ public class FollowModel extends FollowRecord {
         return  (patient==null?new PatientModel():patient);
     }
 
+    public String getPatientAddress(){
+        PatientRecord patient = (PatientRecord) context.selectFrom(Patient.PATIENT).where(Patient.PATIENT.ID.eq(this.getIdpatient())).fetchOne();
+        return  (patient!=null?patient.getAddress():"");
+    }
+
+    public String getBirthdayDate(){
+        PatientRecord patient = (PatientRecord) context.selectFrom(Patient.PATIENT).where(Patient.PATIENT.ID.eq(this.getIdpatient())).fetchOne();
+        return  (patient!=null?patient.getBirthday().toString():"");
+    }
+
     public String getPatientFullName(){
         PatientRecord patient = (PatientRecord) context.selectFrom(Patient.PATIENT).where(Patient.PATIENT.ID.eq(this.getIdpatient())).fetchOne();
         return  (patient==null?"":patient.getFirstname()+" "+patient.getLastname());

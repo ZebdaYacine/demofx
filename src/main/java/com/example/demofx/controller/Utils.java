@@ -9,4 +9,11 @@ public class Utils {
         System.out.println(e.getMessage());
         dialogsController.openInfo(ErrorMessage);
     }
+
+    public static boolean checkStringIsValid(String str) {
+        if (str != null) {
+            return !str.isBlank();
+        }
+        return false;
+    }
 }
