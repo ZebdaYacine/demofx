@@ -1,98 +1,109 @@
 package com.example.demofx.controller;
 
-import com.example.demofx.databaseManger.jooq.tables.records.UserRecord;
-import io.github.palexdev.materialfx.controls.MFXPaginatedTableView;
-import io.github.palexdev.materialfx.controls.MFXTableColumn;
-import io.github.palexdev.materialfx.controls.MFXTextField;
-import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
-import io.github.palexdev.materialfx.filter.LongFilter;
-import io.github.palexdev.materialfx.filter.StringFilter;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import com.example.demofx.model.PatientModel;
+import com.example.demofx.model.ServiceModel;
+import com.example.demofx.model.UserModel;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.ResourceBundle;
 
 public class StatisticController implements Initializable {
 
     @FXML
-    private Label username;
-    @FXML
-    private MFXTextField search;
-
-
+    private Text text1,text2,text3,text4;
 
     @FXML
-    private MFXPaginatedTableView<UserRecord> table;
+    private Hyperlink link1,link2,link3,link4;
 
-    public static  ObservableList<UserRecord> user ;
+    public static boolean isVisited=false;
 
-
-
-    public void showUser(String data) {
-        //username.setText(data);
-    }
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ArrayList<UserRecord> users = new ArrayList<>();
-
-        users.add(new UserRecord(1L,"user1","user1","user1","user1","","",1L,1L,1L));
-        users.add(new UserRecord(2L,"user2","user2","user2","user2","","",1L,1L,1L));
-        users.add(new UserRecord(2L,"user2","user2","user2","user2","","",1L,1L,1L));
-        users.add(new UserRecord(2L,"user2","user2","user2","user2","","",1L,1L,1L));
-        users.add(new UserRecord(2L,"user2","user2","user2","user2","","",1L,1L,1L));
-        users.add(new UserRecord(2L,"user2","user2","user2","user2","","",1L,1L,1L));
-        users.add(new UserRecord(2L,"user2","user2","user2","user2","","",1L,1L,1L));
-        users.add(new UserRecord(2L,"user2","user2","user2","user2","","",1L,1L,1L));
-        users.add(new UserRecord(2L,"user2","user2","user2","user2","","",1L,1L,1L));
-        users.add(new UserRecord(2L,"user2","user2","user2","user2","","",1L,1L,1L));
-        users.add(new UserRecord(2L,"user2","user2","user2","user2","","",1L,1L,1L));
-        users.add(new UserRecord(2L,"user2","user2","user2","user2","","",1L,1L,1L));
-        users.add(new UserRecord(2L,"user2","user2","user2","user2","","",1L,1L,1L));
-        users.add(new UserRecord(2L,"user2","user2","user2","user2","","",1L,1L,1L));
-        users.add(new UserRecord(2L,"user2","user2","user2","user2","","",1L,1L,1L));
-        users.add(new UserRecord(2L,"user2","user2","user2","user2","","",1L,1L,1L));
-        users.add(new UserRecord(2L,"user2","user2","user2","user2","","",1L,1L,1L));
-        users.add(new UserRecord(2L,"user2","user2","user2","user2","","",1L,1L,1L));
-        users.add(new UserRecord(2L,"user2","user2","user2","user2","","",1L,1L,1L));
-
-        setupTable(users);
-        table.autosizeColumnsOnInitialization();
-        search.setOnKeyReleased(event -> {
-            if(search.getText().isEmpty()){
-                user = FXCollections.observableArrayList(users);
-                table.setItems(user);
-            }else{
-                user = FXCollections.observableArrayList(users.get(Integer.parseInt(search.getText())));
-                table.setItems(user);
-            }
+        int a=ServiceModel.getAllServices().size();
+        int b=PatientModel.getAllPatients().size();
+        int c=UserModel.getAllUserByType("doctor").size();
+        int d=UserModel.getAllUserByType("psychologist").size();
+        if(!isVisited){
+            loadData(a,text1);
+            loadData(b,text2);
+            loadData(c,text3);
+            loadData(d,text4);
+            isVisited=true;
+        }else{
+            text1.setText(a+"");
+            text2.setText(b+"");
+            text3.setText(c+"");
+            text4.setText(d+"");
+        }
+        link1.setOnAction(event -> {
+            showList("servicesList");
         });
+
+        link2.setOnAction(event -> {
+            showList("patienstList");
+        });
+        link3.setOnAction(event -> {
+            showList("usersList");
+        });
+        link4.setOnAction(event -> {
+            showList("psychologistesList");
+        });
+
     }
 
-    private void setupTable(ArrayList<UserRecord> users) {
-        MFXTableColumn<UserRecord> name2Column = new MFXTableColumn<>("ID", true, Comparator.comparing(UserRecord::getId));
-        MFXTableColumn<UserRecord> nameColumn = new MFXTableColumn<>("الإسم", true, Comparator.comparing(UserRecord::getFirstname));
-        MFXTableColumn<UserRecord> name1Column = new MFXTableColumn<>("اللقب", true, Comparator.comparing(UserRecord::getLastname));
+    private void loadData(int a , Text text){
+        new Thread(new Runnable() {
+            int i=0;
+            @Override
+            public void run() {
+                while(i<a){
+                    i=i+1;
+                    try {
+                        Thread.sleep(50);
+                    }catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    String str=i+"";
+                    initText(str,text);
+                }
+            }
+        }).start();
+    }
 
-        nameColumn.setRowCellFactory(user -> new MFXTableRowCell<>(UserRecord::getFirstname));
-        name1Column.setRowCellFactory(user -> new MFXTableRowCell<>(UserRecord::getLastname));
-        name2Column.setRowCellFactory(user -> new MFXTableRowCell<>(UserRecord::getId));
 
-        table.getTableColumns().addAll(name2Column,nameColumn, name1Column);
-        table.getFilters().addAll(
-                new LongFilter<>("ID", UserRecord::getId),
-                new StringFilter<>("الإسم", UserRecord::getFirstname),
-                new StringFilter<>("اللقب", UserRecord::getLastname)
-        );
-        user = FXCollections.observableArrayList(users);
-        table.setItems(user);
+    private void initText(String  str , Text text){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                text.setText(str);
+            }
+        }).start();
+    }
+
+
+    private void showList(String layout) {
+            try {
+                FXMLLoader main = new FXMLLoader(getClass().getResource("/com/example/demofx/layouts/" + layout + ".fxml"));
+                Parent root = main.load();
+                Scene home_scene = new Scene(root);
+                Stage stage = new Stage();
+                stage.setScene(home_scene);
+                stage.setResizable(false);
+                stage.show();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
     }
 
 

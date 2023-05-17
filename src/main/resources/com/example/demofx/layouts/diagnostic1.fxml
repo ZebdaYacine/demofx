@@ -2,9 +2,7 @@
 
 <?import io.github.palexdev.materialfx.controls.*?>
 <?import javafx.geometry.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -94,17 +92,11 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </VBox.margin>
                   </MFXDatePicker>
-                  <Label fx:id="lab" accessibleRole="BUTTON" alignment="CENTER" cache="true" cacheHint="SPEED" contentDisplay="CENTER" depthTest="ENABLE" prefHeight="54.0" prefWidth="344.0" text="اضافة التشخيصات" textAlignment="CENTER" textFill="#eb0202" textOverrun="CLIP" wrapText="true">
+                  <Hyperlink fx:id="lab" contentDisplay="CENTER" text="اضافة التشخيصات" textAlignment="CENTER" textFill="RED" textOverrun="WORD_ELLIPSIS" wrapText="true">
                      <font>
-                        <Font name="Segoe UI Bold" size="23.0" />
+                        <Font size="24.0" />
                      </font>
-                     <effect>
-                        <ColorAdjust />
-                     </effect>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Label>
+                  </Hyperlink>
                   <HBox alignment="CENTER_RIGHT" prefHeight="72.0" prefWidth="394.0">
                      <children>
                         <MFXButton fx:id="delete" buttonType="RAISED" prefHeight="39.0" prefWidth="115.0" styleClass="delbtn" stylesheets="@../css/buttons_style.css" text="حذف">

@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.MFXButton?>
-<?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
-<?import io.github.palexdev.materialfx.controls.MFXTextField?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.effect.Bloom?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="638.0" prefWidth="446.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demofx.controller.LoginController">
    <children>
@@ -42,7 +39,7 @@
          <VBox.margin>
             <Insets top="45.0" />
          </VBox.margin></MFXPasswordField>
-      <MFXButton fx:id="btn_logn" buttonType="RAISED" depthLevel="LEVEL5" onAction="#add" prefHeight="64.0" prefWidth="400.0" rippleColor="#a084dc" style="-fx-background-color: #8424d7;" text="تسجيل الدخول" textFill="WHITE" textOverrun="CENTER_ELLIPSIS">
+      <MFXButton fx:id="btn_logn" buttonType="RAISED" depthLevel="LEVEL5" onAction="#login" prefHeight="64.0" prefWidth="400.0" rippleColor="#a084dc" style="-fx-background-color: #8424d7;" text="تسجيل الدخول" textFill="WHITE" textOverrun="CENTER_ELLIPSIS">
          <VBox.margin>
             <Insets top="45.0" />
          </VBox.margin>

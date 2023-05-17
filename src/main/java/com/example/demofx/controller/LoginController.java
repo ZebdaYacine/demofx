@@ -1,6 +1,7 @@
 package com.example.demofx.controller;
 
 import com.example.demofx.databaseManger.jooq.tables.records.UserRecord;
+import com.example.demofx.model.UserModel;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.ActionEvent;
@@ -29,6 +30,8 @@ public class LoginController {
     @FXML
     private MFXTextField password;
 
+    public static UserModel userLoggIn;
+
     @FXML
     private MFXButton btn_logn;
 
@@ -52,40 +55,30 @@ public class LoginController {
     }
 
     @FXML
-    protected void add(ActionEvent event) {
-       /* UserRecord userRecord = context.newRecord(USER);
-        userRecord.setFirstname(username.getText());
-        userRecord.setLastname(password.getText());
-        userRecord.setIdrole(1L);
-        userRecord.setIdservice(1L);
-        userRecord.setIdtype(1L);
-        userRecord.store();
-        getAll();*/
-
-        try {
-            Stage thisStage = (Stage) btn_logn.getScene().getWindow();
-            thisStage.close();
-            FXMLLoader main = new FXMLLoader(getClass().getResource("/com/example/demofx/layouts/main.fxml"));
-            Parent root=main.load();
-            MainController mainController=main.getController();
-            mainController.setStage(stage);
-            mainController.showUser(username.getText());
-            /*if (screenSize.getWidth() <= 1366) {
-                screenSize.width = 1340;
-                screenSize.height = 900;
-            } else {
-                screenSize.width = 1570;
-                screenSize.height = 900;
-            }*/
-            Scene home_scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setScene(home_scene);
-            stage.setTitle("Doctor Light");
-            stage.setResizable(false);
-            stage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+    protected void login(ActionEvent event) {
+        userLoggIn=UserModel.getUserLoggIn(username.getText(),password.getText());
+        if(userLoggIn.getId()!=null){
+            try {
+                Stage thisStage = (Stage) btn_logn.getScene().getWindow();
+                thisStage.close();
+                FXMLLoader main = new FXMLLoader(getClass().getResource("/com/example/demofx/layouts/main.fxml"));
+                Parent root=main.load();
+                MainController mainController=main.getController();
+                mainController.setStage(stage);
+                mainController.showUser(userLoggIn);
+                Scene home_scene = new Scene(root);
+                Stage stage = new Stage();
+                stage.setScene(home_scene);
+                stage.setTitle("Doctor Light");
+                stage.setResizable(false);
+                stage.show();
+            } catch (IOException ex) {
+                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else{
+            new Alert(Alert.AlertType.ERROR, "خطأ في إدخال المعلومات حاول مرة اخرى").show();
         }
+
     }
 
     @FXML

@@ -2,6 +2,7 @@
 
 <?import io.github.palexdev.materialfx.controls.*?>
 <?import javafx.geometry.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
@@ -20,21 +21,27 @@
                         <DropShadow blurType="TWO_PASS_BOX" height="8.19" radius="4.6025" width="12.22" />
                      </effect>
                      <children>
-                        <ImageView fitHeight="40.0" fitWidth="40.0">
+                        <ImageView fx:id="close" fitHeight="40.0" fitWidth="40.0">
                            <image>
                               <Image url="@../icon/baseline_logout_black_24dp.png" />
                            </image>
                            <HBox.margin>
                               <Insets left="20.0" top="10.0" />
                            </HBox.margin>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </ImageView>
-                        <ImageView fitHeight="40.0" fitWidth="40.0">
+                        <ImageView fx:id="profile" fitHeight="40.0" fitWidth="40.0">
                            <image>
                               <Image url="@../icon/baseline_manage_accounts_black_24dp.png" />
                            </image>
                            <HBox.margin>
                               <Insets top="10.0" />
                            </HBox.margin>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </ImageView>
                         <VBox alignment="TOP_RIGHT" prefHeight="112.0" prefWidth="962.0">
                            <children>

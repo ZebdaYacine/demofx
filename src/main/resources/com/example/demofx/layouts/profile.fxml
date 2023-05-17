@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="582.0" prefWidth="446.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demofx.controller.ProfileController">
+   <children>
+      <MFXTextField fx:id="username" floatingText="إسم المستخدم" prefHeight="65.0" prefWidth="400.0">
+         <VBox.margin>
+            <Insets top="45.0" />
+         </VBox.margin>
+         <font>
+            <Font size="18.0" />
+         </font>
+      </MFXTextField>
+      <MFXPasswordField fx:id="passwordOld" floatingText="كلمة السر القديمة" prefHeight="65.0" prefWidth="400.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <VBox.margin>
+            <Insets top="45.0" />
+         </VBox.margin>
+      </MFXPasswordField>
+      <MFXPasswordField fx:id="password" floatingText="كلمة السر الجديدة" prefHeight="65.0" prefWidth="400.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <VBox.margin>
+            <Insets top="45.0" />
+         </VBox.margin></MFXPasswordField>
+      <MFXPasswordField fx:id="password1" floatingText="تأكيد كلمة السر" prefHeight="65.0" prefWidth="400.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <VBox.margin>
+            <Insets top="45.0" />
+         </VBox.margin>
+      </MFXPasswordField>
+      <MFXButton fx:id="edite" buttonType="RAISED" depthLevel="LEVEL5" prefHeight="64.0" prefWidth="400.0" rippleColor="#a084dc" style="-fx-background-color: #8424d7;" text="تأكيد" textFill="WHITE" textOverrun="CENTER_ELLIPSIS">
+         <VBox.margin>
+            <Insets top="45.0" />
+         </VBox.margin>
+         <font>
+            <Font size="28.0" />
+         </font>
+      </MFXButton>
+   </children>
+</VBox>

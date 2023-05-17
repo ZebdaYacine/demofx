@@ -18,7 +18,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -43,7 +43,7 @@ public class DiagnosticController implements Initializable {
     private MFXFilterComboBox<PatientModel> patientCmbox;
 
     @FXML
-    private Label lab;
+    private Hyperlink lab;
 
     @FXML
     private MFXFilterComboBox<ServiceModel> serviceCmbox;

@@ -5,6 +5,7 @@
 package com.example.demofx.controller;
 
 import com.example.demofx.model.DiagnosticModel;
+import com.example.demofx.printer.DiagnosticTemplate;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXPaginatedTableView;
 import javafx.fxml.FXML;
@@ -41,7 +42,7 @@ public class DiagnosticDetailsPrintController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         print.setOnAction(event -> {
-
+            DiagnosticTemplate diagnosticTemplate = new DiagnosticTemplate("C:\\Users\\ZedYacine\\IdeaProjects\\demofx\\diagonstics\\test.pdf",diagnosticModelCurrent);
         });
     }
 }

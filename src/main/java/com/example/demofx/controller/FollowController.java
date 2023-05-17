@@ -12,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -143,25 +144,35 @@ public class FollowController implements Initializable {
             try {
                 initRecord().store();
                 refrechLayout();
-                dialogsController.openInfo("تم عملية الإضافة بنجاح");
             } catch (Exception e) {
-                Utils.trackingException(e,"حدث خطأ في عملية الإضافة",dialogsController);
+                new Alert(Alert.AlertType.ERROR, "خطأ في  إتمام العملية  حاول مرة اخرى").show();
             }
         });
         delete.setOnAction(actionEvent -> {
-            currentPage = table.getCurrentPage();
-            context.delete(FOLLOW).where(FOLLOW.ID.eq(ID)).execute();
-            refrechLayout();
+            if(ID!=0){
+                try{
+                    currentPage = table.getCurrentPage();
+                    context.delete(FOLLOW).where(FOLLOW.ID.eq(ID)).execute();
+                    refrechLayout();
+                }catch (Exception e ){
+                    new Alert(Alert.AlertType.ERROR, "خطأ في  إتمام العملية  حاول مرة اخرى").show();
+                }
+            }else {
+                new Alert(Alert.AlertType.ERROR, "خطأ في  إتمام العملية  حاول مرة اخرى").show();
+            }
         });
         update.setOnAction(actionEvent -> {
-            try {
-                FollowRecord followRecord = initRecord();
-                followRecord.setId(ID);
-                followRecord.update();
-                refrechLayout();
-                dialogsController.openInfo("تم عملية التعديل بنجاح");
-            } catch (Exception e) {
-                Utils.trackingException(e,"حدث خطأ في عملية الإضافة",dialogsController);
+            if(ID!=0){
+                try {
+                    FollowRecord followRecord = initRecord();
+                    followRecord.setId(ID);
+                    followRecord.update();
+                    refrechLayout();
+                } catch (Exception e) {
+                    new Alert(Alert.AlertType.ERROR, "خطأ في  إتمام العملية  حاول مرة اخرى").show();
+                }
+            }else {
+                new Alert(Alert.AlertType.ERROR, "خطأ في  إتمام العملية  حاول مرة اخرى").show();
             }
         });
     }

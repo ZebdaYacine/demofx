@@ -15,6 +15,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 
 import java.net.URL;
 import java.util.Comparator;
@@ -27,7 +28,7 @@ public class UsersController implements Initializable {
     @FXML
     private MFXPaginatedTableView<UserModel> table;
     @FXML
-    private MFXTextField Fname, Lname, phone, srh;
+    private MFXTextField Fname, Lname, phone;
     @FXML
     private MFXButton delete, add, update;
     @FXML
@@ -58,7 +59,9 @@ public class UsersController implements Initializable {
         fNameProperty.bindBidirectional(Fname.textProperty());
         lNameProperty.bindBidirectional(Lname.textProperty());
         phoneProperty.bindBidirectional(phone.textProperty());
+/*
         srhProperty.bindBidirectional(srh.textProperty());
+*/
     }
 
     private void fillInputs(UserRecord userRecord) {
@@ -115,7 +118,7 @@ public class UsersController implements Initializable {
                 fillInputs(userRecord);
             }
         });
-        srh.setOnKeyReleased(keyEvent -> {
+        /*srh.setOnKeyReleased(keyEvent -> {
             if (!srh.getText().isEmpty()) {
                 table.setItems(FXCollections.observableArrayList(userModel.searchUserByPhone(srh.getText(),listUsers)));
             } else {
@@ -126,26 +129,34 @@ public class UsersController implements Initializable {
                 table.goToPage(0);
                 table.setCurrentPage(0);
             }
-        });
+        });*/
         add.setOnAction(event -> {
             try {
                 initRecord().store();
                 refrechLayout();
                 dialogsController.openInfo("تم عملية الإضافة بنجاح");
             }catch (Exception e){
-                dialogsController.openInfo("حدث خطأ في عملية الإضافة");
+                new Alert(Alert.AlertType.ERROR, "خطأ في  إتمام العملية  حاول مرة اخرى").show();
             }
         });
         delete.setOnAction(actionEvent -> {
-            currentPage = table.getCurrentPage();
-            context.delete(USER).where(USER.ID.eq(ID)).execute();
-            refrechLayout();
+            try {
+                currentPage = table.getCurrentPage();
+                context.delete(USER).where(USER.ID.eq(ID)).execute();
+                refrechLayout();
+            }catch (Exception e){
+                new Alert(Alert.AlertType.ERROR, "خطأ في  إتمام العملية  حاول مرة اخرى").show();
+            }
         });
         update.setOnAction(actionEvent -> {
-            UserRecord userRecord=initRecord();
-            userRecord.setId(ID);
-            userRecord.update();
-            refrechLayout();
+            try{
+                UserRecord userRecord=initRecord();
+                userRecord.setId(ID);
+                userRecord.update();
+                refrechLayout();
+            }catch (Exception e){
+                new Alert(Alert.AlertType.ERROR, "خطأ في  إتمام العملية  حاول مرة اخرى").show();
+            }
         });
     }
 

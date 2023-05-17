@@ -32,14 +32,6 @@
          <children>
             <VBox alignment="TOP_CENTER" prefHeight="672.0" prefWidth="843.0">
                <children>
-                  <MFXTextField fx:id="srh" alignment="TOP_LEFT" floatMode="BORDER" floatingText="رقم الهاتف" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="236.0">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets right="250.0" top="10.0" />
-                     </VBox.margin>
-                  </MFXTextField>
                   <MFXPaginatedTableView fx:id="table" footerVisible="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="160.0" prefWidth="800.0" rowsPerPage="15">
                      <VBox.margin>
                         <Insets top="10.0" />

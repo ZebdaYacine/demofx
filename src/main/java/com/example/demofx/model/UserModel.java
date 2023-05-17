@@ -57,6 +57,27 @@ public class UserModel extends UserRecord {
         return this.getFirstname()+" "+this.getLastname();
     }
 
+    public static  UserModel getUserLoggIn(String username,String password) {
+        Result<?> result = context.select().from(USER)
+                .leftOuterJoin(ROLE)
+                .on(USER.IDROLE.eq(ROLE.ID))
+                .leftOuterJoin(TYPE)
+                .on(TYPE.ID.eq(USER.IDTYPE))
+                .where(USER.USERNAME.eq(username)).and(USER.PASSWORD.eq(password))
+                .fetch();
+        UserModel user = new UserModel();
+        for (Record r : result) {
+            ServiceRecord serviceRecord = r.into(SERVICE);
+            UserRecord userRecord = r.into(USER);
+            RoleRecord roleRecord = r.into(ROLE);
+            TypeRecord typeRecord = r.into(TYPE);
+            user = new UserModel(userRecord.getId(), userRecord.getUsername(), userRecord.getPassword(),
+                    userRecord.getFirstname(), userRecord.getLastname(), userRecord.getPhone(), typeRecord.getName(), serviceRecord.getId(),
+                    roleRecord.getId(), userRecord.getIdtype(), serviceRecord.getName(), roleRecord.getName());
+        }
+        return user;
+    }
+
     public static ArrayList<UserModel> getAllUser() {
         Result<?> result = context.select().from(USER).leftOuterJoin(SERVICE)
                 .on(USER.IDSERVICE.eq(SERVICE.ID))
@@ -64,6 +85,29 @@ public class UserModel extends UserRecord {
                 .on(USER.IDROLE.eq(ROLE.ID))
                 .leftOuterJoin(TYPE)
                 .on(TYPE.ID.eq(USER.IDTYPE))
+                .fetch();
+        ArrayList<UserModel> listUser = new ArrayList<>();
+        for (Record r : result) {
+            ServiceRecord serviceRecord = r.into(SERVICE);
+            UserRecord userRecord = r.into(USER);
+            RoleRecord roleRecord = r.into(ROLE);
+            TypeRecord typeRecord = r.into(TYPE);
+            UserModel userModel = new UserModel(userRecord.getId(), userRecord.getUsername(), userRecord.getPassword(),
+                    userRecord.getFirstname(), userRecord.getLastname(), userRecord.getPhone(), typeRecord.getName(), serviceRecord.getId(),
+                    roleRecord.getId(), userRecord.getIdtype(), serviceRecord.getName(), roleRecord.getName());
+            listUser.add(userModel);
+        }
+        return listUser;
+    }
+
+    public static ArrayList<UserModel> getAllUserByType(String type) {
+        Result<?> result = context.select().from(USER).leftOuterJoin(SERVICE)
+                .on(USER.IDSERVICE.eq(SERVICE.ID))
+                .leftOuterJoin(ROLE)
+                .on(USER.IDROLE.eq(ROLE.ID))
+                .leftOuterJoin(TYPE)
+                .on(TYPE.ID.eq(USER.IDTYPE))
+                .where(TYPE.NAME.eq(type))
                 .fetch();
         ArrayList<UserModel> listUser = new ArrayList<>();
         for (Record r : result) {

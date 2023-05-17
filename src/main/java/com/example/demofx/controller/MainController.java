@@ -1,12 +1,15 @@
 package com.example.demofx.controller;
 
 import com.example.demofx.DemoFX;
+import com.example.demofx.model.UserModel;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -25,6 +28,9 @@ public class MainController implements Initializable {
     private Label username,Lname,Fname;
 
     @FXML
+    private ImageView profile,close;
+
+    @FXML
     private VBox pane;
     @FXML
     private MFXButton btn1;
@@ -39,22 +45,43 @@ public class MainController implements Initializable {
         this.stage=stage;
     }
 
-
-    public void showUser(String data) {
-        username.setText("إسم الـمستخدم :"+data);
-        Fname.setText("الإسم :"+data);
-        Lname.setText("اللقب :"+data);
+    public void showUser(UserModel data) {
+        username.setText("إسم الـمستخدم :"+data.getUsername());
+        Fname.setText("الإسم :"+data.getFirstname());
+        Lname.setText("اللقب :"+data.getLastname());
     }
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+       /* if(LoginController.userLoggIn.getRole().equals("user")){
+            btn6.setVisible(false);
+        }*/
         btnList.add(btn1);
         btnList.add(btn2);
         btnList.add(btn3);
         btnList.add(btn4);
         btnList.add(btn5);
         btnList.add(btn6);
+
+        close.setOnMouseClicked(event -> {
+            Stage thisStage = (Stage) close.getScene().getWindow();
+            thisStage.close();
+        });
+
+        profile.setOnMouseClicked(event -> {
+            try {
+                FXMLLoader main = new FXMLLoader(getClass().getResource("/com/example/demofx/layouts/profile.fxml"));
+                Parent root = main.load();
+                Scene home_scene = new Scene(root);
+                Stage stage = new Stage();
+                stage.setScene(home_scene);
+                stage.setResizable(false);
+                stage.show();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
         changePane(btnList,1-dashboardIndex, "statistics",pane);
         btn1.setOnAction(event -> {
             changePane(btnList,1-dashboardIndex, "statistics",pane);

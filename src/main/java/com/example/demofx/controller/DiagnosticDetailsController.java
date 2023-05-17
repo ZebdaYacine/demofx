@@ -12,6 +12,7 @@ import io.github.palexdev.materialfx.controls.MFXPaginatedTableView;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.paint.Color;
@@ -37,7 +38,9 @@ public class DiagnosticDetailsController implements Initializable {
     private TextArea textM,textP,textI,textC;
 
     @FXML
-    private Label labCurrent,lab1,lab2,lab3,lab4,update1,update2,update3,update4;
+    private Hyperlink labCurrent;
+    @FXML
+    private Label lab1,lab2,lab3,lab4,update1,update2,update3,update4;
 
 
     private static DiagnosticModel diagnosticModelCurrent;
@@ -53,7 +56,7 @@ public class DiagnosticDetailsController implements Initializable {
         lab3.setText(textI.getLength()+"/500");
         lab4.setText(textC.getLength()+"/500");
     }
-    public void fillInputs(DiagnosticModel diagnosticModel,MFXPaginatedTableView<DiagnosticModel> table,Label lab) {
+    public void fillInputs(DiagnosticModel diagnosticModel, MFXPaginatedTableView<DiagnosticModel> table, Hyperlink lab) {
         diagnosticModelCurrent=diagnosticModel;
         tableCurrent=table;
         loadDataToLayout();
