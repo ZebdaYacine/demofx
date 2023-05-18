@@ -149,45 +149,6 @@
                         </LinearGradient>
                      </textFill>
                   </MFXButton>
-                  <MFXButton fx:id="btn2" alignment="CENTER_RIGHT" contentDisplay="RIGHT" depthLevel="LEVEL5" prefHeight="80.0" prefWidth="300.0" rippleColor="WHITE" style="-fx-background-color: transparent; -fx-background-radius: 0 0 0 0;" text="المستخدمين" textAlignment="CENTER">
-                     <font>
-                        <Font name="Times New Roman" size="24.0" />
-                     </font>
-                     <textFill>
-                        <LinearGradient endX="1.0" endY="1.0">
-                           <stops>
-                              <Stop>
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </Stop>
-                              <Stop offset="0.006711409395973154">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </Stop>
-                              <Stop offset="1.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </Stop>
-                           </stops>
-                        </LinearGradient>
-                     </textFill>
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" translateX="5.0">
-                           <image>
-                              <Image url="@../icon/baseline_people_white_24dp.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <padding>
-                        <Insets right="50.0" />
-                     </padding>
-                     <VBox.margin>
-                        <Insets top="15.0" />
-                     </VBox.margin>
-                  </MFXButton>
                   <MFXButton fx:id="btn3" alignment="CENTER_RIGHT" contentDisplay="RIGHT" depthLevel="LEVEL5" prefHeight="80.0" prefWidth="300.0" rippleColor="WHITE" style="-fx-background-color: transparent; -fx-background-radius: 0 0 0 0;" text="المرضى" textAlignment="CENTER">
                      <font>
                         <Font name="Times New Roman" size="24.0" />
@@ -334,6 +295,45 @@
                         <ImageView fitHeight="40.0" fitWidth="40.0" translateX="5.0">
                            <image>
                               <Image url="@../icon/baseline_description_white_24dp.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets right="50.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
+                  </MFXButton>
+                  <MFXButton fx:id="btn2" alignment="CENTER_RIGHT" contentDisplay="RIGHT" depthLevel="LEVEL5" prefHeight="80.0" prefWidth="300.0" rippleColor="WHITE" style="-fx-background-color: transparent; -fx-background-radius: 0 0 0 0;" text="المستخدمين" textAlignment="CENTER">
+                     <font>
+                        <Font name="Times New Roman" size="24.0" />
+                     </font>
+                     <textFill>
+                        <LinearGradient endX="1.0" endY="1.0">
+                           <stops>
+                              <Stop>
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </Stop>
+                              <Stop offset="0.006711409395973154">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </Stop>
+                              <Stop offset="1.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </Stop>
+                           </stops>
+                        </LinearGradient>
+                     </textFill>
+                     <graphic>
+                        <ImageView fitHeight="40.0" fitWidth="40.0" translateX="5.0">
+                           <image>
+                              <Image url="@../icon/baseline_people_white_24dp.png" />
                            </image>
                         </ImageView>
                      </graphic>

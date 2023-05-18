@@ -12,6 +12,7 @@ import javafx.scene.control.Alert;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static com.example.demofx.controller.LoginController.main;
 import static com.example.demofx.controller.LoginController.userLoggIn;
 import static com.example.demofx.databaseManger.jooq.Tables.USER;
 
@@ -46,6 +47,8 @@ public class ProfileController implements Initializable {
                             new Alert(Alert.AlertType.INFORMATION, "تم  إتمام العملية").show();
                             userLoggIn.setPassword(password.getText());
                             userLoggIn.setUsername(username.getText());
+                            MainController mainController= main.getController();
+                            mainController.showUser(userLoggIn);
                         }else {
                             new Alert(Alert.AlertType.ERROR, "خطأ في  إتمام العملية  اسم المستخدم محجوز").show();
                         }

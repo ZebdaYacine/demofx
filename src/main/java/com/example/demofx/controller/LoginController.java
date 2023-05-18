@@ -4,9 +4,9 @@ import com.example.demofx.databaseManger.jooq.tables.records.UserRecord;
 import com.example.demofx.model.UserModel;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -16,14 +16,16 @@ import org.jooq.Result;
 
 import java.awt.*;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Random;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static com.example.demofx.DemoFX.context;
 import static com.example.demofx.databaseManger.jooq.tables.User.USER;
 
-public class LoginController {
+public class LoginController implements Initializable {
 
     @FXML
     private MFXTextField username;
@@ -31,6 +33,9 @@ public class LoginController {
     private MFXTextField password;
 
     public static UserModel userLoggIn;
+
+    public static FXMLLoader main ;
+
 
     @FXML
     private MFXButton btn_logn;
@@ -54,14 +59,13 @@ public class LoginController {
         }
     }
 
-    @FXML
-    protected void login(ActionEvent event) {
+    private void login() {
         userLoggIn=UserModel.getUserLoggIn(username.getText(),password.getText());
         if(userLoggIn.getId()!=null){
             try {
                 Stage thisStage = (Stage) btn_logn.getScene().getWindow();
                 thisStage.close();
-                FXMLLoader main = new FXMLLoader(getClass().getResource("/com/example/demofx/layouts/main.fxml"));
+                main= new FXMLLoader(getClass().getResource("/com/example/demofx/layouts/main.fxml"));
                 Parent root=main.load();
                 MainController mainController=main.getController();
                 mainController.setStage(stage);
@@ -106,5 +110,18 @@ public class LoginController {
         } else {
             new Alert(Alert.AlertType.CONFIRMATION, "No record").show();
         }
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        /*btn_logn.setOnKeyReleased(event -> {
+            System.out.println(event.getCode().toString());
+            if(event.getCode()==KeyCode.ENTER){
+                login();
+            }
+        });*/
+        btn_logn.setOnAction(event -> {
+            login();
+        });
     }
 }

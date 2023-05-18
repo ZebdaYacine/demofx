@@ -22,14 +22,11 @@ import java.util.logging.Logger;
 
 
 public class MainController implements Initializable {
-
     public static ArrayList<MFXButton> btnList= new ArrayList<>();
     @FXML
     private Label username,Lname,Fname;
-
     @FXML
     private ImageView profile,close;
-
     @FXML
     private VBox pane;
     @FXML
@@ -37,35 +34,56 @@ public class MainController implements Initializable {
     @FXML
     private MFXButton btn2,btn3,btn4,btn5,btn6;
     private final int dashboardIndex=1;
-
-
     public Stage stage;
-
     public void setStage(Stage stage){
         this.stage=stage;
     }
-
     public void showUser(UserModel data) {
         username.setText("إسم الـمستخدم :"+data.getUsername());
         Fname.setText("الإسم :"+data.getFirstname());
         Lname.setText("اللقب :"+data.getLastname());
     }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-       /* if(LoginController.userLoggIn.getRole().equals("user")){
-            btn6.setVisible(false);
-        }*/
         btnList.add(btn1);
         btnList.add(btn2);
         btnList.add(btn3);
         btnList.add(btn4);
         btnList.add(btn5);
         btnList.add(btn6);
+        btnList.forEach(mfxButton -> {
+            if(!LoginController.userLoggIn.getRole().equals("admin")){
+                mfxButton.setVisible(false);
+            }
+        });
+        if(LoginController.userLoggIn.getRole().equals("user")){
+            btn1.setVisible(true);
+            btn3.setVisible(true);
+            btn4.setVisible(true);
+        }
+        if(LoginController.userLoggIn.getRole().equals("super user")){
+            btn1.setVisible(true);
+            btn3.setVisible(true);
+            btn4.setVisible(true);
+            btn5.setVisible(true);
+            btn6.setVisible(true);
+        }
 
         close.setOnMouseClicked(event -> {
             Stage thisStage = (Stage) close.getScene().getWindow();
             thisStage.close();
+            FXMLLoader main = new FXMLLoader(getClass().getResource("/com/example/demofx/layouts/login.fxml"));
+            Parent root = null;
+            try {
+                root = main.load();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            Scene home_scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setScene(home_scene);
+            stage.setResizable(false);
+            stage.show();
         });
 
         profile.setOnMouseClicked(event -> {
